@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đếm ngày yêu</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/ai-widget.css" />
+  </head>
+  <body class="counter-page">
+    <nav class="top-nav">
+      <a class="nav-link" href="/">Trang chủ</a>
+      <a class="nav-link" href="/journal.html">Nhật ký</a>
+      <a class="nav-link" href="/create.html">Tạo khoảnh khắc</a>
+      <a class="nav-link primary" href="/counter.html">Đếm ngày yêu</a>
+      <a class="nav-link" href="/period.html">Dự đoán kỳ kinh</a>
+    </nav>
+
+    <main class="counter-main">
+      <header class="hero counter-hero">
+        <p class="eyebrow">Đếm ngày yêu</p>
+        <h1 class="counter-title">Chúng mình đã bên nhau bao lâu?</h1>
+        <p class="subhead">Chọn ngày bắt đầu, trang sẽ tự động tính số ngày, tuần, tháng và kỷ niệm tròn tháng tiếp theo.</p>
+      </header>
+
+      <section class="card counter-settings">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Cài đặt</p>
+            <h3>Chọn ngày yêu</h3>
+          </div>
+        </div>
+
+        <div class="field two-col">
+          <label>
+            <span>Ngày yêu nhau</span>
+            <input type="date" id="startDate" />
+          </label>
+          <label>
+            <span>Giờ phút (Tùy chọn)</span>
+            <input type="time" id="startTime" />
+          </label>
+        </div>
+
+        <div class="field">
+          <label>
+            <span>Có thể chọn ảnh nền cho trang này</span>
+            <input type="file" id="bgImageInput" accept="image/*" />
+          </label>
+        </div>
+
+        <div class="counter-actions">
+          <button class="ghost" id="clearBgBtn" type="button">Xóa ảnh nền</button>
+          <button class="primary" id="saveBtn" type="button">Lưu ngày yêu</button>
+        </div>
+
+        <p class="status" id="saveMsg"></p>
+        <p class="status" id="bgMsg"></p>
+      </section>
+
+      <section class="card heart-box counter-heart">
+        <canvas id="heartCanvas"></canvas>
+        <div class="container"></div>
+      </section>
+
+      <section class="card love-counter counter-stats">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Thống kê</p>
+            <h3>Tình yêu của tụi mình</h3>
+          </div>
+          <button class="ghost" id="refreshBtn" type="button">↻</button>
+        </div>
+
+        <div id="counterDisplay" class="counter-display">
+          <p class="status">Chưa có ngày bắt đầu, hay chọn ở trên nhe.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/counter.js"></script>
+    <script src="/ai-widget.js"></script>
+  </body>
+</html>

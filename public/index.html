@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gửi Hoàng Đinh Hải Anh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ai-widget.css">
+  <style>
+    :root {
+      --bg: #fff7f1;
+      --card: rgba(255, 255, 255, 0.82);
+      --text: #2b1b1b;
+      --accent: #ff5f8d;
+      --accent-2: #f47c3c;
+      --shadow: 0 18px 45px rgba(255, 95, 141, 0.25);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      min-height: 100vh;
+      display: block;
+      padding: calc(clamp(22px, 4vw, 34px) + 86px) clamp(14px, 4vw, 28px) 120px;
+      padding-left: calc(clamp(14px, 4vw, 28px) + env(safe-area-inset-left, 0px));
+      padding-right: calc(clamp(14px, 4vw, 28px) + env(safe-area-inset-right, 0px));
+      padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+      padding-top: calc(clamp(22px, 4vw, 34px) + 86px + env(safe-area-inset-top, 0px));
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(125deg, rgba(255,95,141,0.22), rgba(255,255,255,0.18)), url("hai-anh.jpg") center / cover no-repeat;
+      opacity: 0.55;
+      filter: blur(10px) saturate(1.05);
+      transform: scale(1.04);
+      z-index: -2;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.06) 1px, transparent 0);
+      background-size: 24px 24px;
+      mix-blend-mode: soft-light;
+      opacity: 0.35;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .page {
+      width: min(1000px, 100%);
+      display: grid;
+      gap: 18px;
+      margin: 0 auto;
+    }
+    .hero {
+      background: linear-gradient(135deg, rgba(255,95,141,0.25), rgba(244,124,60,0.12));
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after, .hero::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      background: rgba(255,255,255,0.35);
+      filter: blur(60px);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .hero::after { top: -40px; right: -50px; }
+    .hero::before { bottom: -70px; left: -60px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      color: var(--accent);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+      z-index: 1;
+      position: relative;
+    }
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(30px, 6vw, 54px);
+      margin: 14px 0 10px;
+      line-height: 1.12;
+      z-index: 1;
+      position: relative;
+    }
+    .subtitle {
+      font-size: clamp(16px, 3.4vw, 18px);
+      max-width: 680px;
+      margin: 0;
+      opacity: 0.85;
+      z-index: 1;
+      position: relative;
+      line-height: 1.55;
+    }
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      z-index: 1;
+      position: relative;
+    }
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      padding: 20px 20px 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .photo-card img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.15);
+      border: 2px solid rgba(255,255,255,0.9);
+    }
+    .card p { margin: 6px 0; line-height: 1.5; }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .pill {
+      background: #fff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+    .event {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .date {
+      background: #fff;
+      border-radius: 14px;
+      padding: 10px 12px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--accent-2);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    }
+    .event p { margin: 4px 0 0; }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: white;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 12px 30px rgba(255,95,141,0.35);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    .cta.secondary {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid rgba(255,95,141,0.2);
+    }
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(255,95,141,0.45);
+    }
+    .letter {
+      background: #fff;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px dashed rgba(0,0,0,0.08);
+      line-height: 1.6;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+      opacity: 0.75;
+    }
+    .audio-box {
+      position: fixed;
+      right: 20px;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.16);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 50;
+      max-width: min(340px, 85vw);
+    }
+    .audio-box button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(255,95,141,0.35);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .audio-title { font-weight: 700; line-height: 1.3; }
+    .audio-sub { margin: 0; font-size: 13px; opacity: 0.75; }
+    .sc-frame {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      left: -9999px;
+      bottom: -9999px;
+      opacity: 0;
+      pointer-events: none;
+      border: 0;
+    }
+    @media (min-width: 1100px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 900px) {
+      .hero { padding: 26px; }
+      .grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .photo-card img { box-shadow: 0 12px 22px rgba(0,0,0,0.12); }
+    }
+    @media (max-width: 640px) {
+      .hero { padding: 22px; }
+      .card { padding: 18px; }
+      .pill { font-size: 14px; }
+      .timeline { gap: 12px; }
+      .event { grid-template-columns: 1fr; }
+      .date { width: fit-content; }
+      .audio-box {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .sc-frame { height: 110px; }
+    }
+    @media (max-width: 420px) {
+      h1 { font-size: 28px; }
+      .tag { font-size: 13px; }
+      .audio-box button { padding: 10px 12px; width: 100%; text-align: center; }
+      .audio-box { padding: 12px; }
+    }
+    @media (max-width: 340px) {
+      .pill-row { gap: 8px; }
+      .pill { padding: 7px 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    }
+    .top-nav-wrap {
+      position: fixed;
+      top: calc(10px + env(safe-area-inset-top, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(980px, calc(100vw - 24px));
+      z-index: 90;
+    }
+    .nav-toggle {
+      display: none;
+      width: 100%;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      background: rgba(255, 248, 246, 0.88);
+      color: var(--text);
+      border-radius: 16px;
+      font-weight: 700;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 14px 34px rgba(38, 13, 18, 0.14);
+      cursor: pointer;
+    }
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      background: rgba(255, 248, 246, 0.88);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 14px 34px rgba(38, 13, 18, 0.14);
+    }
+    .nav-link {
+      flex: 1 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid rgba(255,95,141,0.14);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 8px 16px rgba(255,95,141,0.18);
+      white-space: nowrap;
+      transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
+    }
+    .nav-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 20px rgba(255,95,141,0.24);
+    }
+    .nav-link.primary {
+      background: linear-gradient(135deg, #ff5f8d, #f47c3c);
+      color: #fff;
+      border: none;
+    }
+    @media (max-width: 720px) {
+      body {
+        padding-top: calc(clamp(22px, 4vw, 34px) + 72px + env(safe-area-inset-top, 0px));
+      }
+      .top-nav-wrap {
+        width: calc(100vw - 16px);
+        top: calc(8px + env(safe-area-inset-top, 0px));
+      }
+      .nav-toggle {
+        display: inline-flex;
+      }
+      .top-nav {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 16px;
+        opacity: 0;
+        transform: translateY(-6px) scale(0.99);
+        transform-origin: top center;
+        pointer-events: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 160ms ease, transform 160ms ease, max-height 160ms ease;
+      }
+      .top-nav-wrap.open .top-nav {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+        max-height: 320px;
+      }
+      .nav-link {
+        min-height: 40px;
+        font-size: 14px;
+        padding: 8px 12px;
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-nav-wrap" id="topNavWrap">
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNavMenu">☰ Menu</button>
+    <nav class="top-nav" id="topNavMenu">
+      <a class="nav-link primary" href="/">🏠 Trang chủ</a>
+      <a class="nav-link" href="/journal.html">📚 Nhật ký</a>
+      <a class="nav-link" href="/create.html">✍️ Tạo khoảng khắc</a>
+      <a class="nav-link" href="/counter.html">🌸 Đếm ngày yêu</a>
+      <a class="nav-link" href="/period.html">🩸 Dự đoán kỳ kinh</a>
+    </nav>
+  </header>
+  <div class="audio-box" aria-label="Trình phát Dành cho em">
+    <div style="flex:1; min-width:0;">
+      <div class="audio-title">Dành cho em — Hoàng Dũng (live Yên)</div>
+      <p class="audio-sub">Mong sao câu chuyện của chúng ta mãi mãi không kết thúc</p>
+    </div>
+    <button id="playBtn" type="button">Play</button>
+  </div>
+  <iframe id="scPlayer" class="sc-frame" title="Dành cho em Hoàng Dũng" allow="autoplay" loading="lazy"
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/xuananh-luong/danh-cho-em-hoang-dung-concert-yen-ha-noi-04112022&color=%23ff5f8d&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"></iframe>
+  <main class="page">
+    <section class="hero">
+      <div class="tag">
+        <svg width="20" height="18" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 21s-6.6-4.35-9.5-8.36C-0.45 8.61 1.07 3.5 5.2 2.36 7.48 1.72 9.7 2.7 12 5.15 14.3 2.7 16.52 1.72 18.8 2.36c4.13 1.14 5.65 6.25 2.7 10.28C18.6 16.65 12 21 12 21Z" fill="#ff5f8d"/>
+        </svg>
+        For Chíp iu 
+      </div>
+      <h1>Em là điều ngọt ngào nhất trong bầu trời của anh</h1>
+      <p class="subtitle">
+        Một góc nhỏ trên internet dành riêng cho em. Mỗi dòng chữ, màu sắc và kỷ niệm ở đây đều được viết để nhắc anh nhớ rằng: yêu em là quyết định đẹp nhất.
+      </p>
+      <div class="cta-row">
+        <a class="cta" href="journal.html">📚 Xem kho kỷ niệm</a>
+        <a class="cta secondary" href="create.html">✍️ Tạo khoảng khắc</a>
+        <a class="cta secondary" href="counter.html">🌸 Đếm ngày yêu</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card photo-card">
+        <h3>Vợ yêu của anh</h3>
+        <img src="hai-anh.jpg" alt="Hải Anh" loading="lazy">
+      </article>
+      <article class="card">
+        <h3>Những điều anh thích ở em</h3>
+        <div class="pill-row">
+          <span class="pill">Đôi môi em</span>
+          <span class="pill">Thích được ngắm em cười</span>
+          <span class="pill">Kiên nhẫn & dịu dàng</span>
+          <span class="pill">Tình cảm chúng mình</span>
+          <span class="pill">Tin vào chúng ta</span>
+          <span class="pill">Nhẹ nhàng, yêu anh</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3>Hành tinh nhỏ của hai ta</h3>
+        <p>Biết đơn phương em vào năm 2021-2022</p>
+        <p>Cuối năm 2024, "Đây là Hàn Quốc hả cậu?"</p>
+        <p>01/06/2025 Chính thức quen nhau qua PSG</p>
+        <p>...Làm quen tán tỉnh...</p>
+        <p>...Mập mờ không danh phận...</p>
+        <p>05/08/2025 và 07/08/2025 trải qua sinh nhật Online đầu tiên cùng nhau</p>
+        <p>05/08/2025 Nhận được món quà đầu tiên từ em</p>
+        <p>Quãng thời gian sau là một khoảng thời giann khó khăn...nhưng cuối cùng vẫn vững bước</p>
+        <p>12/12/2025 Cùng anh trải qua khoảng tgian cuối cùng đời sinh viên</p>
+        <p>Đón giao thừa 2026 cùng em</p>
+        <p>Nhận việc cùng anh...</p>     
+        <p>...và còn nhiều điều nữa đang chờ chúng ta phía trước...</p>                 
+      </article>
+
+      <article class="card">
+        <h3>Bucket list</h3>
+        <ul>
+          <li>Là người đầu tiên đón em khi em về tới Hà Nội</li>
+          <li>Dạo phố cùng em</li>
+          <li>Du lịch cùng em</li>
+          <li>Nằm ôm em mỗi tối.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Playlist nhỏ</h3>
+        <p>Những bài anh muốn cùng em nghe:</p>
+        <p>“Một đời” — 14 Casper, “You Are My Reason” — Calum Scott, “Có Em” — Madihu ft. Low G</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h3>Mốc kỷ niệm</h3>
+      <div class="timeline">
+        <div class="event">
+          <div class="date">Lần đầu</div>
+          <div>
+            <strong>Ngày đầu tiên em nói yêu anh</strong>
+            <p>Em đã khiến thời gian chậm lại, để anh kịp ghi nhớ.</p>
+          </div>
+        </div>
+        <div class="event">
+          <div class="date">Hẹn hò</div>
+          <div>
+            <strong>Lần đầu tiên 2 đứa đón sinh nhật xa cùng nhau</strong>
+            <p>Chỉ cần thấy em, mọi lo lắng đều tan biến.</p>
+          </div>
+        </div>
+        <div class="event">
+          <div class="date">Tương lai</div>
+          <div>
+            <strong>Đón giao thừa 2026 cùng em</strong>
+            <p>Không cần đích đến, chỉ cần có em bên cạnh.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Lời nhắn</h3>
+      <div class="letter">
+        Với anh, tình yêu không bắt đầu bằng sự đồng ý mà bắt đầu từ những lần đợi chờ, từ hai trái tim chưa bao giờ ngừng cố gắng tốt hơn vì nhau...Nếu như cả ngàn lần người xuất hiện là em, Anh vẫn sẽ đến bên em đủ cả ngàn lần ấy...
+      </div>
+      <br>
+      <a class="cta" href="mailto:your.email@example.com?subject=Anh%20nh%C3%A0y%20g%E1%BB%ADi%20H%E1%BA%A3i%20Anh&body=Em%20nh%E1%BA%ADn%20%C4%91%C6%B0%E1%BB%A3c%20r%C3%B9i%20n%C3%A8%20<3">Yêu em nhiều...</a>
+    </section>
+
+    <p class="footer">From Vietnam with luv. Trọng Nghĩa của em.</p>
+  </main>
+  <script>
+    const navWrap = document.getElementById("topNavWrap");
+    const navToggle = document.getElementById("navToggle");
+    const isMobileNav = () => window.matchMedia("(max-width: 720px)").matches;
+    const setNavOpen = (open) => {
+      if (!navWrap || !navToggle) return;
+      navWrap.classList.toggle("open", open);
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+
+    navToggle?.addEventListener("click", () => {
+      const open = navWrap?.classList.contains("open");
+      setNavOpen(!open);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!isMobileNav() || !navWrap || !navWrap.classList.contains("open")) return;
+      if (navWrap.contains(event.target)) return;
+      setNavOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setNavOpen(false);
+    });
+
+    window.addEventListener("resize", () => {
+      if (!isMobileNav()) setNavOpen(false);
+    });
+
+    document.querySelectorAll("#topNavMenu .nav-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (isMobileNav()) setNavOpen(false);
+      });
+    });
+
+    const scFrame = document.getElementById("scPlayer");
+    const playBtn = document.getElementById("playBtn");
+    let scReady = false;
+    let isPlaying = false;
+
+    window.addEventListener("message", (event) => {
+      if (typeof event.data !== "string") return;
+      try {
+        const data = JSON.parse(event.data);
+        if (data.listener_id) return;
+        if (data.method === "ready") scReady = true;
+        if (data.method === "play") { isPlaying = true; playBtn.textContent = "Pause"; }
+        if (data.method === "pause") { isPlaying = false; playBtn.textContent = "Play"; }
+      } catch (_) { /* ignore */ }
+    });
+
+    playBtn.addEventListener("click", () => {
+      if (!scFrame?.contentWindow) return;
+      const method = isPlaying ? "pause" : "play";
+      scFrame.contentWindow.postMessage(JSON.stringify({ method }), "*");
+    });
+
+  </script>
+  <script src="/ai-widget.js"></script>
+</body>
+</html>

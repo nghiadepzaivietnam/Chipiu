@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nhat ky - Camera Wall</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/ai-widget.css" />
+  </head>
+  <body class="journal-page">
+    <main class="camera-wall-page">
+      <header class="camera-topbar">
+        <div class="camera-status-row">
+          <span id="statusClock" class="clock">11:34</span>
+        </div>
+
+        <div class="camera-controls-row">
+          <button class="mini-icon" title="Thong bao">NEW</button>
+          <div class="audience-dropdown">
+            <button id="ownerSelectBtn" class="audience-select-btn" type="button" aria-expanded="false" aria-controls="ownerMenu">
+              <span id="ownerSelectLabel">Mọi người</span>
+              <span class="caret">▾</span>
+            </button>
+            <div id="ownerMenu" class="audience-menu" role="menu">
+              <button class="audience-option active" data-filter="all" data-label="Mọi người" type="button">Mọi người</button>
+              <button class="audience-option" data-filter="Hai Anh" data-label="Hải Anh" type="button">Hải Anh</button>
+              <button class="audience-option" data-filter="Trong Nghia" data-label="Trọng Nghĩa" type="button">Trọng Nghĩa</button>
+            </div>
+          </div>
+          <button class="mini-icon reload-mini" id="reload" type="button" title="Lam moi">↻</button>
+          <a class="avatar-link" href="/create.html" title="Tao khoanh khac">+
+          </a>
+        </div>
+      </header>
+
+      <section id="journal-feed" class="camera-grid"></section>
+
+      <nav class="camera-bottom-dock" aria-label="Camera actions">
+        <a class="dock-icon-btn" href="/" aria-label="Home">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7" rx="2"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="2"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="2"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="2"></rect>
+          </svg>
+        </a>
+        <button class="shutter" type="button" title="Capture" aria-label="Capture"></button>
+        <a class="dock-icon-btn video-btn" href="/create.html" aria-label="Post">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="6" width="14" height="12" rx="3"></rect>
+            <path d="M17 10l4-2v8l-4-2z"></path>
+          </svg>
+          <span class="dock-badge">2</span>
+        </a>
+      </nav>
+    </main>
+
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+      <button id="lightboxClose" class="lightbox-close" type="button" aria-label="Close">x</button>
+      <div class="lightbox-panel">
+        <div id="lightboxMediaWrap" class="lightbox-media-wrap"></div>
+        <div class="lightbox-meta">
+          <p id="lightboxOwner" class="lightbox-owner"></p>
+          <p id="lightboxCaption" class="lightbox-caption"></p>
+        </div>
+      </div>
+    </div>
+
+    <script src="/journal.js"></script>
+    <script src="/ai-widget.js"></script>
+  </body>
+</html>
