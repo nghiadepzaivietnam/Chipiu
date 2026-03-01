@@ -6,6 +6,21 @@ const Moment = require('../models/Moment');
 
 const router = express.Router();
 
+function normalizeText(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+function normalizeOwnerInput(owner) {
+  const key = normalizeText(owner);
+  if (key.includes('hai') && key.includes('anh')) return 'Hải Anh';
+  if (key.includes('trong') && key.includes('nghia')) return 'Trọng Nghĩa';
+  return owner;
+}
+
 // Ensure uploads directory exists
 const uploadDir = path.join(__dirname, '../../uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -43,6 +58,7 @@ router.post('/', (req, res) => {
 
     try {
       const { owner, caption, allowCombined } = req.body;
+      const normalizedOwner = normalizeOwnerInput(owner);
       let mediaType = 'none';
       let mediaUrl;
 
@@ -52,7 +68,7 @@ router.post('/', (req, res) => {
       }
 
       const moment = await Moment.create({
-        owner,
+        owner: normalizedOwner,
         caption,
         mediaType,
         mediaUrl,
@@ -72,7 +88,7 @@ router.get('/', async (req, res) => {
   try {
     const { owner, combined } = req.query;
     const filter = {};
-    if (owner) filter.owner = owner;
+    if (owner) filter.owner = normalizeOwnerInput(owner);
     if (combined === 'true') filter.allowCombined = true;
 
     const moments = await Moment.find(filter).sort({ createdAt: -1 });

@@ -1764,18 +1764,29 @@ body {
     left: 10px;
     right: 10px;
     gap: 8px;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .top-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .top-nav .nav-link {
     padding: 8px 10px;
     font-size: 13px;
     border-radius: 10px;
+    white-space: nowrap;
+    flex: 0 0 auto;
   }
 
   .counter-main {
     width: min(96vw, 100%);
-    margin-top: calc(104px + env(safe-area-inset-top, 0px));
+    margin-top: calc(88px + env(safe-area-inset-top, 0px));
     gap: 14px;
   }
 
