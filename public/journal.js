@@ -10,10 +10,14 @@ const lightboxClose = document.getElementById('lightboxClose');
 const lightboxMediaWrap = document.getElementById('lightboxMediaWrap');
 const lightboxOwner = document.getElementById('lightboxOwner');
 const lightboxCaption = document.getElementById('lightboxCaption');
+const lightboxDownload = document.getElementById('lightboxDownload');
+const lightboxDelete = document.getElementById('lightboxDelete');
+const lightboxActionStatus = document.getElementById('lightboxActionStatus');
 
 let cache = [];
 let current = 'all';
 let zoomed = false;
+let activeMoment = null;
 
 function normalizeText(value) {
   return String(value || '')
@@ -41,9 +45,11 @@ function setZoomState(nextZoomed) {
 
 function openLightbox(item) {
   if (!lightbox || !lightboxMediaWrap) return;
+  activeMoment = item;
 
   lightboxMediaWrap.innerHTML = '';
   setZoomState(false);
+  if (lightboxActionStatus) lightboxActionStatus.textContent = '';
 
   if (item.mediaType === 'image' && item.mediaUrl) {
     const image = document.createElement('img');
@@ -68,6 +74,8 @@ function openLightbox(item) {
 
   if (lightboxOwner) lightboxOwner.textContent = item.owner || 'User';
   if (lightboxCaption) lightboxCaption.textContent = item.caption || '...';
+  if (lightboxDownload) lightboxDownload.disabled = !(item.mediaUrl && item.mediaType !== 'none');
+  if (lightboxDelete) lightboxDelete.disabled = !item._id;
 
   lightbox.classList.add('active');
   lightbox.setAttribute('aria-hidden', 'false');
@@ -79,8 +87,67 @@ function closeLightbox() {
   lightbox.classList.remove('active');
   lightbox.setAttribute('aria-hidden', 'true');
   lightboxMediaWrap.innerHTML = '';
+  if (lightboxActionStatus) lightboxActionStatus.textContent = '';
   setZoomState(false);
+  activeMoment = null;
   document.body.classList.remove('no-scroll');
+}
+
+function inferExtension(mediaType, fallbackUrl) {
+  if (mediaType === 'image') return 'jpg';
+  if (mediaType === 'video') return 'mp4';
+  if (!fallbackUrl) return 'dat';
+  const cleanUrl = fallbackUrl.split('?')[0];
+  const dot = cleanUrl.lastIndexOf('.');
+  return dot === -1 ? 'dat' : cleanUrl.slice(dot + 1).toLowerCase();
+}
+
+async function downloadCurrentMoment() {
+  if (!activeMoment?.mediaUrl) return;
+
+  const extension = inferExtension(activeMoment.mediaType, activeMoment.mediaUrl);
+  const filename = `moment-${activeMoment._id || Date.now()}.${extension}`;
+
+  try {
+    const res = await fetch(activeMoment.mediaUrl);
+    if (!res.ok) throw new Error('Tai file that bai');
+    const blob = await res.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(objectUrl);
+    if (lightboxActionStatus) lightboxActionStatus.textContent = 'Da tai xuong.';
+  } catch (_err) {
+    window.open(activeMoment.mediaUrl, '_blank', 'noopener,noreferrer');
+    if (lightboxActionStatus) {
+      lightboxActionStatus.textContent = 'Khong tai truc tiep duoc, da mo file o tab moi.';
+    }
+  }
+}
+
+async function deleteCurrentMoment() {
+  if (!activeMoment?._id) return;
+  const ok = window.confirm('Ban chac chan muon xoa khoanh khac nay?');
+  if (!ok) return;
+
+  try {
+    if (lightboxDelete) lightboxDelete.disabled = true;
+    const res = await fetch(`/api/moments/${activeMoment._id}`, { method: 'DELETE' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Xoa that bai');
+
+    cache = cache.filter((m) => m._id !== activeMoment._id);
+    render();
+    closeLightbox();
+  } catch (err) {
+    if (lightboxActionStatus) lightboxActionStatus.textContent = `Khong xoa duoc: ${err.message}`;
+  } finally {
+    if (lightboxDelete) lightboxDelete.disabled = !activeMoment?._id;
+  }
 }
 
 function createCard(item) {
@@ -176,6 +243,8 @@ ownerOptions.forEach((option) => {
 
 reloadBtn?.addEventListener('click', fetchMoments);
 lightboxClose?.addEventListener('click', closeLightbox);
+lightboxDownload?.addEventListener('click', downloadCurrentMoment);
+lightboxDelete?.addEventListener('click', deleteCurrentMoment);
 lightbox?.addEventListener('click', (e) => {
   if (e.target === lightbox) closeLightbox();
 });

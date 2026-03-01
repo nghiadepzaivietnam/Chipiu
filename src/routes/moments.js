@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const Moment = require('../models/Moment');
-const { cloudinary, isCloudinaryEnabled } = require('../lib/cloudinary');
+const { cloudinary, isCloudinaryEnabled, toPublicIdFromUrl } = require('../lib/cloudinary');
 
 const router = express.Router();
 
@@ -56,6 +56,13 @@ async function safeDeleteFile(filePath) {
       console.error('Failed to delete temp upload file:', err.message);
     }
   }
+}
+
+function buildDiskPathFromUrl(urlPath) {
+  if (!urlPath || typeof urlPath !== 'string') return null;
+  if (!urlPath.startsWith('/uploads/')) return null;
+  const filename = path.basename(urlPath);
+  return path.join(uploadDir, filename);
 }
 
 // Create a new moment
@@ -118,6 +125,31 @@ router.get('/', async (req, res) => {
     res.json(moments);
   } catch (err) {
     res.status(500).json({ error: 'Could not fetch moments' });
+  }
+});
+
+// Delete a moment by id
+router.delete('/:id', async (req, res) => {
+  try {
+    const moment = await Moment.findById(req.params.id);
+    if (!moment) {
+      return res.status(404).json({ error: 'Moment not found' });
+    }
+
+    const oldDiskPath = buildDiskPathFromUrl(moment.mediaUrl);
+    const oldPublicId = toPublicIdFromUrl(moment.mediaUrl);
+
+    await Moment.deleteOne({ _id: moment._id });
+    await safeDeleteFile(oldDiskPath);
+
+    if (isCloudinaryEnabled && oldPublicId) {
+      const resourceType = moment.mediaType === 'video' ? 'video' : 'image';
+      await cloudinary.uploader.destroy(oldPublicId, { resource_type: resourceType }).catch(() => {});
+    }
+
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.status(500).json({ error: 'Could not delete moment' });
   }
 });
 
