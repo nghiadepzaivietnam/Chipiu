@@ -90,7 +90,7 @@ function createCard(item) {
   if (item.mediaType === 'image' && item.mediaUrl) {
     card.innerHTML = `<img src="${item.mediaUrl}" alt="moment" loading="lazy" />`;
   } else if (item.mediaType === 'video' && item.mediaUrl) {
-    card.innerHTML = `<video src="${item.mediaUrl}" muted playsinline preload="metadata"></video>`;
+    card.innerHTML = `<video src="${item.mediaUrl}" muted playsinline webkit-playsinline autoplay loop preload="metadata"></video>`;
   } else {
     const safeText = item.caption ? item.caption : 'Khoanh khac';
     card.classList.add('text-tile');
