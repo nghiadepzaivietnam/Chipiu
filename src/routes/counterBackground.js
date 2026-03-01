@@ -2,6 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const CounterBackground = require('../models/CounterBackground');
+const { cloudinary, isCloudinaryEnabled, toPublicIdFromUrl } = require('../lib/cloudinary');
 
 const router = express.Router();
 
@@ -9,10 +11,10 @@ const uploadDir = path.join(__dirname, '../../uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
-const stateFile = path.join(uploadDir, 'counter-background.json');
 
 function buildDiskPathFromUrl(urlPath) {
   if (!urlPath || typeof urlPath !== 'string') return null;
+  if (!urlPath.startsWith('/uploads/')) return null;
   const filename = path.basename(urlPath);
   return path.join(uploadDir, filename);
 }
@@ -26,31 +28,6 @@ async function safeDeleteFile(filePath) {
       console.error('Failed to delete old background file:', err.message);
     }
   }
-}
-
-async function readState() {
-  try {
-    const raw = await fs.promises.readFile(stateFile, 'utf8');
-    const parsed = JSON.parse(raw);
-    if (parsed && typeof parsed.imageUrl === 'string' && parsed.imageUrl.length > 0) {
-      return parsed;
-    }
-    return {};
-  } catch (err) {
-    if (err.code !== 'ENOENT') {
-      console.error('Failed to read counter background state:', err.message);
-    }
-    return {};
-  }
-}
-
-async function writeState(next) {
-  const payload = {
-    imageUrl: next?.imageUrl || null,
-    updatedAt: new Date().toISOString(),
-  };
-  await fs.promises.writeFile(stateFile, JSON.stringify(payload, null, 2), 'utf8');
-  return payload;
 }
 
 const storage = multer.diskStorage({
@@ -76,8 +53,8 @@ const upload = multer({
 // Get current counter background
 router.get('/', async (_req, res) => {
   try {
-    const background = await readState();
-    res.json(background);
+    const background = await CounterBackground.findOne().sort({ updatedAt: -1 });
+    res.json(background || {});
   } catch (err) {
     console.error('Counter background get error:', err.message);
     res.status(500).json({ error: 'Could not fetch counter background' });
@@ -90,14 +67,43 @@ router.post('/', upload.single('image'), async (req, res) => {
     return res.status(400).json({ error: 'Image is required' });
   }
 
-  const newImageUrl = `/uploads/${req.file.filename}`;
-
   try {
-    const existing = await readState();
-    const oldImagePath = buildDiskPathFromUrl(existing.imageUrl);
-    const background = await writeState({ imageUrl: newImageUrl });
+    const existing = await CounterBackground.findOne().sort({ updatedAt: -1 });
+
+    let newImageUrl = `/uploads/${req.file.filename}`;
+    let newImagePublicId = null;
+
+    if (isCloudinaryEnabled) {
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'hdha/counter-background',
+        resource_type: 'image',
+      });
+      newImageUrl = uploadResult.secure_url;
+      newImagePublicId = uploadResult.public_id || null;
+      await safeDeleteFile(req.file.path);
+    }
+
+    const oldImagePath = buildDiskPathFromUrl(existing?.imageUrl);
+
+    let background;
+    if (existing) {
+      existing.imageUrl = newImageUrl;
+      existing.imagePublicId = newImagePublicId;
+      background = await existing.save();
+    } else {
+      background = await CounterBackground.create({
+        imageUrl: newImageUrl,
+        imagePublicId: newImagePublicId,
+      });
+    }
 
     await safeDeleteFile(oldImagePath);
+
+    const oldPublicId = existing?.imagePublicId || toPublicIdFromUrl(existing?.imageUrl);
+    if (isCloudinaryEnabled && oldPublicId && oldPublicId !== newImagePublicId) {
+      await cloudinary.uploader.destroy(oldPublicId, { resource_type: 'image' }).catch(() => {});
+    }
+
     return res.status(201).json(background);
   } catch (err) {
     await safeDeleteFile(path.join(uploadDir, req.file.filename));
@@ -108,12 +114,17 @@ router.post('/', upload.single('image'), async (req, res) => {
 // Remove current counter background
 router.delete('/', async (_req, res) => {
   try {
-    const existing = await readState();
-    if (!existing.imageUrl) return res.json({ ok: true });
+    const existing = await CounterBackground.findOne().sort({ updatedAt: -1 });
+    if (!existing) return res.json({ ok: true });
 
     const oldImagePath = buildDiskPathFromUrl(existing.imageUrl);
-    await writeState({ imageUrl: null });
+    await CounterBackground.deleteOne({ _id: existing._id });
     await safeDeleteFile(oldImagePath);
+
+    const oldPublicId = existing.imagePublicId || toPublicIdFromUrl(existing.imageUrl);
+    if (isCloudinaryEnabled && oldPublicId) {
+      await cloudinary.uploader.destroy(oldPublicId, { resource_type: 'image' }).catch(() => {});
+    }
 
     return res.json({ ok: true });
   } catch (err) {

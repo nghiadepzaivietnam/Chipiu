@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const Moment = require('../models/Moment');
+const { cloudinary, isCloudinaryEnabled } = require('../lib/cloudinary');
 
 const router = express.Router();
 
@@ -46,6 +47,17 @@ const fileFilter = (_req, file, cb) => {
 
 const upload = multer({ storage, fileFilter, limits: { fileSize: 100 * 1024 * 1024 } }); // 100MB
 
+async function safeDeleteFile(filePath) {
+  if (!filePath) return;
+  try {
+    await fs.promises.unlink(filePath);
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
+      console.error('Failed to delete temp upload file:', err.message);
+    }
+  }
+}
+
 // Create a new moment
 router.post('/', (req, res) => {
   upload.single('media')(req, res, async (uploadErr) => {
@@ -64,7 +76,17 @@ router.post('/', (req, res) => {
 
       if (req.file) {
         mediaType = req.file.mimetype.startsWith('video') ? 'video' : 'image';
-        mediaUrl = `/uploads/${req.file.filename}`;
+
+        if (isCloudinaryEnabled) {
+          const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'hdha/moments',
+            resource_type: mediaType === 'video' ? 'video' : 'image',
+          });
+          mediaUrl = uploadResult.secure_url;
+          await safeDeleteFile(req.file.path);
+        } else {
+          mediaUrl = `/uploads/${req.file.filename}`;
+        }
       }
 
       const moment = await Moment.create({
@@ -77,6 +99,7 @@ router.post('/', (req, res) => {
 
       return res.status(201).json(moment);
     } catch (err) {
+      await safeDeleteFile(req.file?.path);
       console.error(err);
       return res.status(400).json({ error: err.message });
     }

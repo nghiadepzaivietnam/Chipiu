@@ -15,6 +15,10 @@
 - Mot trong 2 cai:
   - `OPENAI_API_KEY` (neu dung OpenAI), hoac
   - `HF_API_TOKEN` (neu dung Hugging Face)
+- Khuyen nghi de luu media ben vung (khong mat sau khi redeploy):
+  - `CLOUDINARY_CLOUD_NAME`
+  - `CLOUDINARY_API_KEY`
+  - `CLOUDINARY_API_SECRET`
 
 ## 4) Deploy
 1. Bam `Apply`/`Deploy`.
@@ -23,4 +27,5 @@
 
 ## Ghi chu
 - Render free co the ngu nguon khi khong co truy cap.
-- Thu muc `uploads` tren Render la ephemeral (co the mat khi restart). Neu can luu file ben vung, nen doi sang Cloudinary/S3.
+- Thu muc `uploads` tren Render la ephemeral (co the mat khi restart).
+- Khi da dien du bo bien `CLOUDINARY_*`, app se tu dong upload anh/video len Cloudinary de luu ben vung.

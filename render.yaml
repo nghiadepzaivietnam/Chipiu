@@ -22,3 +22,9 @@ services:
         sync: false
       - key: HF_MODEL
         value: meta-llama/Llama-3.1-8B-Instruct
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
