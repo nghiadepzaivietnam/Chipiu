@@ -87,6 +87,7 @@ body {
   display: grid;
   place-items: center;
   perspective: 1600px;
+  padding-top: calc(18px + env(safe-area-inset-top, 0px));
   transition: transform 1s cubic-bezier(0.25, 0.9, 0.2, 1), filter 1s ease-in-out;
   transform-style: preserve-3d;
 }
@@ -388,12 +389,24 @@ body.focus-letter .atmosphere {
 }
 
 @media (max-width: 760px) {
+  .scene {
+    padding-top: calc(56px + env(safe-area-inset-top, 0px));
+  }
+
   .envelope-wrap {
     width: min(90vw, 420px);
   }
 
   .letter {
-    height: 145%;
+    height: 130%;
+  }
+
+  .scene.opened .letter {
+    transform: translateX(-50%) translateY(-6%) scaleY(1) rotateX(0deg);
+  }
+
+  .letter-inner {
+    padding-top: clamp(26px, 7vw, 34px);
   }
 
   p.line {
@@ -401,6 +414,8 @@ body.focus-letter .atmosphere {
   }
 
   .audio-toggle {
+    left: calc(14px + env(safe-area-inset-left, 0px));
+    right: auto;
     width: 40px;
     height: 40px;
     font-size: 18px;
