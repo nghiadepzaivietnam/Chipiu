@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trinh tao Hanh Trinh 2 Dua</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #ff5f8d;
+      --ink: #3e2130;
+      --panel: rgba(255, 255, 255, 0.88);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255, 191, 218, 0.48), transparent 34%),
+        radial-gradient(circle at 90% 84%, rgba(255, 216, 233, 0.46), transparent 44%),
+        linear-gradient(135deg, #fff5fa, #fff0f6 45%, #fff8fc 100%);
+      min-height: 100vh;
+      padding: 18px;
+    }
+    .shell {
+      width: min(1200px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 360px 1fr;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.94);
+      border-radius: 18px;
+      box-shadow: 0 14px 36px rgba(255, 96, 150, 0.16);
+      backdrop-filter: blur(8px);
+    }
+    .left {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+    }
+    h1 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: 30px;
+      color: #a73762;
+      line-height: 1.12;
+    }
+    .sub {
+      margin: 0;
+      opacity: 0.78;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .grid { display: grid; gap: 8px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    label { font-size: 13px; font-weight: 600; opacity: 0.82; }
+    input, select, textarea, button { font: inherit; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 95, 141, 0.24);
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 9px 10px;
+      color: var(--ink);
+    }
+    textarea { min-height: 78px; resize: vertical; }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, #ff5f8d, #ff7fac);
+      box-shadow: 0 10px 24px rgba(255, 95, 141, 0.28);
+    }
+    .btn.ghost {
+      color: #a53b63;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 95, 141, 0.24);
+      box-shadow: none;
+    }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .list { display: grid; gap: 8px; }
+    .item {
+      border: 1px solid rgba(255, 125, 174, 0.26);
+      background: rgba(255, 255, 255, 0.84);
+      border-radius: 12px;
+      padding: 9px;
+      display: grid;
+      gap: 6px;
+    }
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+    }
+    .item-title {
+      margin: 0;
+      font-size: 14px;
+      color: #86284d;
+    }
+    .item-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .small {
+      border: 1px solid rgba(255, 95, 141, 0.25);
+      border-radius: 8px;
+      background: #fff;
+      color: #9c365f;
+      padding: 5px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .right { padding: 14px 14px 8px; display: grid; gap: 8px; }
+    .preview-title { margin: 0; color: #a73762; font-size: 20px; font-weight: 700; }
+    .scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 4px 18px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 95, 141, 0.55) transparent;
+    }
+    .track {
+      position: relative;
+      display: flex;
+      width: max-content;
+      gap: 38px;
+      min-height: 430px;
+      padding: 14px 18px;
+    }
+    .line {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 130, 176, 0.42);
+      overflow: hidden;
+    }
+    .line-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ff4f87, #ff7fb0, #ffc5dc);
+      box-shadow: 0 0 18px rgba(255, 79, 135, 0.5);
+      transition: width 140ms ease-out;
+    }
+    .step {
+      width: 255px;
+      min-width: 255px;
+      min-height: 390px;
+      position: relative;
+      scroll-snap-align: start;
+    }
+    .node {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 4px solid #ff5f8d;
+      background: #fff;
+      box-shadow: 0 0 0 7px rgba(255, 121, 168, 0.2);
+    }
+    .box {
+      position: absolute;
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.88);
+      padding: 12px;
+      box-shadow: 0 12px 28px rgba(255, 113, 164, 0.2);
+      opacity: 0;
+      transition: opacity 380ms ease, transform 380ms ease;
+    }
+    .step.top .box { bottom: calc(50% + 32px); transform: translateY(18px); }
+    .step.bottom .box { top: calc(50% + 32px); transform: translateY(-18px); }
+    .step.visible .box { opacity: 1; transform: translateY(0); }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff5f8d, #ff82ad);
+      color: #fff;
+      font-weight: 800;
+      font-size: 19px;
+      padding: 5px 7px 5px 11px;
+      box-shadow: 0 9px 20px rgba(255, 95, 141, 0.3);
+    }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      object-fit: cover;
+      background: #fff;
+    }
+    .avatar.pair { margin-left: -10px; box-shadow: 0 0 0 2px #fff; }
+    .role {
+      margin: 7px 0 0;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: #b13f6d;
+    }
+    .title {
+      margin: 8px 0 4px;
+      font-size: 16px;
+      color: #5e2340;
+    }
+    .desc { margin: 0; font-size: 14px; line-height: 1.5; opacity: 0.86; }
+    .future .box {
+      box-shadow: 0 0 0 1px rgba(255, 146, 194, 0.65), 0 0 28px rgba(255, 88, 147, 0.42);
+      animation: glow 2.3s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100% { box-shadow: 0 0 0 1px rgba(255, 146, 194, 0.65), 0 0 22px rgba(255, 88, 147, 0.36); }
+      50% { box-shadow: 0 0 0 1px rgba(255, 146, 194, 0.85), 0 0 30px rgba(255, 88, 147, 0.54); }
+    }
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+      .left { max-height: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="card left">
+      <h1>Trinh tao hanh trinh</h1>
+      <p class="sub">Du lieu duoc luu MongoDB de len web va co backup local tren may ban.</p>
+
+      <div class="grid">
+        <label>Avatar Hai Anh</label>
+        <input type="file" id="avatarHaiAnhFile" accept="image/*" />
+      </div>
+      <div class="grid">
+        <label>Avatar Trọng Nghĩa</label>
+        <input type="file" id="avatarToiFile" accept="image/*" />
+      </div>
+
+      <hr style="border:none;border-top:1px solid rgba(255,95,141,.18);width:100%;margin:2px 0;">
+
+      <div class="grid">
+        <label>Ngay / moc thoi gian</label>
+        <input id="fDate" placeholder="Vi du: 01 / 06 / 2025" />
+      </div>
+      <div class="grid">
+        <label>Vai tro</label>
+        <select id="fRole">
+          <option value="haianh">Hai Anh (tren)</option>
+          <option value="toi">Trọng Nghĩa (duoi)</option>
+          <option value="both">Ca hai</option>
+        </select>
+      </div>
+      <div class="grid">
+        <label>Tieu de ngan</label>
+        <input id="fTitle" placeholder="Vi du: Chinh thuc ben nhau" />
+      </div>
+      <div class="grid">
+        <label>Mo ta</label>
+        <textarea id="fDesc" placeholder="1-2 dong mo ta"></textarea>
+      </div>
+      <div class="row2">
+        <label style="display:flex;gap:8px;align-items:center;">
+          <input type="checkbox" id="fFuture" style="width:auto;" />
+          Moc dac biet (phat sang)
+        </label>
+        <button class="btn" id="addBtn" type="button">+ Them moc</button>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" id="exportBtn" type="button">Xuat JSON</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none;" />
+        <button class="btn ghost" id="importBtn" type="button">Nhap JSON</button>
+      </div>
+      <button class="btn ghost" id="clearBtn" type="button">Xoa tat ca moc</button>
+
+      <div class="list" id="itemsList"></div>
+    </section>
+
+    <section class="card right">
+      <p class="preview-title">Preview: Hanh Trinh Toi 2 Dua</p>
+      <div class="scroll" id="scroll">
+        <div class="track" id="track">
+          <div class="line"><div class="line-fill" id="lineFill"></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "hdha.journey.builder.v1";
+    const API_BASE = "/api/journey";
+    const DEFAULT_HAIANH = "/hai-anh.jpg";
+    const DEFAULT_TOI = "/uploads/1772244572266-5389.jpg";
+
+    const avatarHaiAnhFile = document.getElementById("avatarHaiAnhFile");
+    const avatarToiFile = document.getElementById("avatarToiFile");
+    const fDate = document.getElementById("fDate");
+    const fRole = document.getElementById("fRole");
+    const fTitle = document.getElementById("fTitle");
+    const fDesc = document.getElementById("fDesc");
+    const fFuture = document.getElementById("fFuture");
+    const addBtn = document.getElementById("addBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const importBtn = document.getElementById("importBtn");
+    const importFile = document.getElementById("importFile");
+    const clearBtn = document.getElementById("clearBtn");
+    const itemsList = document.getElementById("itemsList");
+    const scroll = document.getElementById("scroll");
+    const track = document.getElementById("track");
+    const lineFill = document.getElementById("lineFill");
+
+    let state = loadLocalState();
+
+    function loadLocalState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { avatars: { haianh: DEFAULT_HAIANH, toi: DEFAULT_TOI }, items: [] };
+        const parsed = JSON.parse(raw);
+        return {
+          avatars: {
+            haianh: parsed?.avatars?.haianh || DEFAULT_HAIANH,
+            toi: parsed?.avatars?.toi || DEFAULT_TOI,
+          },
+          items: Array.isArray(parsed?.items) ? parsed.items : [],
+        };
+      } catch (_e) {
+        return { avatars: { haianh: DEFAULT_HAIANH, toi: DEFAULT_TOI }, items: [] };
+      }
+    }
+
+    function saveLocalState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    async function loadServerState() {
+      const res = await fetch(API_BASE);
+      if (!res.ok) throw new Error("Khong the tai du lieu tu server.");
+      const data = await res.json();
+      return {
+        avatars: {
+          haianh: data?.avatars?.haianh || DEFAULT_HAIANH,
+          toi: data?.avatars?.toi || DEFAULT_TOI,
+        },
+        items: Array.isArray(data?.items) ? data.items : [],
+      };
+    }
+
+    async function saveServerState() {
+      const res = await fetch(API_BASE, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d?.error || "Luu server that bai.");
+      }
+    }
+
+    async function uploadAvatar(file) {
+      const form = new FormData();
+      form.append("image", file);
+      const res = await fetch(`${API_BASE}/avatar`, { method: "POST", body: form });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d?.error || "Upload avatar that bai.");
+      }
+      const data = await res.json();
+      return String(data?.url || "").trim();
+    }
+
+    function roleLabel(role) {
+      if (role === "haianh") return "Hai Anh";
+      if (role === "toi") return "Trọng Nghĩa";
+      return "Ca hai";
+    }
+
+    function isTop(role, index) {
+      if (role === "haianh") return true;
+      if (role === "toi") return false;
+      return index % 2 === 0;
+    }
+
+    function buildAvatarHtml(role) {
+      const a1 = `<img class="avatar" src="${state.avatars.haianh}" alt="Hai Anh" onerror="this.src='${DEFAULT_HAIANH}'">`;
+      const a2 = `<img class="avatar" src="${state.avatars.toi}" alt="Trọng Nghĩa" onerror="this.src='${DEFAULT_HAIANH}'">`;
+      if (role === "haianh") return a1;
+      if (role === "toi") return a2;
+      return `${a1}<img class="avatar pair" src="${state.avatars.toi}" alt="Trọng Nghĩa" onerror="this.src='${DEFAULT_HAIANH}'">`;
+    }
+
+    function renderList() {
+      itemsList.innerHTML = "";
+      if (!state.items.length) {
+        itemsList.innerHTML = '<p class="sub" style="margin:0;">Chua co moc nao. Them moc dau tien o phia tren.</p>';
+        return;
+      }
+      state.items.forEach((item, idx) => {
+        const wrap = document.createElement("article");
+        wrap.className = "item";
+        wrap.innerHTML = `
+          <div class="item-top">
+            <strong>${item.date || "Chua co ngay"} · ${roleLabel(item.role)}</strong>
+            <span>${item.future ? "*" : ""}</span>
+          </div>
+          <p class="item-title">${item.title || "(Chua co tieu de)"}</p>
+          <div class="item-btns">
+            <button class="small" data-act="up" data-idx="${idx}">Up</button>
+            <button class="small" data-act="down" data-idx="${idx}">Down</button>
+            <button class="small" data-act="edit" data-idx="${idx}">Sua</button>
+            <button class="small" data-act="del" data-idx="${idx}">Xoa</button>
+          </div>
+        `;
+        itemsList.appendChild(wrap);
+      });
+    }
+
+    function renderPreview() {
+      track.querySelectorAll(".step").forEach((n) => n.remove());
+      state.items.forEach((item, idx) => {
+        const top = isTop(item.role, idx);
+        const step = document.createElement("article");
+        step.className = `step ${top ? "top" : "bottom"} ${item.future ? "future" : ""}`;
+        step.setAttribute("data-step", "");
+        step.innerHTML = `
+          <div class="box">
+            <div class="pill">${item.date || "?"} ${buildAvatarHtml(item.role)}</div>
+            <p class="role">${roleLabel(item.role)}</p>
+            <h3 class="title">${item.title || "(Chua co tieu de)"}</h3>
+            <p class="desc">${item.desc || ""}</p>
+          </div>
+          <div class="node" aria-hidden="true"></div>
+        `;
+        track.appendChild(step);
+      });
+      bindStepReveal();
+      updateFill();
+    }
+
+    function renderAll() {
+      renderList();
+      renderPreview();
+      saveLocalState();
+    }
+
+    async function addItem() {
+      const date = fDate.value.trim();
+      const title = fTitle.value.trim();
+      const desc = fDesc.value.trim();
+      if (!title) return alert("Nhap tieu de moc truoc nhe.");
+      state.items.push({ date, role: fRole.value, title, desc, future: Boolean(fFuture.checked) });
+      fDate.value = "";
+      fTitle.value = "";
+      fDesc.value = "";
+      fFuture.checked = false;
+      renderAll();
+      await saveServerState().catch((e) => alert(e.message));
+    }
+
+    function updateFill() {
+      const max = Math.max(1, scroll.scrollWidth - scroll.clientWidth);
+      const p = Math.min(1, Math.max(0, scroll.scrollLeft / max));
+      lineFill.style.width = `${(p * 100).toFixed(2)}%`;
+    }
+
+    function bindStepReveal() {
+      const steps = Array.from(track.querySelectorAll("[data-step]"));
+      if (!steps.length) return;
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        },
+        { root: scroll, threshold: 0.4 }
+      );
+      steps.forEach((s) => io.observe(s));
+    }
+
+    itemsList.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-act]");
+      if (!btn) return;
+      const idx = Number(btn.getAttribute("data-idx"));
+      const act = btn.getAttribute("data-act");
+      if (!Number.isInteger(idx)) return;
+
+      if (act === "del") {
+        state.items.splice(idx, 1);
+      } else if (act === "up" && idx > 0) {
+        [state.items[idx - 1], state.items[idx]] = [state.items[idx], state.items[idx - 1]];
+      } else if (act === "down" && idx < state.items.length - 1) {
+        [state.items[idx + 1], state.items[idx]] = [state.items[idx], state.items[idx + 1]];
+      } else if (act === "edit") {
+        const item = state.items[idx];
+        const title = prompt("Sua tieu de:", item.title || "");
+        if (title === null) return;
+        const desc = prompt("Sua mo ta:", item.desc || "");
+        if (desc === null) return;
+        const date = prompt("Sua ngay/moc:", item.date || "");
+        if (date === null) return;
+        item.title = title.trim();
+        item.desc = desc.trim();
+        item.date = date.trim();
+      }
+      renderAll();
+      saveServerState().catch(() => {});
+    });
+
+    addBtn.addEventListener("click", () => {
+      addItem().catch(() => {});
+    });
+
+    avatarHaiAnhFile.addEventListener("change", async () => {
+      const file = avatarHaiAnhFile.files?.[0];
+      if (!file) return;
+      try {
+        const url = await uploadAvatar(file);
+        state.avatars.haianh = url || DEFAULT_HAIANH;
+        renderAll();
+        await saveServerState();
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+
+    avatarToiFile.addEventListener("change", async () => {
+      const file = avatarToiFile.files?.[0];
+      if (!file) return;
+      try {
+        const url = await uploadAvatar(file);
+        state.avatars.toi = url || DEFAULT_TOI;
+        renderAll();
+        await saveServerState();
+      } catch (e) {
+        alert(e.message);
+      }
+    });
+
+    exportBtn.addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "hanh-trinh-2-dua.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    importBtn.addEventListener("click", () => importFile.click());
+    importFile.addEventListener("change", async () => {
+      const f = importFile.files?.[0];
+      if (!f) return;
+      const text = await f.text();
+      try {
+        const parsed = JSON.parse(text);
+        if (!parsed || !Array.isArray(parsed.items)) throw new Error("invalid");
+        state = {
+          avatars: {
+            haianh: parsed?.avatars?.haianh || DEFAULT_HAIANH,
+            toi: parsed?.avatars?.toi || DEFAULT_TOI,
+          },
+          items: parsed.items,
+        };
+        renderAll();
+        await saveServerState();
+      } catch (_e) {
+        alert("File JSON khong hop le.");
+      }
+      importFile.value = "";
+    });
+
+    clearBtn.addEventListener("click", () => {
+      if (!confirm("Xoa toan bo moc hanh trinh?")) return;
+      state.items = [];
+      renderAll();
+      saveServerState().catch(() => {});
+    });
+
+    scroll.addEventListener("scroll", updateFill, { passive: true });
+    window.addEventListener("resize", updateFill, { passive: true });
+
+    (async function init() {
+      renderAll();
+      try {
+        state = await loadServerState();
+        renderAll();
+      } catch (_e) {
+        // fallback local
+      }
+    })();
+  </script>
+</body>
+</html>

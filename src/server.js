@@ -33,6 +33,7 @@ app.use('/api/counter-bg', require('./routes/counterBackground'));
 app.use('/api/period', require('./routes/period'));
 app.use('/api/period-ai', require('./routes/periodAi'));
 app.use('/api/ai-chat', require('./routes/aiChat'));
+app.use('/api/journey', require('./routes/journey'));
 
 // SPA fallback to serve index.html (anything not /api or /uploads)
 app.get(/^\/(?!api|uploads).*/, (_req, res) => {
