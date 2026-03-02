@@ -263,6 +263,61 @@
         color: #8e5a72;
         min-height: 18px;
       }
+      .reminder-gift {
+        margin-top: 10px;
+        border: 1px dashed rgba(233, 128, 184, 0.55);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.78);
+        overflow: hidden;
+      }
+      .reminder-toggle {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        cursor: pointer;
+        color: #7f4563;
+        font: inherit;
+        font-weight: 700;
+      }
+      .gift-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: inline-grid;
+        place-items: center;
+        background: linear-gradient(135deg, #ff89bf, #ffb0d3);
+        color: #fff;
+        font-size: 22px;
+      }
+      .reminder-panel {
+        display: none;
+        border-top: 1px dashed rgba(233, 128, 184, 0.5);
+        padding: 10px;
+      }
+      .reminder-panel.open {
+        display: block;
+      }
+      .reminder-text {
+        margin: 0 0 8px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.45;
+        color: #7a3f5e;
+      }
+      .reminder-refresh {
+        border: 1px solid rgba(233, 128, 184, 0.45);
+        border-radius: 10px;
+        background: #fff;
+        color: #e663a5;
+        font: inherit;
+        font-weight: 700;
+        padding: 7px 10px;
+        cursor: pointer;
+      }
 
       @media (max-width: 900px) {
         .grid { grid-template-columns: 1fr; }
@@ -316,6 +371,16 @@
             <button class="btn soft" id="clearBtn" type="button">Xóa ngày đã chọn</button>
           </div>
           <p class="status" id="saveStatus"></p>
+          <section class="reminder-gift">
+            <button class="reminder-toggle" id="reminderToggle" type="button" aria-expanded="false">
+              <span class="gift-icon" aria-hidden="true">🎀</span>
+              <span>Hộp quà lời nhắc hôm nay</span>
+            </button>
+            <div class="reminder-panel" id="reminderPanel">
+              <p class="reminder-text" id="reminderText"></p>
+              <button class="reminder-refresh" id="reminderRefresh" type="button">Đổi lời nhắc</button>
+            </div>
+          </section>
 
           <h3 class="section-title" style="font-size:22px;margin-top:12px;">Ngày đã chọn</h3>
           <ul class="list" id="loggedList"></ul>
