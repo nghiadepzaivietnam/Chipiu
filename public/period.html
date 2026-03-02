@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>D? do�n k? kinh</title>
+    <title>Dự đoán kỳ kinh</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
@@ -12,7 +12,6 @@
       :root {
         --pink-1: #ff76b6;
         --pink-2: #ff9fcb;
-        --pink-3: #ffd8eb;
         --rose: #8a3b64;
         --soft: rgba(255, 255, 255, 0.86);
         --line: rgba(236, 127, 181, 0.34);
@@ -31,6 +30,7 @@
         position: fixed;
         inset: 0;
         z-index: -2;
+        pointer-events: none;
         background:
           linear-gradient(180deg, rgba(255, 240, 248, 0.2), rgba(255, 219, 239, 0.46)),
           url('/hello-kitty-wallpaper.jpg') center / cover no-repeat;
@@ -41,6 +41,7 @@
         position: fixed;
         inset: 0;
         z-index: -1;
+        pointer-events: none;
         background: radial-gradient(circle at 10% 12%, rgba(255, 126, 188, 0.24), transparent 32%),
           radial-gradient(circle at 90% 4%, rgba(255, 189, 218, 0.3), transparent 34%);
       }
@@ -160,6 +161,7 @@
         justify-content: space-between;
         gap: 8px;
         margin-bottom: 10px;
+        padding: 0 max(8px, env(safe-area-inset-left, 0px));
       }
       .month-title {
         margin: 0;
@@ -172,6 +174,8 @@
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 6px;
+        padding-left: max(8px, env(safe-area-inset-left, 0px));
+        padding-right: max(8px, env(safe-area-inset-right, 0px));
       }
       .weekday span {
         text-align: center;
@@ -190,6 +194,8 @@
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        position: relative;
+        z-index: 2;
       }
       .day.outside { opacity: 0.42; }
       .day.today { box-shadow: inset 0 0 0 2px #f7bb6f; }
@@ -253,51 +259,51 @@
       }
     </style>
   </head>
-  <body>
-    <nav class="top-nav" aria-label="Dieu huong">
-      <a class="nav-link" href="/">Trang ch?</a>
-      <a class="nav-link" href="/journal.html">Nh?t k�</a>
-      <a class="nav-link" href="/create.html">T?o kho?nh kh?c</a>
-      <a class="nav-link" href="/counter.html">�?m ng�y y�u</a>
-      <a class="nav-link primary" href="/period.html">D? do�n k? kinh</a>
+  <body class="period-page">
+    <nav class="top-nav" aria-label="Điều hướng">
+      <a class="nav-link" href="/">Trang chủ</a>
+      <a class="nav-link" href="/journal.html">Nhật ký</a>
+      <a class="nav-link" href="/create.html">Tạo khoảnh khắc</a>
+      <a class="nav-link" href="/counter.html">Đếm ngày yêu</a>
+      <a class="nav-link primary" href="/period.html">Dự đoán kỳ kinh</a>
     </nav>
 
     <main class="period-main">
       <section class="card hero">
-        <h1>L?ch k? kinh m?i</h1>
-        <p>Trang m?i t?i gi?n cho di?n tho?i, b?m v�o ng�y d? d�nh d?u nhanh, kh�ng lag.</p>
+        <h1>Lịch kỳ kinh mới</h1>
+        <p>Trang mới tối giản cho điện thoại, bấm vào ngày để đánh dấu nhanh, không lag.</p>
       </section>
 
       <div class="grid">
         <section class="card">
-          <h2 class="section-title">C�i d?t</h2>
+          <h2 class="section-title">Cài đặt</h2>
           <div class="field">
-            <label class="label" for="anchorDate">Ng�y b?t d?u k? g?n nh?t</label>
+            <label class="label" for="anchorDate">Ngày bắt đầu kỳ gần nhất</label>
             <input class="input" id="anchorDate" type="date" />
           </div>
           <div class="field">
-            <label class="label" for="cycleLength">�? d�i chu k? (ng�y)</label>
+            <label class="label" for="cycleLength">Độ dài chu kỳ (ngày)</label>
             <input class="input" id="cycleLength" type="number" min="20" max="45" />
           </div>
           <div class="field">
-            <label class="label" for="periodLength">S? ng�y h�nh kinh</label>
+            <label class="label" for="periodLength">Số ngày hành kinh</label>
             <input class="input" id="periodLength" type="number" min="2" max="10" />
           </div>
           <div class="row">
-            <button class="btn primary" id="saveBtn" type="button">Luu</button>
-            <button class="btn soft" id="clearBtn" type="button">X�a ng�y d� ch?n</button>
+            <button class="btn primary" id="saveBtn" type="button">Lưu</button>
+            <button class="btn soft" id="clearBtn" type="button">Xóa ngày đã chọn</button>
           </div>
           <p class="status" id="saveStatus"></p>
 
-          <h3 class="section-title" style="font-size:22px;margin-top:12px;">Ng�y d� ch?n</h3>
+          <h3 class="section-title" style="font-size:22px;margin-top:12px;">Ngày đã chọn</h3>
           <ul class="list" id="loggedList"></ul>
         </section>
 
         <section class="card">
           <div class="calendar-head">
-            <button class="btn soft" id="prevBtn" type="button">?</button>
+            <button class="btn soft" id="prevBtn" type="button" aria-label="Tháng trước">←</button>
             <h2 class="month-title" id="monthTitle"></h2>
-            <button class="btn soft" id="nextBtn" type="button">?</button>
+            <button class="btn soft" id="nextBtn" type="button" aria-label="Tháng sau">→</button>
           </div>
 
           <div class="weekday">
@@ -306,9 +312,9 @@
           <div class="days" id="calendarDays"></div>
 
           <div class="legend">
-            <span><i class="dot logged"></i> �� ch?n</span>
-            <span><i class="dot predicted"></i> D? do�n</span>
-            <span><i class="dot today"></i> H�m nay</span>
+            <span><i class="dot logged"></i> Đã chọn</span>
+            <span><i class="dot predicted"></i> Dự đoán</span>
+            <span><i class="dot today"></i> Hôm nay</span>
           </div>
         </section>
       </div>

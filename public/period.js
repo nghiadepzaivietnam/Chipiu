@@ -1,4 +1,4 @@
-const STORAGE_KEY = "hdha.period.tracker.v2";
+Ôªøconst STORAGE_KEY = "hdha.period.tracker.v2";
 const API_ENDPOINT = "/api/period";
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -117,10 +117,10 @@ function scheduleRemoteSave() {
   saveTimer = setTimeout(() => {
     saveRemote()
       .then(() => {
-        if (saveStatus) saveStatus.textContent = "–„ luu";
+        if (saveStatus) saveStatus.textContent = "ƒê√£ l∆∞u";
       })
       .catch(() => {
-        if (saveStatus) saveStatus.textContent = "–„ luu local (m?ng y?u)";
+        if (saveStatus) saveStatus.textContent = "ƒê√£ l∆∞u local (m·∫°ng y·∫øu)";
       });
   }, 250);
 }
@@ -168,7 +168,7 @@ function renderList() {
   const sorted = Array.from(state.loggedDates).sort((a, b) => b.localeCompare(a));
   if (!sorted.length) {
     const li = document.createElement("li");
-    li.textContent = "Chua cÛ ng‡y n‡o.";
+    li.textContent = "Ch∆∞a c√≥ ng√†y n√†o.";
     loggedList.appendChild(li);
     return;
   }
@@ -187,7 +187,7 @@ function renderCalendar() {
   const gridEnd = addDays(gridStart, 41);
   const predictedSet = getPredictedSet(gridStart, gridEnd);
 
-  monthTitle.textContent = `Th·ng ${String(monthStart.getUTCMonth() + 1).padStart(2, "0")}/${monthStart.getUTCFullYear()}`;
+  monthTitle.textContent = `Th√°ng ${String(monthStart.getUTCMonth() + 1).padStart(2, "0")}/${monthStart.getUTCFullYear()}`;
   calendarDays.innerHTML = "";
 
   for (let i = 0; i < 42; i += 1) {
@@ -232,13 +232,13 @@ function bindEvents() {
     state.anchorDate = nextAnchor;
     state.cycleLength = clampNum(cycleLengthInput.value, 20, 45, state.cycleLength);
     state.periodLength = clampNum(periodLengthInput.value, 2, 10, state.periodLength);
-    if (saveStatus) saveStatus.textContent = "–ang luu...";
+    if (saveStatus) saveStatus.textContent = "ƒêang l∆∞u...";
     saveAll();
   });
 
   clearBtn?.addEventListener("click", () => {
     state.loggedDates.clear();
-    if (saveStatus) saveStatus.textContent = "–ang luu...";
+    if (saveStatus) saveStatus.textContent = "ƒêang l∆∞u...";
     saveAll();
   });
 
@@ -263,7 +263,7 @@ function bindEvents() {
       state.loggedDates.add(dateIso);
     }
 
-    if (saveStatus) saveStatus.textContent = "–ang luu...";
+    if (saveStatus) saveStatus.textContent = "ƒêang l∆∞u...";
     saveAll();
   });
 }
