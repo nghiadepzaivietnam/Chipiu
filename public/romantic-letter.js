@@ -19,6 +19,10 @@ const SONG_START_SECONDS = 42;
 let opened = false;
 let soundEnabled = true;
 let targetAmbientVolume = 0;
+let audioReady = {
+  ambient: false,
+  song: false,
+};
 
 const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
 
@@ -258,22 +262,31 @@ async function tryPlay(audioEl) {
 
 function updateAudioUi() {
   audioToggle.classList.toggle("muted", !soundEnabled);
-  audioToggle.textContent = soundEnabled ? "♫" : "♪";
+  const missingAll = !audioReady.ambient && !audioReady.song;
+  audioToggle.textContent = missingAll ? "!" : soundEnabled ? "♫" : "♪";
+  audioToggle.title = missingAll
+    ? "Missing audio files: /audio/romantic-ambient.mp3 and /audio/noi-nay-co-anh.mp3"
+    : "Toggle sound";
 }
 
 async function startAudioExperience() {
   if (!soundEnabled) return;
+  if (!audioReady.ambient && !audioReady.song) return;
 
   if (fxCtx && fxCtx.state === "suspended") {
     await fxCtx.resume().catch(() => {});
   }
 
-  targetAmbientVolume = 0.16;
-  await tryPlay(bgAmbient);
+  if (audioReady.ambient) {
+    targetAmbientVolume = 0.16;
+    await tryPlay(bgAmbient);
+  }
 
-  loveSong.currentTime = SONG_START_SECONDS;
-  loveSong.volume = 0.9;
-  await tryPlay(loveSong);
+  if (audioReady.song) {
+    loveSong.currentTime = SONG_START_SECONDS;
+    loveSong.volume = 0.9;
+    await tryPlay(loveSong);
+  }
 }
 
 function fadeOutSong() {
@@ -290,17 +303,21 @@ function fadeOutSong() {
 
 audioToggle.addEventListener("click", async (e) => {
   e.stopPropagation();
+  if (!audioReady.ambient && !audioReady.song) {
+    alert("Không tìm thấy file nhạc. Hãy thêm:\n- public/audio/noi-nay-co-anh.mp3\n- public/audio/romantic-ambient.mp3");
+    return;
+  }
   soundEnabled = !soundEnabled;
 
   if (soundEnabled) {
-    targetAmbientVolume = opened ? 0.16 : 0.08;
-    await tryPlay(bgAmbient);
-    if (opened) {
+    targetAmbientVolume = audioReady.ambient ? (opened ? 0.16 : 0.08) : 0;
+    if (audioReady.ambient) await tryPlay(bgAmbient);
+    if (opened && audioReady.song) {
       await tryPlay(loveSong);
     }
   } else {
     targetAmbientVolume = 0;
-    fadeOutSong();
+    if (audioReady.song) fadeOutSong();
   }
 
   updateAudioUi();
@@ -344,6 +361,23 @@ window.addEventListener("touchmove", (e) => {
 }, { passive: true });
 
 window.addEventListener("resize", resizeCanvases);
+
+bgAmbient.addEventListener("canplaythrough", () => {
+  audioReady.ambient = true;
+  updateAudioUi();
+});
+loveSong.addEventListener("canplaythrough", () => {
+  audioReady.song = true;
+  updateAudioUi();
+});
+bgAmbient.addEventListener("error", () => {
+  audioReady.ambient = false;
+  updateAudioUi();
+});
+loveSong.addEventListener("error", () => {
+  audioReady.song = false;
+  updateAudioUi();
+});
 
 updateAudioUi();
 resizeCanvases();
