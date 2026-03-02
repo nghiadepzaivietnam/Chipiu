@@ -25,6 +25,7 @@ const AUDIO_CONFIG = {
 let opened = false;
 let soundEnabled = true;
 let targetAmbientVolume = 0;
+let hasStartedMusic = false;
 let audioReady = {
   ambient: false,
   song: false,
@@ -289,9 +290,12 @@ async function startAudioExperience() {
   }
 
   if (audioReady.song) {
-    loveSong.currentTime = AUDIO_CONFIG.songStartSeconds || 0;
+    if (!hasStartedMusic) {
+      loveSong.currentTime = AUDIO_CONFIG.songStartSeconds || 0;
+    }
     loveSong.volume = 0.9;
     await tryPlay(loveSong);
+    hasStartedMusic = true;
   }
 }
 
@@ -367,6 +371,14 @@ window.addEventListener("touchmove", (e) => {
 }, { passive: true });
 
 window.addEventListener("resize", resizeCanvases);
+
+// Start music as soon as user touches/clicks the letter scene, even before opening envelope.
+const bootstrapMusic = async () => {
+  if (!soundEnabled || hasStartedMusic) return;
+  await startAudioExperience();
+};
+window.addEventListener("pointerdown", bootstrapMusic, { passive: true });
+window.addEventListener("touchstart", bootstrapMusic, { passive: true });
 
 if (AUDIO_CONFIG.ambientUrl) {
   bgAmbient.src = AUDIO_CONFIG.ambientUrl;
