@@ -256,16 +256,22 @@ function playSparkleFx() {
 }
 
 async function tryPlay(audioEl) {
+  if (!audioEl || !audioEl.getAttribute("src")) return false;
   try {
     await audioEl.play();
+    return true;
   } catch (_err) {
     // ignore playback blocked or missing file
+    return false;
   }
 }
 
 function updateAudioUi() {
+  const hasAmbientSrc = Boolean(bgAmbient.getAttribute("src"));
+  const hasSongSrc = Boolean(loveSong.getAttribute("src"));
+  const missingAll = !hasAmbientSrc && !hasSongSrc;
+
   audioToggle.classList.toggle("muted", !soundEnabled);
-  const missingAll = !audioReady.ambient && !audioReady.song;
   audioToggle.textContent = missingAll ? "!" : soundEnabled ? "♫" : "♪";
   audioToggle.title = missingAll
     ? "Missing audio files. Add /audio/noi-nay-co-anh.mp3 (and /audio/romantic-ambient.mp3 if needed)"
@@ -274,24 +280,23 @@ function updateAudioUi() {
 
 async function startAudioExperience() {
   if (!soundEnabled) return;
-  if (!audioReady.ambient && !audioReady.song) return;
 
   if (fxCtx && fxCtx.state === "suspended") {
     await fxCtx.resume().catch(() => {});
   }
 
-  if (audioReady.ambient) {
+  if (bgAmbient.getAttribute("src")) {
     targetAmbientVolume = 0.16;
     await tryPlay(bgAmbient);
   }
 
-  if (audioReady.song) {
+  if (loveSong.getAttribute("src")) {
     if (!hasStartedMusic) {
       loveSong.currentTime = AUDIO_CONFIG.songStartSeconds || 0;
     }
     loveSong.volume = 0.9;
-    await tryPlay(loveSong);
-    hasStartedMusic = true;
+    const played = await tryPlay(loveSong);
+    if (played) hasStartedMusic = true;
   }
 }
 
@@ -309,21 +314,23 @@ function fadeOutSong() {
 
 audioToggle.addEventListener("click", async (e) => {
   e.stopPropagation();
-  if (!audioReady.ambient && !audioReady.song) {
+  const hasAmbientSrc = Boolean(bgAmbient.getAttribute("src"));
+  const hasSongSrc = Boolean(loveSong.getAttribute("src"));
+  if (!hasAmbientSrc && !hasSongSrc) {
     alert("Chưa có file nhạc local. Hãy thêm:\\n- public/audio/noi-nay-co-anh.mp3\\n- public/audio/romantic-ambient.mp3 (tuỳ chọn)");
     return;
   }
   soundEnabled = !soundEnabled;
 
   if (soundEnabled) {
-    targetAmbientVolume = audioReady.ambient ? (opened ? 0.16 : 0.08) : 0;
-    if (audioReady.ambient) await tryPlay(bgAmbient);
-    if (opened && audioReady.song) {
+    targetAmbientVolume = hasAmbientSrc ? (opened ? 0.16 : 0.08) : 0;
+    if (hasAmbientSrc) await tryPlay(bgAmbient);
+    if (opened && hasSongSrc) {
       await tryPlay(loveSong);
     }
   } else {
     targetAmbientVolume = 0;
-    if (audioReady.song) fadeOutSong();
+    if (hasSongSrc) fadeOutSong();
   }
 
   updateAudioUi();
