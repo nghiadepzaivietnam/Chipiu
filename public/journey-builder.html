@@ -25,6 +25,29 @@
       min-height: 100vh;
       padding: 18px;
     }
+    .top-links {
+      width: min(1200px, 100%);
+      margin: 0 auto 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .top-link {
+      text-decoration: none;
+      color: #a23a62;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid rgba(255, 95, 141, 0.22);
+      box-shadow: 0 8px 20px rgba(255, 108, 160, 0.16);
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+    .top-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(255, 108, 160, 0.2);
+    }
     .shell {
       width: min(1200px, 100%);
       margin: 0 auto;
@@ -245,10 +268,20 @@
     @media (max-width: 980px) {
       .shell { grid-template-columns: 1fr; }
       .left { max-height: none; }
+      .top-links {
+        justify-content: stretch;
+      }
+      .top-link {
+        flex: 1 1 auto;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
+  <nav class="top-links" aria-label="Dieu huong hanh trinh">
+    <a class="top-link" href="/hanh-trinh-toi-2-dua.html">← Quay ve trang hanh trinh</a>
+  </nav>
   <main class="shell">
     <section class="card left">
       <h1>Trinh tao hanh trinh</h1>
