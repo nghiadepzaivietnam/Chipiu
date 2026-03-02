@@ -14,7 +14,13 @@ const hctx = heartsCanvas.getContext("2d", { alpha: true });
 const bgAmbient = document.getElementById("bgAmbient");
 const loveSong = document.getElementById("loveSong");
 
-const SONG_START_SECONDS = 42;
+const AUDIO_CONFIG = {
+  // Dán link mp3 public trực tiếp để phát online, ví dụ từ Cloudinary/R2/S3.
+  // Không dùng link YouTube page vì audio tag không phát trực tiếp được.
+  loveSongUrl: "",
+  ambientUrl: "",
+  songStartSeconds: 0,
+};
 
 let opened = false;
 let soundEnabled = true;
@@ -265,7 +271,7 @@ function updateAudioUi() {
   const missingAll = !audioReady.ambient && !audioReady.song;
   audioToggle.textContent = missingAll ? "!" : soundEnabled ? "♫" : "♪";
   audioToggle.title = missingAll
-    ? "Missing audio files: /audio/romantic-ambient.mp3 and /audio/noi-nay-co-anh.mp3"
+    ? "Missing audio URLs. Set loveSongUrl/ambientUrl in romantic-letter.js"
     : "Toggle sound";
 }
 
@@ -283,7 +289,7 @@ async function startAudioExperience() {
   }
 
   if (audioReady.song) {
-    loveSong.currentTime = SONG_START_SECONDS;
+    loveSong.currentTime = AUDIO_CONFIG.songStartSeconds || 0;
     loveSong.volume = 0.9;
     await tryPlay(loveSong);
   }
@@ -304,7 +310,7 @@ function fadeOutSong() {
 audioToggle.addEventListener("click", async (e) => {
   e.stopPropagation();
   if (!audioReady.ambient && !audioReady.song) {
-    alert("Không tìm thấy file nhạc. Hãy thêm:\n- public/audio/noi-nay-co-anh.mp3\n- public/audio/romantic-ambient.mp3");
+    alert("Chưa có link nhạc. Hãy set loveSongUrl (và ambientUrl nếu muốn) trong romantic-letter.js");
     return;
   }
   soundEnabled = !soundEnabled;
@@ -361,6 +367,13 @@ window.addEventListener("touchmove", (e) => {
 }, { passive: true });
 
 window.addEventListener("resize", resizeCanvases);
+
+if (AUDIO_CONFIG.ambientUrl) {
+  bgAmbient.src = AUDIO_CONFIG.ambientUrl;
+}
+if (AUDIO_CONFIG.loveSongUrl) {
+  loveSong.src = AUDIO_CONFIG.loveSongUrl;
+}
 
 bgAmbient.addEventListener("canplaythrough", () => {
   audioReady.ambient = true;
