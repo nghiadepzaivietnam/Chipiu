@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Romantic Letter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Great+Vibes&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/romantic-letter.css" />
+  </head>
+  <body>
+    <canvas id="particles" aria-hidden="true"></canvas>
+    <div class="bg-blur" aria-hidden="true"></div>
+
+    <main class="stage">
+      <button id="envelopeBtn" class="envelope-scene" aria-label="Open letter">
+        <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+        <div class="envelope">
+          <div class="env-back"></div>
+          <div class="env-front"></div>
+          <div class="env-flap"></div>
+
+          <article class="letter" id="letter">
+            <div class="letter-inner">
+              <h1>My love,</h1>
+              <p>
+                If you are reading this, it means you chose to open something that carries my heart inside.
+              </p>
+              <p>
+                In a world full of noise, you are my quiet place.<br />
+                In days that feel heavy, you are my light.<br />
+                Every smile of yours feels like a sunrise I never want to miss.
+              </p>
+              <p>
+                I don't know what the future holds,<br />
+                but if it has you in it,<br />
+                then I am no longer afraid of anything.
+              </p>
+              <p>
+                Thank you for existing.<br />
+                Thank you for being you.
+              </p>
+              <p class="signature">Forever yours.</p>
+            </div>
+          </article>
+        </div>
+      </button>
+      <p class="hint">Click the envelope</p>
+    </main>
+
+    <script src="/romantic-letter.js"></script>
+  </body>
+</html>
