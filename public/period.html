@@ -1,35 +1,30 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dự đoán kỳ kinh</title>
+    <title>D? do�n k? kinh</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/ai-widget.css" />
     <style>
       :root {
-        --bg: #fff7f2;
-        --text: #2d1d21;
-        --primary: #ef5a95;
-        --primary-2: #f38c4b;
-        --card: rgba(255, 255, 255, 0.82);
-        --line: rgba(224, 124, 174, 0.24);
+        --pink-1: #ff76b6;
+        --pink-2: #ff9fcb;
+        --pink-3: #ffd8eb;
+        --rose: #8a3b64;
+        --soft: rgba(255, 255, 255, 0.86);
+        --line: rgba(236, 127, 181, 0.34);
       }
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: "Space Grotesk", system-ui, sans-serif;
-        color: var(--text);
-        background: var(--bg);
         min-height: 100vh;
-        padding: calc(22px + 86px + env(safe-area-inset-top, 0px)) 14px 34px;
+        font-family: "Quicksand", sans-serif;
+        color: #5b3150;
+        background: #fff2f8;
+        padding: calc(82px + env(safe-area-inset-top, 0px)) 12px 24px;
       }
       body::before {
         content: "";
@@ -37,162 +32,126 @@
         inset: 0;
         z-index: -2;
         background:
-          radial-gradient(circle at 12% 14%, rgba(239, 90, 149, 0.23), transparent 32%),
-          radial-gradient(circle at 88% 2%, rgba(243, 140, 75, 0.18), transparent 30%),
-          linear-gradient(165deg, #fff8f4, #fff2f9);
+          linear-gradient(180deg, rgba(255, 240, 248, 0.2), rgba(255, 219, 239, 0.46)),
+          url('/hello-kitty-wallpaper.jpg') center / cover no-repeat;
+        filter: saturate(1.04);
       }
-      .top-nav-wrap {
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: radial-gradient(circle at 10% 12%, rgba(255, 126, 188, 0.24), transparent 32%),
+          radial-gradient(circle at 90% 4%, rgba(255, 189, 218, 0.3), transparent 34%);
+      }
+
+      .top-nav {
         position: fixed;
         top: calc(10px + env(safe-area-inset-top, 0px));
-        left: 50%;
-        transform: translateX(-50%);
-        width: min(980px, calc(100vw - 24px));
-        z-index: 90;
-      }
-      .nav-toggle {
-        display: none;
-        width: 100%;
-        min-height: 46px;
-        border: 1px solid rgba(255, 255, 255, 0.56);
-        border-radius: 16px;
-        font-weight: 700;
-        color: var(--text);
-        background: rgba(255, 249, 247, 0.9);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 14px 30px rgba(45, 17, 33, 0.13);
-      }
-      .top-nav {
+        left: 12px;
+        right: 12px;
+        z-index: 30;
         display: flex;
         gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
         padding: 8px;
         border-radius: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.56);
-        background: rgba(255, 249, 247, 0.9);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 14px 30px rgba(45, 17, 33, 0.13);
+        background: rgba(255, 247, 252, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.68);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 12px 24px rgba(219, 94, 152, 0.2);
       }
+      .top-nav::-webkit-scrollbar { display: none; }
       .nav-link {
-        flex: 1 0 auto;
-        min-height: 42px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        flex: 0 0 auto;
+        white-space: nowrap;
+        text-decoration: none;
         padding: 9px 12px;
         border-radius: 12px;
-        text-decoration: none;
         font-weight: 700;
-        color: var(--primary);
+        color: var(--pink-1);
         background: #fff;
-        border: 1px solid rgba(239, 90, 149, 0.18);
-        white-space: nowrap;
+        border: 1px solid rgba(255, 130, 191, 0.25);
       }
       .nav-link.primary {
         color: #fff;
         border: none;
-        background: linear-gradient(130deg, var(--primary), var(--primary-2));
+        background: linear-gradient(135deg, var(--pink-1), var(--pink-2));
       }
 
       .period-main {
-        width: min(1080px, 100%);
+        width: min(980px, 100%);
         margin: 0 auto;
         display: grid;
-        gap: 16px;
+        gap: 12px;
       }
-      .hero,
       .card {
-        background: var(--card);
-        border: 1px solid rgba(255, 255, 255, 0.72);
         border-radius: 20px;
-        box-shadow: 0 16px 34px rgba(233, 90, 154, 0.14);
+        background: var(--soft);
+        border: 1px solid rgba(255, 255, 255, 0.76);
+        box-shadow: 0 10px 24px rgba(222, 91, 154, 0.16);
+        padding: 14px;
       }
       .hero {
-        padding: 22px;
+        background: linear-gradient(155deg, rgba(255, 173, 221, 0.38), rgba(255, 236, 248, 0.94));
       }
       .hero h1 {
-        margin: 10px 0 8px;
-        font-family: "Playfair Display", serif;
-        font-size: clamp(28px, 5vw, 44px);
-        line-height: 1.1;
+        margin: 6px 0 4px;
+        font-family: "Baloo 2", sans-serif;
+        font-size: clamp(28px, 7vw, 40px);
+        line-height: 1.04;
+        color: var(--rose);
       }
-      .hero p {
-        margin: 0;
-        opacity: 0.88;
-        line-height: 1.55;
-      }
-      .hero-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        border-radius: 999px;
-        padding: 7px 12px;
-        font-weight: 700;
-        background: #fff;
-        color: var(--primary);
-      }
+      .hero p { margin: 0; font-weight: 700; color: #8f4b70; }
 
-      .layout {
+      .grid {
         display: grid;
-        gap: 16px;
-        grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+        grid-template-columns: 300px minmax(0, 1fr);
+        gap: 12px;
       }
-      .card {
-        padding: 16px;
+      .section-title {
+        margin: 0 0 10px;
+        font-family: "Baloo 2", sans-serif;
+        font-size: 24px;
+        color: #75345a;
       }
-      .card h2 {
-        margin: 0 0 12px;
-        font-size: 20px;
+      .field { margin-bottom: 10px; }
+      .label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 700;
+        color: #8b4a6f;
       }
-      .field {
-        display: grid;
-        gap: 6px;
-        margin-bottom: 12px;
-      }
-      label {
-        font-weight: 600;
-      }
-      input,
-      textarea,
-      button {
-        font: inherit;
-      }
-      input,
-      textarea {
+      .input {
         width: 100%;
         border: 1px solid var(--line);
         border-radius: 12px;
-        padding: 10px 12px;
+        min-height: 42px;
+        padding: 8px 10px;
+        font: inherit;
+        color: #5d3551;
         background: #fff;
-        color: var(--text);
       }
-      textarea {
-        resize: vertical;
-        min-height: 96px;
-      }
-      .btn-row {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      button {
+      .row { display: flex; gap: 8px; flex-wrap: wrap; }
+      .btn {
         border: none;
         border-radius: 12px;
-        padding: 10px 14px;
+        min-height: 40px;
+        padding: 8px 12px;
+        font: inherit;
         font-weight: 700;
         cursor: pointer;
       }
-      .btn-primary {
+      .btn.primary {
         color: #fff;
-        background: linear-gradient(130deg, var(--primary), var(--primary-2));
+        background: linear-gradient(135deg, var(--pink-1), var(--pink-2));
       }
-      .btn-soft {
-        color: var(--primary);
+      .btn.soft {
+        color: var(--pink-1);
         background: #fff;
-        border: 1px solid rgba(239, 90, 149, 0.24);
-      }
-      .muted {
-        margin: 8px 0 0;
-        color: #7b5d67;
-        font-size: 14px;
+        border: 1px solid var(--line);
       }
 
       .calendar-head {
@@ -200,142 +159,72 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        margin-bottom: 12px;
-      }
-      .calendar-card {
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.76);
-        background: linear-gradient(165deg, rgba(255, 247, 251, 0.86), rgba(255, 236, 246, 0.8));
-        box-shadow: 0 22px 40px rgba(194, 82, 133, 0.18);
-      }
-      .calendar-card::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        background:
-          linear-gradient(180deg, rgba(255, 248, 252, 0.34), rgba(255, 242, 248, 0.4)),
-          url("/hello-kitty-wallpaper.jpg") center / cover no-repeat;
-        opacity: 0.82;
-        pointer-events: none;
-      }
-      .calendar-card > * {
-        position: relative;
-        z-index: 1;
+        margin-bottom: 10px;
       }
       .month-title {
         margin: 0;
-        font-size: clamp(20px, 3vw, 28px);
-        color: #6b2c4b;
-        font-weight: 800;
+        font-family: "Baloo 2", sans-serif;
+        font-size: clamp(22px, 5vw, 30px);
+        color: #6f2f53;
       }
-      .calendar-grid,
-      .weekday-grid {
+      .weekday,
+      .days {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        gap: 8px;
+        gap: 6px;
       }
-      .weekday-grid span {
+      .weekday span {
         text-align: center;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
-        color: #98677e;
+        color: #9c6782;
       }
       .day {
-        min-height: 68px;
-        aspect-ratio: 1 / 1;
-        border: 1px solid rgba(224, 124, 174, 0.28);
-        border-radius: 16px;
+        border: 1px solid rgba(234, 136, 187, 0.26);
+        border-radius: 12px;
         background: rgba(255, 255, 255, 0.86);
-        padding: 7px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 8px 16px rgba(80, 33, 53, 0.07);
-        transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, background-color 120ms ease;
-        position: relative;
-        overflow: hidden;
-        z-index: 2;
+        min-height: 44px;
+        font: inherit;
+        font-weight: 700;
+        color: #733558;
+        cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
       }
-      .day * {
-        pointer-events: none;
-      }
-      .day:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 20px rgba(80, 33, 53, 0.1);
-      }
-      .day .d {
-        font-size: clamp(18px, 2.4vw, 21px);
-        font-weight: 800;
-        color: #6f2d4d;
-        line-height: 1;
-      }
-      .day.outside {
-        opacity: 0.44;
-        background: rgba(255, 255, 255, 0.62);
-      }
-      .day.today {
-        box-shadow: inset 0 0 0 2px #f2b36d, 0 12px 20px rgba(242, 179, 109, 0.28);
-      }
-      .day.predicted {
-        background: rgba(255, 202, 227, 0.58);
-        border-color: rgba(228, 107, 169, 0.7);
-      }
+      .day.outside { opacity: 0.42; }
+      .day.today { box-shadow: inset 0 0 0 2px #f7bb6f; }
       .day.logged {
-        background: linear-gradient(145deg, rgba(239, 90, 149, 0.45), rgba(243, 140, 75, 0.34));
-        border-color: rgba(228, 107, 169, 0.84);
+        color: #fff;
+        border-color: rgba(215, 92, 153, 0.8);
+        background: linear-gradient(135deg, #ff7bb8, #ff9aca);
       }
-      .day.predicted::after,
-      .day.logged::after {
-        content: "";
-        position: absolute;
-        top: 7px;
-        right: 7px;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.86);
+      .day.predicted:not(.logged) {
+        background: rgba(255, 201, 228, 0.7);
+        border-color: rgba(220, 116, 172, 0.66);
       }
-      .day.predicted::after {
-        background: #e78ec0;
-      }
-      .day.logged::after {
-        background: #ef5a95;
-      }
+
       .legend {
         margin-top: 10px;
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
-      }
-      .legend span {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
+        gap: 10px;
         font-size: 12px;
+        font-weight: 700;
+        color: #844666;
       }
       .dot {
-        width: 10px;
-        height: 10px;
+        width: 9px;
+        height: 9px;
         border-radius: 50%;
         display: inline-block;
+        margin-right: 5px;
       }
-      .dot.logged {
-        background: #ef5a95;
-      }
-      .dot.predicted {
-        background: #f4a2c8;
-      }
-      .dot.today {
-        background: #f2b36d;
-      }
+      .dot.logged { background: #ff6cae; }
+      .dot.predicted { background: #f4a3ca; }
+      .dot.today { background: #f7bb6f; }
 
-      .date-list {
-        margin: 0;
+      .list {
+        margin: 8px 0 0;
         padding: 0;
         list-style: none;
         display: grid;
@@ -343,132 +232,85 @@
         max-height: 220px;
         overflow: auto;
       }
-      .date-list li {
+      .list li {
         border: 1px dashed var(--line);
         border-radius: 10px;
-        padding: 8px 10px;
-        background: rgba(255, 255, 255, 0.66);
-        font-size: 14px;
+        background: rgba(255, 255, 255, 0.76);
+        padding: 7px 9px;
+        font-weight: 700;
+        color: #7b415f;
       }
-      .ai-answer {
-        margin-top: 10px;
-        border-radius: 12px;
-        border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.84);
-        padding: 10px 12px;
-        white-space: pre-wrap;
-        line-height: 1.5;
-        min-height: 56px;
+      .status {
+        margin: 8px 0 0;
+        font-size: 13px;
+        font-weight: 700;
+        color: #8e5a72;
+        min-height: 18px;
       }
-      .warn {
-        margin-top: 8px;
-        font-size: 12px;
-        color: #8a5f52;
-      }
+
       @media (max-width: 900px) {
-        .layout {
-          grid-template-columns: 1fr;
-        }
-      }
-      @media (max-width: 720px) {
-        body {
-          padding-top: calc(22px + 72px + env(safe-area-inset-top, 0px));
-        }
-        .top-nav-wrap {
-          width: calc(100vw - 16px);
-          top: calc(8px + env(safe-area-inset-top, 0px));
-        }
-        .nav-toggle {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .top-nav {
-          position: absolute;
-          top: calc(100% + 8px);
-          left: 0;
-          right: 0;
-          display: grid;
-          grid-template-columns: 1fr;
-          opacity: 0;
-          transform: translateY(-6px) scale(0.99);
-          transform-origin: top center;
-          pointer-events: none;
-          max-height: 0;
-          overflow: hidden;
-          transition: opacity 160ms ease, transform 160ms ease, max-height 160ms ease;
-        }
-        .top-nav-wrap.open .top-nav {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-          pointer-events: auto;
-          max-height: 400px;
-        }
-        .nav-link {
-          justify-content: flex-start;
-          min-height: 40px;
-          font-size: 14px;
-        }
+        .grid { grid-template-columns: 1fr; }
       }
     </style>
   </head>
-  <body class="period-page">
-    <header class="top-nav-wrap" id="topNavWrap">
-      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="topNavMenu">☰ Menu</button>
-      <nav class="top-nav" id="topNavMenu">
-        <a class="nav-link" href="/">Trang chủ</a>
-        <a class="nav-link" href="/journal.html">Nhật ký</a>
-        <a class="nav-link" href="/create.html">Tạo khoảnh khắc</a>
-        <a class="nav-link" href="/counter.html">Đếm ngày yêu</a>
-        <a class="nav-link primary" href="/period.html">Dự đoán kỳ kinh</a>
-      </nav>
-    </header>
+  <body>
+    <nav class="top-nav" aria-label="Dieu huong">
+      <a class="nav-link" href="/">Trang ch?</a>
+      <a class="nav-link" href="/journal.html">Nh?t k�</a>
+      <a class="nav-link" href="/create.html">T?o kho?nh kh?c</a>
+      <a class="nav-link" href="/counter.html">�?m ng�y y�u</a>
+      <a class="nav-link primary" href="/period.html">D? do�n k? kinh</a>
+    </nav>
 
     <main class="period-main">
-      <section class="hero">
-        <span class="hero-tag">🩸 Theo dõi chu kỳ</span>
-        <h1>Lịch dự đoán kỳ kinh và nhật ký ngày</h1>
-        <p>Tích ngày có kinh trên lịch. Hệ thống sẽ dự đoán các ngày tiếp theo dựa theo chu kỳ và số ngày hành kinh của bạn.</p>
+      <section class="card hero">
+        <h1>L?ch k? kinh m?i</h1>
+        <p>Trang m?i t?i gi?n cho di?n tho?i, b?m v�o ng�y d? d�nh d?u nhanh, kh�ng lag.</p>
       </section>
 
-      <div class="layout">
-        <section class="card period-calendar">
-          <h2>Cài đặt chu kỳ</h2>
+      <div class="grid">
+        <section class="card">
+          <h2 class="section-title">C�i d?t</h2>
           <div class="field">
-            <label for="anchorDate">Ngày bắt đầu kỳ gần nhất</label>
-            <input id="anchorDate" type="date" />
+            <label class="label" for="anchorDate">Ng�y b?t d?u k? g?n nh?t</label>
+            <input class="input" id="anchorDate" type="date" />
           </div>
           <div class="field">
-            <label for="periodLength">Số ngày hành kinh</label>
-            <input id="periodLength" type="number" min="2" max="10" />
+            <label class="label" for="cycleLength">�? d�i chu k? (ng�y)</label>
+            <input class="input" id="cycleLength" type="number" min="20" max="45" />
           </div>
-          <div class="btn-row">
-            <button id="saveSettingsBtn" class="btn-primary" type="button">Lưu cài đặt</button>
-            <button id="clearLoggedBtn" class="btn-soft" type="button">Xóa ngày đã tích</button>
-          </div>        </section>
+          <div class="field">
+            <label class="label" for="periodLength">S? ng�y h�nh kinh</label>
+            <input class="input" id="periodLength" type="number" min="2" max="10" />
+          </div>
+          <div class="row">
+            <button class="btn primary" id="saveBtn" type="button">Luu</button>
+            <button class="btn soft" id="clearBtn" type="button">X�a ng�y d� ch?n</button>
+          </div>
+          <p class="status" id="saveStatus"></p>
 
-        <section class="card calendar-card">
-          <div class="calendar-head">
-            <button id="prevMonthBtn" class="btn-soft" type="button">← Tháng trước</button>
-            <h2 id="monthTitle" class="month-title"></h2>
-            <button id="nextMonthBtn" class="btn-soft" type="button">Tháng sau →</button>
-          </div>
-          <div class="weekday-grid">
-            <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
-          </div>
-          <div id="calendarGrid" class="calendar-grid" aria-label="Lịch chu kỳ"></div>
-          <div class="legend">
-            <span><i class="dot logged"></i> Đã tích thực tế</span>
-            <span><i class="dot predicted"></i> Ngày dự đoán</span>
-            <span><i class="dot today"></i> Hôm nay</span>
-          </div>
+          <h3 class="section-title" style="font-size:22px;margin-top:12px;">Ng�y d� ch?n</h3>
+          <ul class="list" id="loggedList"></ul>
         </section>
 
         <section class="card">
-          <h2>Ngày đã tích</h2>
-          <ul id="loggedDateList" class="date-list"></ul>
-        </section>
+          <div class="calendar-head">
+            <button class="btn soft" id="prevBtn" type="button">?</button>
+            <h2 class="month-title" id="monthTitle"></h2>
+            <button class="btn soft" id="nextBtn" type="button">?</button>
+          </div>
 
+          <div class="weekday">
+            <span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span>
+          </div>
+          <div class="days" id="calendarDays"></div>
+
+          <div class="legend">
+            <span><i class="dot logged"></i> �� ch?n</span>
+            <span><i class="dot predicted"></i> D? do�n</span>
+            <span><i class="dot today"></i> H�m nay</span>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -476,4 +318,3 @@
     <script src="/ai-widget.js"></script>
   </body>
 </html>
-

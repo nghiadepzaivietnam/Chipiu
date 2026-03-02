@@ -1,98 +1,68 @@
-const STORAGE_KEY = "hdha.period.tracker.v1";
+const STORAGE_KEY = "hdha.period.tracker.v2";
 const API_ENDPOINT = "/api/period";
-const dayMs = 24 * 60 * 60 * 1000;
-
-const topNavWrap = document.getElementById("topNavWrap");
-const navToggle = document.getElementById("navToggle");
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 const anchorDateInput = document.getElementById("anchorDate");
+const cycleLengthInput = document.getElementById("cycleLength");
 const periodLengthInput = document.getElementById("periodLength");
-const saveSettingsBtn = document.getElementById("saveSettingsBtn");
-const clearLoggedBtn = document.getElementById("clearLoggedBtn");
+const saveBtn = document.getElementById("saveBtn");
+const clearBtn = document.getElementById("clearBtn");
+const saveStatus = document.getElementById("saveStatus");
 
-const prevMonthBtn = document.getElementById("prevMonthBtn");
-const nextMonthBtn = document.getElementById("nextMonthBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
 const monthTitle = document.getElementById("monthTitle");
-const calendarGrid = document.getElementById("calendarGrid");
-const summaryText = document.getElementById("summaryText");
-const loggedDateList = document.getElementById("loggedDateList");
+const calendarDays = document.getElementById("calendarDays");
+const loggedList = document.getElementById("loggedList");
 
-const todayIso = toIsoLocalDate(new Date());
+const todayIso = toIso(new Date());
 
 const state = {
-  monthCursor: parseIsoAsUtc(todayIso),
+  monthCursor: parseIso(todayIso),
   anchorDate: todayIso,
   cycleLength: 28,
   periodLength: 5,
   loggedDates: new Set(),
 };
+
 let saveTimer = null;
 
-function toIsoLocalDate(date) {
+function toIso(date) {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
   const d = String(date.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
 }
 
-function parseIsoAsUtc(iso) {
-  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return null;
+function parseIso(iso) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, d));
 }
 
-function formatUtcToIso(date) {
+function isoFromUtc(date) {
   return date.toISOString().slice(0, 10);
 }
 
-function addDaysUtc(date, days) {
-  return new Date(date.getTime() + days * dayMs);
+function addDays(date, days) {
+  return new Date(date.getTime() + days * DAY_MS);
 }
 
-function startOfMonthUtc(date) {
+function startOfMonth(date) {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
 }
 
-function sameMonthUtc(a, b) {
+function isSameMonth(a, b) {
   return a.getUTCFullYear() === b.getUTCFullYear() && a.getUTCMonth() === b.getUTCMonth();
 }
 
-function clampNumber(value, min, max, fallback) {
+function clampNum(value, min, max, fallback) {
   const n = Number(value);
   if (!Number.isFinite(n)) return fallback;
   return Math.min(max, Math.max(min, Math.round(n)));
 }
 
-function saveState() {
-  const payload = {
-    anchorDate: state.anchorDate,
-    cycleLength: state.cycleLength,
-    periodLength: state.periodLength,
-    loggedDates: Array.from(state.loggedDates).sort(),
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  scheduleRemoteSave();
-}
-
-function loadState() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return;
-  try {
-    const data = JSON.parse(raw);
-    if (parseIsoAsUtc(data.anchorDate)) state.anchorDate = data.anchorDate;
-    state.cycleLength = clampNumber(data.cycleLength, 20, 45, 28);
-    state.periodLength = clampNumber(data.periodLength, 2, 10, 5);
-    if (Array.isArray(data.loggedDates)) {
-      state.loggedDates = new Set(
-        data.loggedDates.filter((d) => parseIsoAsUtc(d))
-      );
-    }
-  } catch (_err) {
-    // ignore invalid local storage
-  }
-}
-
-function toPayload() {
+function payload() {
   return {
     anchorDate: state.anchorDate,
     cycleLength: state.cycleLength,
@@ -101,323 +71,227 @@ function toPayload() {
   };
 }
 
-function applyPayload(data) {
-  if (parseIsoAsUtc(data?.anchorDate)) state.anchorDate = data.anchorDate;
-  state.cycleLength = clampNumber(data?.cycleLength, 20, 45, state.cycleLength);
-  state.periodLength = clampNumber(data?.periodLength, 2, 10, state.periodLength);
-  if (Array.isArray(data?.loggedDates)) {
-    state.loggedDates = new Set(data.loggedDates.filter((d) => parseIsoAsUtc(d)));
+function saveLocal() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload()));
+}
+
+function loadLocal() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const data = JSON.parse(raw);
+    applyPayload(data);
+  } catch (_err) {
+    // ignore
   }
 }
 
-async function loadRemoteState() {
-  const res = await fetch(API_ENDPOINT);
-  if (!res.ok) throw new Error("Could not fetch period data");
-  const data = await res.json();
-  applyPayload(data);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(toPayload()));
+function applyPayload(data) {
+  if (parseIso(data?.anchorDate)) state.anchorDate = data.anchorDate;
+  state.cycleLength = clampNum(data?.cycleLength, 20, 45, state.cycleLength);
+  state.periodLength = clampNum(data?.periodLength, 2, 10, state.periodLength);
+  if (Array.isArray(data?.loggedDates)) {
+    state.loggedDates = new Set(data.loggedDates.filter((x) => parseIso(x)));
+  }
 }
 
-async function saveRemoteState() {
+async function saveRemote() {
   const res = await fetch(API_ENDPOINT, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(toPayload()),
+    body: JSON.stringify(payload()),
   });
-  if (!res.ok) throw new Error("Could not save period data");
+  if (!res.ok) throw new Error("save failed");
+}
+
+async function loadRemote() {
+  const res = await fetch(API_ENDPOINT);
+  if (!res.ok) return;
+  const data = await res.json();
+  applyPayload(data);
+  saveLocal();
 }
 
 function scheduleRemoteSave() {
   if (saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    saveRemoteState().catch(() => {
-      // Keep local data if API is unavailable.
-    });
-  }, 300);
+    saveRemote()
+      .then(() => {
+        if (saveStatus) saveStatus.textContent = "–„ luu";
+      })
+      .catch(() => {
+        if (saveStatus) saveStatus.textContent = "–„ luu local (m?ng y?u)";
+      });
+  }, 250);
 }
 
-function getCycleStartDates() {
-  const starts = [];
-  const sorted = Array.from(state.loggedDates)
-    .filter((d) => parseIsoAsUtc(d))
-    .sort();
+function getPredictedSet(rangeStart, rangeEnd) {
+  const out = new Set();
+  const anchor = parseIso(state.anchorDate);
+  if (!anchor) return out;
 
-  let prev = null;
-  for (const iso of sorted) {
-    const current = parseIsoAsUtc(iso);
-    if (!current) continue;
-    if (!prev) {
-      starts.push(iso);
-      prev = current;
-      continue;
-    }
-    const diff = Math.round((current.getTime() - prev.getTime()) / dayMs);
-    if (diff > 1) starts.push(iso);
-    prev = current;
-  }
+  const cycle = clampNum(state.cycleLength, 20, 45, 28);
+  const period = clampNum(state.periodLength, 2, 10, 5);
 
-  if (!starts.length && parseIsoAsUtc(state.anchorDate)) starts.push(state.anchorDate);
-  return starts;
-}
-
-function getEstimatedCycleLength() {
-  const starts = getCycleStartDates().map(parseIsoAsUtc).filter(Boolean);
-  if (starts.length < 2) return state.cycleLength;
-
-  const diffs = [];
-  for (let i = 1; i < starts.length; i += 1) {
-    const diff = Math.round((starts[i].getTime() - starts[i - 1].getTime()) / dayMs);
-    if (diff >= 20 && diff <= 45) diffs.push(diff);
-  }
-  if (!diffs.length) return state.cycleLength;
-  const avg = Math.round(diffs.reduce((a, b) => a + b, 0) / diffs.length);
-  return clampNumber(avg, 20, 45, state.cycleLength);
-}
-
-function getLatestLoggedDateUtc() {
-  const sorted = Array.from(state.loggedDates)
-    .filter((d) => parseIsoAsUtc(d))
-    .sort();
-  if (!sorted.length) return null;
-  return parseIsoAsUtc(sorted[sorted.length - 1]);
-}
-
-function getPredictionSet(rangeStart, rangeEnd) {
-  const set = new Set();
-  const anchor = parseIsoAsUtc(state.anchorDate);
-  if (!anchor) return set;
-
-  const cycle = getEstimatedCycleLength();
-  const period = clampNumber(state.periodLength, 2, 10, 5);
-  const latestLogged = getLatestLoggedDateUtc();
-
-  const diffDays = Math.floor((rangeStart.getTime() - anchor.getTime()) / dayMs);
-  const cycleOffset = Math.floor(diffDays / cycle);
-  let start = addDaysUtc(anchor, cycleOffset * cycle);
-
+  let start = new Date(anchor.getTime());
   while (start.getTime() > rangeStart.getTime()) {
-    start = addDaysUtc(start, -cycle);
+    start = addDays(start, -cycle);
   }
 
-  const endBuffer = addDaysUtc(rangeEnd, period + cycle);
-  while (start.getTime() <= endBuffer.getTime()) {
+  const endWithBuffer = addDays(rangeEnd, cycle + period);
+  while (start.getTime() <= endWithBuffer.getTime()) {
     for (let i = 0; i < period; i += 1) {
-      const day = addDaysUtc(start, i);
-      if (
-        day.getTime() >= rangeStart.getTime() &&
-        day.getTime() <= rangeEnd.getTime() &&
-        (!latestLogged || day.getTime() > latestLogged.getTime())
-      ) {
-        set.add(formatUtcToIso(day));
+      const day = addDays(start, i);
+      if (day >= rangeStart && day <= rangeEnd) {
+        out.add(isoFromUtc(day));
       }
     }
-    start = addDaysUtc(start, cycle);
+    start = addDays(start, cycle);
   }
 
-  return set;
+  return out;
 }
 
-function getNextPredictedStart() {
-  const anchor = parseIsoAsUtc(state.anchorDate);
-  if (!anchor) return null;
-  const cycle = getEstimatedCycleLength();
-  const period = clampNumber(state.periodLength, 2, 10, 5);
-  const today = parseIsoAsUtc(todayIso);
-
-  const diffDays = Math.floor((today.getTime() - anchor.getTime()) / dayMs);
-  let offset = Math.floor(diffDays / cycle);
-  if (offset < 0) offset = 0;
-
-  let start = addDaysUtc(anchor, offset * cycle);
-  while (addDaysUtc(start, period - 1).getTime() < today.getTime()) {
-    start = addDaysUtc(start, cycle);
-  }
-  return formatUtcToIso(start);
-}
-
-function formatDateVi(iso) {
-  const date = parseIsoAsUtc(iso);
-  if (!date) return iso;
+function formatVi(iso) {
+  const d = parseIso(iso);
+  if (!d) return iso;
   return new Intl.DateTimeFormat("vi-VN", {
-    weekday: "short",
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
     timeZone: "UTC",
-  }).format(date);
+  }).format(d);
 }
 
-function renderSummary() {
-  if (summaryText) summaryText.textContent = "";
-}
-
-function renderLoggedDateList() {
-  const list = Array.from(state.loggedDates).sort((a, b) => b.localeCompare(a));
-  loggedDateList.innerHTML = "";
-  if (!list.length) {
+function renderList() {
+  loggedList.innerHTML = "";
+  const sorted = Array.from(state.loggedDates).sort((a, b) => b.localeCompare(a));
+  if (!sorted.length) {
     const li = document.createElement("li");
-    li.textContent = "Ch∆∞a c√≥ ng√†y n√†o. B·∫•m v√†o ng√†y trong l·ªãch ƒë·ªÉ t√≠ch.";
-    loggedDateList.appendChild(li);
+    li.textContent = "Chua cÛ ng‡y n‡o.";
+    loggedList.appendChild(li);
     return;
   }
-  list.slice(0, 90).forEach((iso) => {
+
+  sorted.slice(0, 120).forEach((iso) => {
     const li = document.createElement("li");
-    li.textContent = formatDateVi(iso);
-    loggedDateList.appendChild(li);
+    li.textContent = formatVi(iso);
+    loggedList.appendChild(li);
   });
 }
 
 function renderCalendar() {
-  const monthStart = startOfMonthUtc(state.monthCursor);
-  const firstWeekday = (monthStart.getUTCDay() + 6) % 7;
-  const gridStart = addDaysUtc(monthStart, -firstWeekday);
-  const gridEnd = addDaysUtc(gridStart, 41);
-  const predicted = getPredictionSet(gridStart, gridEnd);
+  const monthStart = startOfMonth(state.monthCursor);
+  const firstWeekDay = (monthStart.getUTCDay() + 6) % 7;
+  const gridStart = addDays(monthStart, -firstWeekDay);
+  const gridEnd = addDays(gridStart, 41);
+  const predictedSet = getPredictedSet(gridStart, gridEnd);
 
-  monthTitle.textContent = `Th√°ng ${String(monthStart.getUTCMonth() + 1).padStart(2, "0")}/${monthStart.getUTCFullYear()}`;
+  monthTitle.textContent = `Th·ng ${String(monthStart.getUTCMonth() + 1).padStart(2, "0")}/${monthStart.getUTCFullYear()}`;
+  calendarDays.innerHTML = "";
 
-  calendarGrid.innerHTML = "";
   for (let i = 0; i < 42; i += 1) {
-    const day = addDaysUtc(gridStart, i);
-    const iso = formatUtcToIso(day);
-    const inMonth = sameMonthUtc(day, monthStart);
-    const isLogged = state.loggedDates.has(iso);
-    const isPredicted = predicted.has(iso);
-    const isToday = iso === todayIso;
+    const day = addDays(gridStart, i);
+    const iso = isoFromUtc(day);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "day";
+    btn.dataset.date = iso;
+    btn.textContent = String(day.getUTCDate());
 
-    const cell = document.createElement("button");
-    cell.type = "button";
-    cell.className = "day";
-    cell.setAttribute("aria-label", `Ng√†y ${iso}`);
-    if (!inMonth) cell.classList.add("outside");
-    if (isToday) cell.classList.add("today");
-    if (isPredicted) cell.classList.add("predicted");
-    if (isLogged) cell.classList.add("logged");
-    cell.dataset.date = iso;
+    if (!isSameMonth(day, monthStart)) btn.classList.add("outside");
+    if (iso === todayIso) btn.classList.add("today");
+    if (predictedSet.has(iso)) btn.classList.add("predicted");
+    if (state.loggedDates.has(iso)) btn.classList.add("logged");
 
-    const dayNumber = document.createElement("span");
-    dayNumber.className = "d";
-    dayNumber.textContent = String(day.getUTCDate());
-    cell.appendChild(dayNumber);
-
-    calendarGrid.appendChild(cell);
+    calendarDays.appendChild(btn);
   }
 }
 
-function renderAll() {
+function renderForm() {
   anchorDateInput.value = state.anchorDate;
+  cycleLengthInput.value = String(state.cycleLength);
   periodLengthInput.value = String(state.periodLength);
+}
+
+function render() {
+  renderForm();
   renderCalendar();
-  renderSummary();
-  renderLoggedDateList();
+  renderList();
 }
 
-function addLoggedDate(iso) {
-  if (!parseIsoAsUtc(iso)) return false;
-  state.loggedDates.add(iso);
-  saveState();
-  renderAll();
-  return true;
-}
-
-function removeLoggedDate(iso) {
-  if (!parseIsoAsUtc(iso)) return false;
-  state.loggedDates.delete(iso);
-  saveState();
-  renderAll();
-  return true;
-}
-
-function setNavOpen(open) {
-  topNavWrap?.classList.toggle("open", open);
-  if (navToggle) navToggle.setAttribute("aria-expanded", open ? "true" : "false");
-}
-
-function handleToggleDate(iso) {
-  if (state.loggedDates.has(iso)) state.loggedDates.delete(iso);
-  else state.loggedDates.add(iso);
-  saveState();
-  renderAll();
+function saveAll() {
+  saveLocal();
+  scheduleRemoteSave();
+  render();
 }
 
 function bindEvents() {
-  navToggle?.addEventListener("click", () => {
-    setNavOpen(!topNavWrap?.classList.contains("open"));
-  });
-  document.addEventListener("click", (event) => {
-    const isMobile = window.matchMedia("(max-width: 720px)").matches;
-    if (!isMobile || !topNavWrap?.classList.contains("open")) return;
-    if (topNavWrap.contains(event.target)) return;
-    setNavOpen(false);
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setNavOpen(false);
-  });
-  window.addEventListener("resize", () => {
-    if (!window.matchMedia("(max-width: 720px)").matches) setNavOpen(false);
+  saveBtn?.addEventListener("click", () => {
+    const nextAnchor = parseIso(anchorDateInput.value) ? anchorDateInput.value : todayIso;
+    state.anchorDate = nextAnchor;
+    state.cycleLength = clampNum(cycleLengthInput.value, 20, 45, state.cycleLength);
+    state.periodLength = clampNum(periodLengthInput.value, 2, 10, state.periodLength);
+    if (saveStatus) saveStatus.textContent = "–ang luu...";
+    saveAll();
   });
 
-  saveSettingsBtn?.addEventListener("click", () => {
-    const anchor = parseIsoAsUtc(anchorDateInput.value) ? anchorDateInput.value : todayIso;
-    state.anchorDate = anchor;
-    state.periodLength = clampNumber(periodLengthInput.value, 2, 10, 5);
-    saveState();
-    renderAll();
-  });
-
-  clearLoggedBtn?.addEventListener("click", () => {
+  clearBtn?.addEventListener("click", () => {
     state.loggedDates.clear();
-    saveState();
-    renderAll();
+    if (saveStatus) saveStatus.textContent = "–ang luu...";
+    saveAll();
   });
 
-  prevMonthBtn?.addEventListener("click", () => {
+  prevBtn?.addEventListener("click", () => {
     state.monthCursor = new Date(Date.UTC(state.monthCursor.getUTCFullYear(), state.monthCursor.getUTCMonth() - 1, 1));
     renderCalendar();
   });
-  nextMonthBtn?.addEventListener("click", () => {
+
+  nextBtn?.addEventListener("click", () => {
     state.monthCursor = new Date(Date.UTC(state.monthCursor.getUTCFullYear(), state.monthCursor.getUTCMonth() + 1, 1));
     renderCalendar();
   });
 
-  let lastTapTs = 0;
-  const onCalendarTap = (event) => {
-    const btn = event.target.closest("button.day");
-    if (!btn?.dataset.date) return;
-    const now = Date.now();
-    if (now - lastTapTs < 120) return;
-    lastTapTs = now;
-    handleToggleDate(btn.dataset.date);
-  };
+  calendarDays?.addEventListener("click", (event) => {
+    const target = event.target.closest("button.day");
+    if (!target?.dataset.date) return;
+    const dateIso = target.dataset.date;
 
-  calendarGrid?.addEventListener("pointerup", onCalendarTap);
-  calendarGrid?.addEventListener("click", onCalendarTap);
+    if (state.loggedDates.has(dateIso)) {
+      state.loggedDates.delete(dateIso);
+    } else {
+      state.loggedDates.add(dateIso);
+    }
+
+    if (saveStatus) saveStatus.textContent = "–ang luu...";
+    saveAll();
+  });
 }
 
 async function init() {
-  loadState();
-  try {
-    await loadRemoteState();
-  } catch (_err) {
-    // Use local data when API is unavailable.
-  }
-  const maybeAnchor = parseIsoAsUtc(state.anchorDate);
-  state.monthCursor = maybeAnchor ? startOfMonthUtc(maybeAnchor) : startOfMonthUtc(parseIsoAsUtc(todayIso));
-  bindEvents();
-  renderAll();
+  loadLocal();
+  await loadRemote().catch(() => {});
 
-  // Expose safe actions for AI widget on this page only.
+  const anchor = parseIso(state.anchorDate) || parseIso(todayIso);
+  state.monthCursor = startOfMonth(anchor);
+
+  bindEvents();
+  render();
+
   window.__periodAssistant = {
-    addLoggedDate,
-    removeLoggedDate,
-    getTodayIso: () => todayIso,
-    setPeriodLength: (n) => {
-      state.periodLength = clampNumber(n, 2, 10, state.periodLength);
-      saveState();
-      renderAll();
-      return state.periodLength;
+    addLoggedDate: (iso) => {
+      if (!parseIso(iso)) return false;
+      state.loggedDates.add(iso);
+      saveAll();
+      return true;
     },
-    getEstimatedCycleLength,
+    removeLoggedDate: (iso) => {
+      if (!parseIso(iso)) return false;
+      state.loggedDates.delete(iso);
+      saveAll();
+      return true;
+    },
+    getTodayIso: () => todayIso,
   };
 }
 
