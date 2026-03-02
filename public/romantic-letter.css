@@ -255,6 +255,10 @@ body {
   z-index: 2;
   padding: clamp(18px, 3vw, 30px);
   color: var(--paper-text);
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .line {
@@ -340,6 +344,8 @@ body.focus-letter .atmosphere {
   transform: translateX(-50%) translateY(-16%) scaleY(1) rotateX(0deg);
   opacity: 1;
   z-index: 10;
+  overflow: auto;
+  touch-action: pan-y;
 }
 
 .scene.opened .hint {

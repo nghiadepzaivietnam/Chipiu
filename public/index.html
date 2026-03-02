@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script>
-    window.location.replace("/romantic-letter.html");
-  </script>
   <title>Gửi Hoàng Đinh Hải Anh</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -403,6 +400,57 @@
         justify-content: flex-start;
       }
     }
+    .romantic-launch {
+      position: fixed;
+      right: 20px;
+      bottom: calc(110px + env(safe-area-inset-bottom, 0px));
+      z-index: 95;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.7);
+      background: linear-gradient(145deg, #ffd6ea, #ff97c3);
+      color: #7e2c53;
+      font-size: 26px;
+      box-shadow: 0 14px 30px rgba(255,95,141,0.35);
+      cursor: pointer;
+    }
+    .letter-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 130;
+      display: none;
+      background: rgba(13, 5, 18, 0.66);
+      backdrop-filter: blur(10px);
+    }
+    .letter-modal.open { display: block; }
+    .letter-modal-close {
+      position: absolute;
+      top: calc(14px + env(safe-area-inset-top, 0px));
+      right: calc(14px + env(safe-area-inset-right, 0px));
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .letter-modal-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #12091d;
+    }
+    @media (max-width: 640px) {
+      .romantic-launch {
+        right: 12px;
+        bottom: calc(98px + env(safe-area-inset-bottom, 0px));
+      }
+    }
   </style>
 </head>
 <body>
@@ -425,6 +473,11 @@
   </div>
   <iframe id="scPlayer" class="sc-frame" title="Dành cho em Hoàng Dũng" allow="autoplay" loading="lazy"
     src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/xuananh-luong/danh-cho-em-hoang-dung-concert-yen-ha-noi-04112022&color=%23ff5f8d&auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=true"></iframe>
+  <button id="romanticLaunch" class="romantic-launch" type="button" aria-label="Mở thư tình" title="Mở thư tình">💌</button>
+  <section id="letterModal" class="letter-modal" aria-hidden="true">
+    <button id="letterModalClose" class="letter-modal-close" type="button" aria-label="Đóng">✕</button>
+    <iframe id="letterFrame" class="letter-modal-frame" src="/romantic-letter.html" title="Romantic letter"></iframe>
+  </section>
   <main class="page">
     <section class="hero">
       <div class="tag">
@@ -587,6 +640,26 @@
       if (!scFrame?.contentWindow) return;
       const method = isPlaying ? "pause" : "play";
       scFrame.contentWindow.postMessage(JSON.stringify({ method }), "*");
+    });
+
+    const romanticLaunch = document.getElementById("romanticLaunch");
+    const letterModal = document.getElementById("letterModal");
+    const letterModalClose = document.getElementById("letterModalClose");
+
+    const setLetterModalOpen = (open) => {
+      if (!letterModal) return;
+      letterModal.classList.toggle("open", open);
+      letterModal.setAttribute("aria-hidden", open ? "false" : "true");
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+
+    romanticLaunch?.addEventListener("click", () => setLetterModalOpen(true));
+    letterModalClose?.addEventListener("click", () => setLetterModalOpen(false));
+    letterModal?.addEventListener("click", (event) => {
+      if (event.target === letterModal) setLetterModalOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setLetterModalOpen(false);
     });
 
   </script>
