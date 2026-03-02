@@ -1,84 +1,350 @@
-const envelopeBtn = document.getElementById("envelopeBtn");
-const sparkles = document.getElementById("sparkles");
+﻿const scene = document.getElementById("scene");
+const envelopeTrigger = document.getElementById("envelopeTrigger");
+const envelopeWrap = document.getElementById("envelopeWrap");
+const letter = document.getElementById("letter");
+const letterInner = document.getElementById("letterInner");
+const sparkBurst = document.getElementById("sparkBurst");
+const audioToggle = document.getElementById("audioToggle");
+
+const starsCanvas = document.getElementById("starsCanvas");
+const heartsCanvas = document.getElementById("heartsCanvas");
+const sctx = starsCanvas.getContext("2d", { alpha: true });
+const hctx = heartsCanvas.getContext("2d", { alpha: true });
+
+const bgAmbient = document.getElementById("bgAmbient");
+const loveSong = document.getElementById("loveSong");
+
+const SONG_START_SECONDS = 42;
 
 let opened = false;
+let soundEnabled = true;
+let targetAmbientVolume = 0;
 
-function spawnSparkles() {
-  sparkles.innerHTML = "";
-  for (let i = 0; i < 24; i += 1) {
-    const dot = document.createElement("span");
-    dot.className = "spark";
-    dot.style.left = `${8 + Math.random() * 84}%`;
-    dot.style.top = `${20 + Math.random() * 60}%`;
-    dot.style.animationDelay = `${Math.random() * 230}ms`;
-    dot.style.animationDuration = `${650 + Math.random() * 450}ms`;
-    sparkles.appendChild(dot);
+const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
+
+const stars = [];
+const hearts = [];
+let width = 0;
+let height = 0;
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+function resizeCanvases() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  width = window.innerWidth;
+  height = window.innerHeight;
+
+  starsCanvas.width = Math.floor(width * dpr);
+  starsCanvas.height = Math.floor(height * dpr);
+  starsCanvas.style.width = `${width}px`;
+  starsCanvas.style.height = `${height}px`;
+  sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  heartsCanvas.width = Math.floor(width * dpr);
+  heartsCanvas.height = Math.floor(height * dpr);
+  heartsCanvas.style.width = `${width}px`;
+  heartsCanvas.style.height = `${height}px`;
+  hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  seedParticles();
+}
+
+function seedParticles() {
+  stars.length = 0;
+  hearts.length = 0;
+
+  const starCount = Math.max(90, Math.floor((width * height) / 8000));
+  const heartCount = Math.max(26, Math.floor((width * height) / 35000));
+
+  for (let i = 0; i < starCount; i += 1) {
+    stars.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: 0.5 + Math.random() * 1.45,
+      base: 0.2 + Math.random() * 0.5,
+      twinkle: Math.random() * Math.PI * 2,
+      speed: 0.004 + Math.random() * 0.02,
+      depth: 0.2 + Math.random() * 0.8,
+    });
+  }
+
+  for (let i = 0; i < heartCount; i += 1) {
+    hearts.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: 5 + Math.random() * 9,
+      vx: (Math.random() - 0.5) * 0.16,
+      vy: -0.1 - Math.random() * 0.28,
+      a: 0.18 + Math.random() * 0.28,
+      twinkle: Math.random() * Math.PI * 2,
+      depth: 0.4 + Math.random() * 1.2,
+    });
   }
 }
 
-envelopeBtn.addEventListener("click", () => {
+function drawHeart(ctx, x, y, size, alpha) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(size / 14, size / 14);
+  ctx.beginPath();
+  ctx.moveTo(0, 4);
+  ctx.bezierCurveTo(0, -3, -10, -3, -10, 4);
+  ctx.bezierCurveTo(-10, 10, -3, 14, 0, 18);
+  ctx.bezierCurveTo(3, 14, 10, 10, 10, 4);
+  ctx.bezierCurveTo(10, -3, 0, -3, 0, 4);
+  ctx.closePath();
+  ctx.fillStyle = `rgba(255, 157, 214, ${alpha})`;
+  ctx.shadowColor = "rgba(255, 179, 234, 0.8)";
+  ctx.shadowBlur = 10;
+  ctx.fill();
+  ctx.restore();
+}
+
+function renderBackground(t) {
+  sctx.clearRect(0, 0, width, height);
+  hctx.clearRect(0, 0, width, height);
+
+  const px = (pointer.x - 0.5) * 10;
+  const py = (pointer.y - 0.5) * 10;
+
+  for (const star of stars) {
+    star.twinkle += star.speed;
+    const alpha = Math.max(0.05, star.base + Math.sin(star.twinkle) * 0.2);
+    const sx = star.x - px * star.depth * 0.12;
+    const sy = star.y - py * star.depth * 0.12;
+
+    sctx.beginPath();
+    sctx.arc(sx, sy, star.r, 0, Math.PI * 2);
+    sctx.fillStyle = `rgba(255, 245, 255, ${alpha})`;
+    sctx.fill();
+  }
+
+  for (const heart of hearts) {
+    heart.y += heart.vy;
+    heart.x += heart.vx;
+    heart.twinkle += 0.02;
+
+    if (heart.y < -26) {
+      heart.y = height + 20;
+      heart.x = Math.random() * width;
+    }
+    if (heart.x < -30) heart.x = width + 20;
+    if (heart.x > width + 30) heart.x = -20;
+
+    const alpha = Math.max(0.08, heart.a + Math.sin(heart.twinkle) * 0.12);
+    const hx = heart.x - px * heart.depth * 0.25;
+    const hy = heart.y - py * heart.depth * 0.25;
+    drawHeart(hctx, hx, hy, heart.size, alpha);
+  }
+}
+
+function updateParallax() {
+  pointer.x = lerp(pointer.x, pointer.tx, 0.08);
+  pointer.y = lerp(pointer.y, pointer.ty, 0.08);
+
+  const nx = (pointer.x - 0.5) * 2;
+  const ny = (pointer.y - 0.5) * 2;
+
+  const tiltX = nx * 4.5;
+  const tiltY = -ny * 4.2;
+  envelopeWrap.style.setProperty("--tilt-x", `${tiltX.toFixed(2)}deg`);
+  envelopeWrap.style.setProperty("--tilt-y", `${tiltY.toFixed(2)}deg`);
+
+  const lx = 50 + nx * 18;
+  const ly = 38 + ny * 18;
+  envelopeWrap.style.setProperty("--lx", `${lx}%`);
+  envelopeWrap.style.setProperty("--ly", `${ly}%`);
+
+  const paperX = 50 + nx * 10;
+  const paperY = 28 + ny * 10;
+  letter.style.setProperty("--px", `${paperX}%`);
+  letter.style.setProperty("--py", `${paperY}%`);
+}
+
+function animate(time) {
+  updateParallax();
+  renderBackground(time);
+
+  const current = bgAmbient.volume;
+  const next = lerp(current, targetAmbientVolume, 0.04);
+  bgAmbient.volume = Math.max(0, Math.min(0.35, next));
+
+  requestAnimationFrame(animate);
+}
+
+function spawnSparkBurst() {
+  sparkBurst.innerHTML = "";
+  for (let i = 0; i < 34; i += 1) {
+    const s = document.createElement("span");
+    s.className = "spark";
+    s.style.left = `${5 + Math.random() * 90}%`;
+    s.style.top = `${8 + Math.random() * 80}%`;
+    s.style.animationDelay = `${Math.random() * 160}ms`;
+    s.style.animationDuration = `${700 + Math.random() * 500}ms`;
+    sparkBurst.appendChild(s);
+  }
+}
+
+function revealLines() {
+  const lines = letterInner.querySelectorAll(".line");
+  lines.forEach((line, idx) => {
+    setTimeout(() => line.classList.add("visible"), 580 + idx * 220);
+  });
+}
+
+function createAudioContext() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  return AC ? new AC() : null;
+}
+
+const fxCtx = createAudioContext();
+
+function playPaperFx() {
+  if (!fxCtx || !soundEnabled) return;
+  const now = fxCtx.currentTime;
+  const noiseBuffer = fxCtx.createBuffer(1, fxCtx.sampleRate * 0.25, fxCtx.sampleRate);
+  const data = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < data.length; i += 1) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+  }
+
+  const source = fxCtx.createBufferSource();
+  source.buffer = noiseBuffer;
+  const filter = fxCtx.createBiquadFilter();
+  filter.type = "bandpass";
+  filter.frequency.value = 900;
+  filter.Q.value = 0.8;
+
+  const gain = fxCtx.createGain();
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.18, now + 0.03);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
+
+  source.connect(filter);
+  filter.connect(gain);
+  gain.connect(fxCtx.destination);
+  source.start(now);
+  source.stop(now + 0.26);
+}
+
+function playSparkleFx() {
+  if (!fxCtx || !soundEnabled) return;
+  const now = fxCtx.currentTime;
+  for (let i = 0; i < 6; i += 1) {
+    const osc = fxCtx.createOscillator();
+    const gain = fxCtx.createGain();
+    osc.type = "triangle";
+    osc.frequency.value = 900 + i * 180;
+    gain.gain.setValueAtTime(0.0001, now + i * 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.06, now + i * 0.03 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.03 + 0.18);
+
+    osc.connect(gain);
+    gain.connect(fxCtx.destination);
+    osc.start(now + i * 0.03);
+    osc.stop(now + i * 0.03 + 0.2);
+  }
+}
+
+async function tryPlay(audioEl) {
+  try {
+    await audioEl.play();
+  } catch (_err) {
+    // ignore playback blocked or missing file
+  }
+}
+
+function updateAudioUi() {
+  audioToggle.classList.toggle("muted", !soundEnabled);
+  audioToggle.textContent = soundEnabled ? "♫" : "♪";
+}
+
+async function startAudioExperience() {
+  if (!soundEnabled) return;
+
+  if (fxCtx && fxCtx.state === "suspended") {
+    await fxCtx.resume().catch(() => {});
+  }
+
+  targetAmbientVolume = 0.16;
+  await tryPlay(bgAmbient);
+
+  loveSong.currentTime = SONG_START_SECONDS;
+  loveSong.volume = 0.9;
+  await tryPlay(loveSong);
+}
+
+function fadeOutSong() {
+  const fade = setInterval(() => {
+    if (loveSong.volume <= 0.03) {
+      loveSong.pause();
+      loveSong.volume = 0.9;
+      clearInterval(fade);
+      return;
+    }
+    loveSong.volume = Math.max(0, loveSong.volume - 0.03);
+  }, 80);
+}
+
+audioToggle.addEventListener("click", async (e) => {
+  e.stopPropagation();
+  soundEnabled = !soundEnabled;
+
+  if (soundEnabled) {
+    targetAmbientVolume = opened ? 0.16 : 0.08;
+    await tryPlay(bgAmbient);
+    if (opened) {
+      await tryPlay(loveSong);
+    }
+  } else {
+    targetAmbientVolume = 0;
+    fadeOutSong();
+  }
+
+  updateAudioUi();
+});
+
+envelopeTrigger.addEventListener("click", async () => {
   if (opened) return;
   opened = true;
-  envelopeBtn.classList.add("opened", "float");
-  spawnSparkles();
+
+  scene.classList.add("opening");
+  document.body.classList.add("focus-envelope");
+
+  spawnSparkBurst();
+  playPaperFx();
+
+  setTimeout(() => {
+    scene.classList.add("opened");
+    playSparkleFx();
+    revealLines();
+  }, 260);
+
+  setTimeout(() => {
+    document.body.classList.remove("focus-envelope");
+    document.body.classList.add("focus-letter");
+    scene.classList.remove("opening");
+  }, 1200);
+
+  await startAudioExperience();
 });
 
-// floating romantic particles
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let w = 0;
-let h = 0;
-let particles = [];
-
-function resize() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
-}
-
-function createParticle() {
-  const size = 1 + Math.random() * 3;
-  return {
-    x: Math.random() * w,
-    y: Math.random() * h,
-    r: size,
-    a: 0.1 + Math.random() * 0.45,
-    vy: 0.18 + Math.random() * 0.42,
-    vx: (Math.random() - 0.5) * 0.18,
-    tw: Math.random() * Math.PI * 2,
-  };
-}
-
-function seed() {
-  const count = Math.max(36, Math.round((w * h) / 21000));
-  particles = Array.from({ length: count }, createParticle);
-}
-
-function draw() {
-  ctx.clearRect(0, 0, w, h);
-
-  particles.forEach((p) => {
-    p.y -= p.vy;
-    p.x += p.vx;
-    p.tw += 0.03;
-
-    if (p.y < -10) p.y = h + 10;
-    if (p.x > w + 10) p.x = -10;
-    if (p.x < -10) p.x = w + 10;
-
-    const alpha = p.a + Math.sin(p.tw) * 0.08;
-    ctx.beginPath();
-    ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.05, alpha)})`;
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  requestAnimationFrame(draw);
-}
-
-resize();
-seed();
-draw();
-window.addEventListener("resize", () => {
-  resize();
-  seed();
+window.addEventListener("mousemove", (e) => {
+  pointer.tx = e.clientX / width;
+  pointer.ty = e.clientY / height;
 });
+
+window.addEventListener("touchmove", (e) => {
+  const t = e.touches[0];
+  if (!t) return;
+  pointer.tx = t.clientX / width;
+  pointer.ty = t.clientY / height;
+}, { passive: true });
+
+window.addEventListener("resize", resizeCanvases);
+
+updateAudioUi();
+resizeCanvases();
+requestAnimationFrame(animate);
