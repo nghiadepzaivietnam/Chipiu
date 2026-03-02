@@ -161,7 +161,7 @@
         justify-content: space-between;
         gap: 8px;
         margin-bottom: 10px;
-        padding: 0 max(8px, env(safe-area-inset-left, 0px));
+        padding: 0 max(16px, env(safe-area-inset-left, 0px));
       }
       .month-title {
         margin: 0;
@@ -174,8 +174,8 @@
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 6px;
-        padding-left: max(8px, env(safe-area-inset-left, 0px));
-        padding-right: max(8px, env(safe-area-inset-right, 0px));
+        padding-left: max(16px, env(safe-area-inset-left, 0px));
+        padding-right: max(16px, env(safe-area-inset-right, 0px));
       }
       .weekday span {
         text-align: center;
@@ -256,6 +256,18 @@
 
       @media (max-width: 900px) {
         .grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 520px) {
+        .calendar-head {
+          padding-left: max(20px, env(safe-area-inset-left, 0px));
+          padding-right: max(20px, env(safe-area-inset-right, 0px));
+        }
+        .weekday,
+        .days {
+          padding-left: max(20px, env(safe-area-inset-left, 0px));
+          padding-right: max(20px, env(safe-area-inset-right, 0px));
+          gap: 5px;
+        }
       }
     </style>
   </head>
