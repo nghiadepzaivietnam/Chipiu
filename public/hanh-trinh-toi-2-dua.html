@@ -37,7 +37,29 @@
       backdrop-filter: blur(10px);
       overflow: hidden;
     }
-    .journey-head { padding: 24px 24px 8px; }
+    .journey-head {
+      padding: 24px 24px 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .head-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .manage-link {
+      text-decoration: none;
+      background: linear-gradient(135deg, #ff5f8d, #ff84ad);
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(255, 95, 141, 0.28);
+      white-space: nowrap;
+    }
     .journey-title {
       margin: 0;
       font-family: "Playfair Display", serif;
@@ -222,8 +244,13 @@
 <body>
   <main class="journey-shell">
     <header class="journey-head">
-      <h1 class="journey-title">Hanh Trinh Toi 2 Dua</h1>
-      <p class="journey-sub">Noi nay hien thi timeline lay du lieu tu MongoDB. Ban cap nhat o trang journey-builder.</p>
+      <div>
+        <h1 class="journey-title">Hanh Trinh Toi 2 Dua</h1>
+        <p class="journey-sub">Noi nay hien thi timeline lay du lieu tu MongoDB. Ban cap nhat o trang journey-builder.</p>
+      </div>
+      <div class="head-actions">
+        <a class="manage-link" href="/journey-builder.html">Them/Sua hanh trinh</a>
+      </div>
     </header>
 
     <section class="timeline-wrap" aria-label="Timeline cuon ngang">
