@@ -292,11 +292,33 @@
       }
       .timeline-wrap { padding: 10px 10px 16px; }
       .timeline-btn { display: none; }
-      .timeline-track { gap: 22px; min-height: 380px; padding: 12px 10px; }
-      .timeline-line { left: 10px; right: 10px; }
-      .step { width: min(82vw, 250px); min-width: min(82vw, 250px); min-height: 340px; }
-      .step.top .step-card { bottom: calc(50% + 26px); }
-      .step.bottom .step-card { top: calc(50% + 26px); }
+      .timeline-track {
+        gap: 22px;
+        min-height: 500px;
+        padding: 12px 10px;
+      }
+      .timeline-line {
+        left: 10px;
+        right: 10px;
+        top: 86px;
+        transform: none;
+      }
+      .step {
+        width: min(82vw, 250px);
+        min-width: min(82vw, 250px);
+        min-height: 460px;
+      }
+      .step-node {
+        top: 86px;
+      }
+      .step.top .step-card,
+      .step.bottom .step-card {
+        top: 126px;
+        bottom: auto;
+      }
+      .step.top .step-card { transform: translateY(14px); }
+      .step.bottom .step-card { transform: translateY(14px); }
+      .step.visible .step-card { transform: translateY(0); }
       .step-card { padding: 11px; }
       .year-pill { font-size: 19px; padding: 5px 7px 5px 10px; }
       .avatar { width: 34px; height: 34px; }
@@ -363,11 +385,21 @@
     }
 
     function avatarHtml(role, avatars) {
-      const a1 = `<img class="avatar" src="${avatars.haianh || DEFAULT_HAIANH}" alt="Hai Anh" onerror="this.src='${DEFAULT_HAIANH}'">`;
-      const a2 = `<img class="avatar" src="${avatars.toi || DEFAULT_TOI}" alt="Trọng Nghĩa" onerror="this.src='${DEFAULT_HAIANH}'">`;
+      const a1 = `<img class="avatar" src="${avatars.haianh || DEFAULT_HAIANH}" alt="Hai Anh" data-fallback="${DEFAULT_HAIANH}">`;
+      const a2 = `<img class="avatar" src="${avatars.toi || DEFAULT_TOI}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
       if (role === "haianh") return a1;
       if (role === "toi") return a2;
-      return `<span class="avatar-stack">${a1}<img class="avatar pair" src="${avatars.toi || DEFAULT_TOI}" alt="Trọng Nghĩa" onerror="this.src='${DEFAULT_HAIANH}'"></span>`;
+      return `<span class="avatar-stack">${a1}<img class="avatar pair" src="${avatars.toi || DEFAULT_TOI}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}"></span>`;
+    }
+
+    function bindAvatarFallback(scope) {
+      scope.querySelectorAll("img.avatar").forEach((img) => {
+        const fallback = img.getAttribute("data-fallback") || DEFAULT_HAIANH;
+        img.addEventListener("error", () => {
+          if (img.src.endsWith(fallback)) return;
+          img.src = fallback;
+        }, { once: true });
+      });
     }
 
     function updateFill() {
@@ -415,6 +447,7 @@
         trackEl.appendChild(step);
       });
 
+      bindAvatarFallback(trackEl);
       bindReveal();
       updateFill();
     }

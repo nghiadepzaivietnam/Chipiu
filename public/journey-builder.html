@@ -442,11 +442,21 @@
     }
 
     function buildAvatarHtml(role) {
-      const a1 = `<img class="avatar" src="${state.avatars.haianh}" alt="Hai Anh" onerror="this.src='${DEFAULT_HAIANH}'">`;
-      const a2 = `<img class="avatar" src="${state.avatars.toi}" alt="Trọng Nghĩa" onerror="this.src='${DEFAULT_HAIANH}'">`;
+      const a1 = `<img class="avatar" src="${state.avatars.haianh}" alt="Hai Anh" data-fallback="${DEFAULT_HAIANH}">`;
+      const a2 = `<img class="avatar" src="${state.avatars.toi}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
       if (role === "haianh") return a1;
       if (role === "toi") return a2;
-      return `${a1}<img class="avatar pair" src="${state.avatars.toi}" alt="Trọng Nghĩa" onerror="this.src='${DEFAULT_HAIANH}'">`;
+      return `${a1}<img class="avatar pair" src="${state.avatars.toi}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
+    }
+
+    function bindAvatarFallback(scope) {
+      scope.querySelectorAll("img.avatar").forEach((img) => {
+        const fallback = img.getAttribute("data-fallback") || DEFAULT_HAIANH;
+        img.addEventListener("error", () => {
+          if (img.src.endsWith(fallback)) return;
+          img.src = fallback;
+        }, { once: true });
+      });
     }
 
     function renderList() {
@@ -493,6 +503,7 @@
         `;
         track.appendChild(step);
       });
+      bindAvatarFallback(track);
       bindStepReveal();
       updateFill();
     }
