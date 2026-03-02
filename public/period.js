@@ -19,7 +19,7 @@ const todayIso = toIso(new Date());
 
 const state = {
   monthCursor: parseIso(todayIso),
-  anchorDate: todayIso,
+  anchorDate: "",
   cycleLength: 28,
   periodLength: 5,
   loggedDates: new Set(),
@@ -127,26 +127,57 @@ function scheduleRemoteSave() {
 
 function getPredictedSet(rangeStart, rangeEnd) {
   const out = new Set();
-  const anchor = parseIso(state.anchorDate);
-  if (!anchor) return out;
+  if (!state.loggedDates.size) return out;
 
   const cycle = clampNum(state.cycleLength, 20, 45, 28);
   const period = clampNum(state.periodLength, 2, 10, 5);
+  const sortedLogged = Array.from(state.loggedDates).sort();
+  const lastLoggedIso = sortedLogged[sortedLogged.length - 1];
+  const lastLoggedDate = parseIso(lastLoggedIso);
+  if (!lastLoggedDate) return out;
 
-  let start = new Date(anchor.getTime());
-  while (start.getTime() > rangeStart.getTime()) {
-    start = addDays(start, -cycle);
+  let cycleStarts = [sortedLogged[0]];
+  for (let i = 1; i < sortedLogged.length; i += 1) {
+    const prev = parseIso(sortedLogged[i - 1]);
+    const cur = parseIso(sortedLogged[i]);
+    if (!prev || !cur) continue;
+    const gap = Math.round((cur.getTime() - prev.getTime()) / DAY_MS);
+    if (gap > 1) cycleStarts.push(sortedLogged[i]);
   }
 
-  const endWithBuffer = addDays(rangeEnd, cycle + period);
+  if (!cycleStarts.length) return out;
+  const cycleStartDates = cycleStarts.map(parseIso).filter(Boolean);
+  let estimatedCycle = cycle;
+  if (cycleStartDates.length >= 2) {
+    const diffs = [];
+    for (let i = 1; i < cycleStartDates.length; i += 1) {
+      const diff = Math.round((cycleStartDates[i].getTime() - cycleStartDates[i - 1].getTime()) / DAY_MS);
+      if (diff >= 20 && diff <= 45) diffs.push(diff);
+    }
+    if (diffs.length) {
+      estimatedCycle = clampNum(
+        Math.round(diffs.reduce((sum, d) => sum + d, 0) / diffs.length),
+        20,
+        45,
+        cycle
+      );
+    }
+  }
+
+  let start = cycleStartDates[cycleStartDates.length - 1];
+  while (start.getTime() > rangeStart.getTime()) {
+    start = addDays(start, -estimatedCycle);
+  }
+
+  const endWithBuffer = addDays(rangeEnd, estimatedCycle + period);
   while (start.getTime() <= endWithBuffer.getTime()) {
     for (let i = 0; i < period; i += 1) {
       const day = addDays(start, i);
-      if (day >= rangeStart && day <= rangeEnd) {
+      if (day >= rangeStart && day <= rangeEnd && day.getTime() > lastLoggedDate.getTime()) {
         out.add(isoFromUtc(day));
       }
     }
-    start = addDays(start, cycle);
+    start = addDays(start, estimatedCycle);
   }
 
   return out;
@@ -209,7 +240,7 @@ function renderCalendar() {
 }
 
 function renderForm() {
-  anchorDateInput.value = state.anchorDate;
+  anchorDateInput.value = state.anchorDate || "";
   cycleLengthInput.value = String(state.cycleLength);
   periodLengthInput.value = String(state.periodLength);
 }
@@ -228,8 +259,7 @@ function saveAll() {
 
 function bindEvents() {
   saveBtn?.addEventListener("click", () => {
-    const nextAnchor = parseIso(anchorDateInput.value) ? anchorDateInput.value : todayIso;
-    state.anchorDate = nextAnchor;
+    state.anchorDate = parseIso(anchorDateInput.value) ? anchorDateInput.value : "";
     state.cycleLength = clampNum(cycleLengthInput.value, 20, 45, state.cycleLength);
     state.periodLength = clampNum(periodLengthInput.value, 2, 10, state.periodLength);
     if (saveStatus) saveStatus.textContent = "Đang lưu...";

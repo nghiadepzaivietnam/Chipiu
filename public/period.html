@@ -199,6 +199,16 @@
       }
       .day.outside { opacity: 0.42; }
       .day.today { box-shadow: inset 0 0 0 2px #f7bb6f; }
+      .day.today::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #f7bb6f;
+      }
       .day.logged {
         color: #fff;
         border-color: rgba(215, 92, 153, 0.8);
