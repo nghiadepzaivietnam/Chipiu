@@ -15,10 +15,6 @@ const bgAmbient = document.getElementById("bgAmbient");
 const loveSong = document.getElementById("loveSong");
 
 const AUDIO_CONFIG = {
-  // Dán link mp3 public trực tiếp để phát online, ví dụ từ Cloudinary/R2/S3.
-  // Không dùng link YouTube page vì audio tag không phát trực tiếp được.
-  loveSongUrl: "",
-  ambientUrl: "",
   songStartSeconds: 0,
 };
 
@@ -272,7 +268,7 @@ function updateAudioUi() {
   const missingAll = !audioReady.ambient && !audioReady.song;
   audioToggle.textContent = missingAll ? "!" : soundEnabled ? "♫" : "♪";
   audioToggle.title = missingAll
-    ? "Missing audio URLs. Set loveSongUrl/ambientUrl in romantic-letter.js"
+    ? "Missing audio files. Add /audio/noi-nay-co-anh.mp3 (and /audio/romantic-ambient.mp3 if needed)"
     : "Toggle sound";
 }
 
@@ -314,7 +310,7 @@ function fadeOutSong() {
 audioToggle.addEventListener("click", async (e) => {
   e.stopPropagation();
   if (!audioReady.ambient && !audioReady.song) {
-    alert("Chưa có link nhạc. Hãy set loveSongUrl (và ambientUrl nếu muốn) trong romantic-letter.js");
+    alert("Chưa có file nhạc local. Hãy thêm:\\n- public/audio/noi-nay-co-anh.mp3\\n- public/audio/romantic-ambient.mp3 (tuỳ chọn)");
     return;
   }
   soundEnabled = !soundEnabled;
@@ -379,13 +375,6 @@ const bootstrapMusic = async () => {
 };
 window.addEventListener("pointerdown", bootstrapMusic, { passive: true });
 window.addEventListener("touchstart", bootstrapMusic, { passive: true });
-
-if (AUDIO_CONFIG.ambientUrl) {
-  bgAmbient.src = AUDIO_CONFIG.ambientUrl;
-}
-if (AUDIO_CONFIG.loveSongUrl) {
-  loveSong.src = AUDIO_CONFIG.loveSongUrl;
-}
 
 bgAmbient.addEventListener("canplaythrough", () => {
   audioReady.ambient = true;
