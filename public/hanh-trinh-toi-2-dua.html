@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hành Trình Tới 2 Đứa</title>
+    <title>Hanh Trinh Toi 2 Dua</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,26 +14,26 @@
     <link rel="stylesheet" href="/ai-widget.css" />
   </head>
   <body class="journey-love-page">
-    <nav class="journey-nav" aria-label="Điều hướng">
-      <a class="journey-nav-link" href="/">Trang chủ</a>
-      <a class="journey-nav-link" href="/journal.html">Nhật ký</a>
-      <a class="journey-nav-link" href="/create.html">Tạo khoảnh khắc</a>
-      <a class="journey-nav-link" href="/counter.html">Đếm ngày yêu</a>
-      <a class="journey-nav-link" href="/period.html">Dự đoán kỳ kinh</a>
-      <a class="journey-nav-link active" href="/hanh-trinh-toi-2-dua.html">Hành trình</a>
+    <nav class="journey-nav" aria-label="Dieu huong">
+      <a class="journey-nav-link" href="/">Trang chu</a>
+      <a class="journey-nav-link" href="/journal.html">Nhat ky</a>
+      <a class="journey-nav-link" href="/create.html">Tao khoanh khac</a>
+      <a class="journey-nav-link" href="/counter.html">Dem ngay yeu</a>
+      <a class="journey-nav-link" href="/period.html">Du doan ky kinh</a>
+      <a class="journey-nav-link active" href="/hanh-trinh-toi-2-dua.html">Hanh trinh</a>
     </nav>
 
     <main class="journey-love-main">
       <section class="journey-hero">
-        <p class="journey-kicker">Hành Trình Tới 2 Đứa</p>
-        <h1 class="journey-title">Mỗi cột mốc là một lần tụi mình chọn nhau thêm một lần nữa</h1>
+        <p class="journey-kicker">Hanh Trinh Toi 2 Dua</p>
+        <h1 class="journey-title">Moi cot moc la mot lan tui minh chon nhau them mot lan nua</h1>
         <p class="journey-subtitle">
-          Timeline cuộn ngang, nơi Hải Anh ở phía trên và Trọng Nghĩa ở phía dưới, cùng bước về phía tương lai.
+          Timeline cuon ngang, noi Hai Anh o phia tren va Trong Nghia o phia duoi, cung buoc ve phia tuong lai.
         </p>
       </section>
 
-      <section class="journey-timeline-shell" aria-label="Timeline tình yêu cuộn ngang">
-        <button class="journey-arrow prev" id="journeyPrev" type="button" aria-label="Cuộn trái">‹</button>
+      <section class="journey-timeline-shell" aria-label="Timeline tinh yeu cuon ngang">
+        <button class="journey-arrow prev" id="journeyPrev" type="button" aria-label="Cuon trai">�</button>
         <div class="journey-scroll" id="journeyScroll">
           <div class="journey-track" id="journeyTrack">
             <div class="journey-line" aria-hidden="true">
@@ -41,56 +41,15 @@
             </div>
           </div>
         </div>
-        <button class="journey-arrow next" id="journeyNext" type="button" aria-label="Cuộn phải">›</button>
+        <button class="journey-arrow next" id="journeyNext" type="button" aria-label="Cuon phai">�</button>
       </section>
-      <p class="journey-empty" id="journeyEmpty" hidden>Chưa có cột mốc nào. Thêm dữ liệu ở trang builder nhé.</p>
-    </main>
-    <section class="journey-create-dock" aria-label="Them hanh trinh nhanh">
-      <button class="journey-create-toggle" id="journeyAddToggle" type="button" aria-expanded="false" aria-controls="journeyAddPanel">
-        Them hanh trinh
-      </button>
-      <div class="journey-create-panel" id="journeyAddPanel" hidden>
-        <p class="journey-create-title">Them moc moi</p>
-        <p class="journey-create-hint">Moc thoi gian co the la text tu do (vi du: "Lan dau hen ho", "Mua he 2025").</p>
-        <p class="journey-form-mode" id="journeyFormMode">Che do: Them moi</p>
-        <div class="journey-create-grid">
-          <label class="journey-create-label">
-            Moc thoi gian
-            <input class="journey-create-input" id="journeyAddDateText" maxlength="80" placeholder="Text tu do..." />
-          </label>
-          <label class="journey-create-label">
-            Vai tro
-            <select class="journey-create-input" id="journeyAddRole">
-              <option value="haianh">Hai Anh (tren)</option>
-              <option value="toi">Trong Nghia (duoi)</option>
-              <option value="both">Ca hai</option>
-            </select>
-          </label>
-          <label class="journey-create-label journey-create-span2">
-            Tieu de
-            <input class="journey-create-input" id="journeyAddTitle" maxlength="180" placeholder="Tieu de ngan..." />
-          </label>
-          <label class="journey-create-label journey-create-span2">
-            Mo ta
-            <textarea class="journey-create-input" id="journeyAddDesc" maxlength="700" rows="3" placeholder="Mo ta ngan cho moc nay..."></textarea>
-          </label>
-          <label class="journey-create-check">
-            <input type="checkbox" id="journeyAddFuture" />
-            Moc dac biet (phat sang)
-          </label>
-        </div>
-        <div class="journey-create-actions">
-          <button class="journey-create-btn ghost" id="journeyAddCancel" type="button">Dong</button>
-          <button class="journey-create-btn ghost" id="journeyResetForm" type="button">Moi form</button>
-          <button class="journey-create-btn" id="journeyAddSubmit" type="button">Luu moc</button>
-        </div>
-        <div class="journey-manage">
-          <p class="journey-manage-title">Danh sach moc hien tai</p>
-          <div class="journey-manage-list" id="journeyManageList"></div>
-        </div>
-        <p class="journey-create-status" id="journeyAddStatus"></p>
+
+      <p class="journey-empty" id="journeyEmpty" hidden>Chua co cot moc nao. Bam nut duoi de vao trang quan ly.</p>
+
+      <div class="journey-builder-cta">
+        <a class="journey-builder-btn" href="/journey-builder.html">Mo trang quan ly hanh trinh</a>
       </div>
-    </section>
+    </main>
 
     <script src="/user-context.js"></script>
     <script src="/journey-love.js"></script>
