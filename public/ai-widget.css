@@ -31,6 +31,8 @@ body.period-page .ai-chat-widget {
   position: relative;
   transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
   animation: aiPulse 1.9s ease-in-out infinite;
+  touch-action: none;
+  user-select: none;
 }
 
 .ai-chat-toggle:hover {
@@ -139,6 +141,15 @@ body.period-page .ai-chat-widget {
   padding: 11px 12px;
   border-bottom: 1px solid rgba(223, 126, 174, 0.26);
   background: rgba(255, 255, 255, 0.36);
+}
+.ai-chat-widget.dock-right .ai-chat-panel {
+  left: auto;
+  right: 0;
+  transform-origin: right bottom;
+}
+.ai-chat-widget.dragging .ai-chat-toggle {
+  cursor: grabbing;
+  animation: none;
 }
 .ai-chat-head-top {
   display: flex;

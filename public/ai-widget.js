@@ -1,5 +1,6 @@
 (function initAiWidget() {
   const STORAGE_KEY = "hdha.ai.chat.v2";
+  const POSITION_STORAGE_KEY = "hdha.ai.widget.pos.v1";
   const HISTORY_ENDPOINT = "/api/ai-chat/history";
   const MAX_MESSAGES = 20;
   const MAX_CONVERSATIONS = 30;
@@ -14,8 +15,9 @@
         <div class="ai-chat-head-top">
           <p class="ai-chat-title">AI tu van</p>
           <div class="ai-chat-head-actions">
-            <button class="ai-chat-mini" id="aiChatNew" type="button" aria-label="Tao doan chat moi">Moi</button>
-            <button class="ai-chat-mini danger" id="aiChatDelete" type="button" aria-label="Xoa doan chat hien tai">Xoa</button>
+            <button class="ai-chat-mini" id="aiChatNew" type="button" aria-label="Thêm đoạn chat mới">Thêm đoạn chat mới</button>
+            <button class="ai-chat-mini" id="aiChatRename" type="button" aria-label="Đổi tên đoạn chat">Đổi tên đoạn chat</button>
+            <button class="ai-chat-mini danger" id="aiChatDelete" type="button" aria-label="Xóa đoạn chat">Xóa đoạn chat</button>
             <button class="ai-chat-close" type="button" aria-label="Dong chat">x</button>
           </div>
         </div>
@@ -37,6 +39,7 @@
   const toggleBtn = root.querySelector(".ai-chat-toggle");
   const closeBtn = root.querySelector(".ai-chat-close");
   const newBtn = root.querySelector("#aiChatNew");
+  const renameBtn = root.querySelector("#aiChatRename");
   const deleteBtn = root.querySelector("#aiChatDelete");
   const threadSelect = root.querySelector("#aiChatThreads");
   const form = root.querySelector("#aiChatForm");
@@ -45,6 +48,11 @@
 
   let state = loadLocalState();
   let historySaveTimer = null;
+  let dragTimer = null;
+  let dragging = false;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+  let suppressToggleClick = false;
 
   function makeAssistantGreeting() {
     return {
@@ -162,6 +170,7 @@
     });
     threadSelect.value = state.activeConversationId;
     deleteBtn.disabled = state.conversations.length <= 1;
+    renameBtn.disabled = !state.conversations.length;
   }
 
   function renderMessages() {
@@ -216,6 +225,49 @@
         activeConversationId: state.activeConversationId,
       }),
     });
+  }
+
+  function clampWidgetPosition(x, y) {
+    const margin = 8;
+    const width = toggleBtn.offsetWidth || 68;
+    const height = toggleBtn.offsetHeight || 68;
+    const maxX = Math.max(margin, window.innerWidth - width - margin);
+    const maxY = Math.max(margin, window.innerHeight - height - margin);
+    return {
+      x: Math.min(maxX, Math.max(margin, Math.round(x))),
+      y: Math.min(maxY, Math.max(margin, Math.round(y))),
+    };
+  }
+
+  function saveWidgetPosition(x, y) {
+    localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify({ x, y }));
+  }
+
+  function updatePanelDock(x) {
+    const dockRight = x > (window.innerWidth - 220);
+    root.classList.toggle("dock-right", dockRight);
+  }
+
+  function applyWidgetPosition(x, y, persist) {
+    const pos = clampWidgetPosition(x, y);
+    root.style.left = `${pos.x}px`;
+    root.style.top = `${pos.y}px`;
+    root.style.right = "auto";
+    root.style.bottom = "auto";
+    updatePanelDock(pos.x);
+    if (persist) saveWidgetPosition(pos.x, pos.y);
+  }
+
+  function applySavedWidgetPosition() {
+    try {
+      const raw = localStorage.getItem(POSITION_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!Number.isFinite(parsed?.x) || !Number.isFinite(parsed?.y)) return;
+      applyWidgetPosition(parsed.x, parsed.y, false);
+    } catch (_err) {
+      // ignore
+    }
   }
 
   function textOf(selector, fallback = "") {
@@ -375,6 +427,21 @@
     input.focus();
   });
 
+  renameBtn.addEventListener("click", () => {
+    const active = getActiveConversation();
+    if (!active) return;
+    const nextTitle = window.prompt("Nhap ten moi cho doan chat:", active.title || "");
+    if (nextTitle == null) return;
+    const title = nextTitle.trim().slice(0, 120);
+    if (!title) return;
+    active.title = title;
+    active.updatedAt = new Date().toISOString();
+    syncConversationOrder();
+    state.activeConversationId = active.id;
+    renderAll();
+    persistAll();
+  });
+
   deleteBtn.addEventListener("click", () => {
     const active = getActiveConversation();
     if (!active) return;
@@ -396,6 +463,67 @@
     state.activeConversationId = threadSelect.value;
     renderMessages();
     persistAll();
+  });
+
+  toggleBtn.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) return;
+    suppressToggleClick = false;
+    dragTimer = setTimeout(() => {
+      dragging = true;
+      root.classList.add("dragging");
+      const rect = root.getBoundingClientRect();
+      dragOffsetX = event.clientX - rect.left;
+      dragOffsetY = event.clientY - rect.top;
+      try {
+        toggleBtn.setPointerCapture(event.pointerId);
+      } catch (_err) {
+        // ignore
+      }
+    }, 260);
+  });
+
+  toggleBtn.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    event.preventDefault();
+    const x = event.clientX - dragOffsetX;
+    const y = event.clientY - dragOffsetY;
+    applyWidgetPosition(x, y, false);
+  });
+
+  function stopDrag(event) {
+    if (dragTimer) {
+      clearTimeout(dragTimer);
+      dragTimer = null;
+    }
+    if (!dragging) return;
+    dragging = false;
+    root.classList.remove("dragging");
+    suppressToggleClick = true;
+    const rect = root.getBoundingClientRect();
+    applyWidgetPosition(rect.left, rect.top, true);
+    try {
+      toggleBtn.releasePointerCapture(event.pointerId);
+    } catch (_err) {
+      // ignore
+    }
+    setTimeout(() => {
+      suppressToggleClick = false;
+    }, 120);
+  }
+
+  toggleBtn.addEventListener("pointerup", stopDrag);
+  toggleBtn.addEventListener("pointercancel", stopDrag);
+  toggleBtn.addEventListener("click", (event) => {
+    if (!suppressToggleClick) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
+
+  window.addEventListener("resize", () => {
+    const rect = root.getBoundingClientRect();
+    if (root.style.top && root.style.left) {
+      applyWidgetPosition(rect.left, rect.top, true);
+    }
   });
 
   document.addEventListener("keydown", (event) => {
@@ -444,6 +572,7 @@
   });
 
   renderAll();
+  applySavedWidgetPosition();
 
   loadRemoteHistory()
     .then((remote) => {
