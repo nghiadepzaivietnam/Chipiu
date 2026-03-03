@@ -1,3 +1,5 @@
+const SHARED_USER_ID = "hdha-shared";
+
 function sanitizeUserId(input) {
   const raw = String(input || "").trim().toLowerCase();
   const cleaned = raw.replace(/[^a-z0-9._-]/g, "").slice(0, 64);
@@ -5,10 +7,8 @@ function sanitizeUserId(input) {
 }
 
 function resolveUserId(req) {
-  const headerId = req.get("x-user-id");
-  const queryId = req.query?.userId;
-  const bodyId = typeof req.body?.userId === "string" ? req.body.userId : "";
-  return sanitizeUserId(headerId || queryId || bodyId || "default");
+  const forcedShared = process.env.SHARED_USER_ID || SHARED_USER_ID;
+  return sanitizeUserId(forcedShared);
 }
 
 function userContext(req, _res, next) {

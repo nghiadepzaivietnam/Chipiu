@@ -10,6 +10,7 @@ const CounterConfig = require("./models/CounterConfig");
 const Journey = require("./models/Journey");
 const PeriodTracker = require("./models/PeriodTracker");
 const { userContext } = require("./middleware/userContext");
+const { migrateToSharedUser, SHARED_USER_ID } = require("./lib/migrateSharedUserData");
 
 dotenv.config();
 
@@ -30,6 +31,13 @@ mongoose
     ]).catch((err) => {
       console.error("Index sync warning:", err.message || err);
     });
+    await migrateToSharedUser()
+      .then(() => {
+        console.log(`Shared sync ready for userId: ${SHARED_USER_ID}`);
+      })
+      .catch((err) => {
+        console.error("Shared sync warning:", err.message || err);
+      });
   })
   .catch((err) => console.error("Mongo error:", err));
 

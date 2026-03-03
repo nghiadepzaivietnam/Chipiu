@@ -1,21 +1,13 @@
 (function initUserContext() {
   const STORAGE_KEY = "hdha.user.id.v1";
-
-  function createId() {
-    const seed = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-    return `u-${seed}`.toLowerCase();
-  }
+  const SHARED_USER_ID = "hdha-shared";
 
   function readUserId() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const clean = String(raw || "").trim().toLowerCase().replace(/[^a-z0-9._-]/g, "").slice(0, 64);
-      if (clean) return clean;
-      const created = createId();
-      localStorage.setItem(STORAGE_KEY, created);
-      return created;
+      localStorage.setItem(STORAGE_KEY, SHARED_USER_ID);
+      return SHARED_USER_ID;
     } catch (_err) {
-      return "default";
+      return SHARED_USER_ID;
     }
   }
 
