@@ -52,6 +52,7 @@
       <div class="journey-create-panel" id="journeyAddPanel" hidden>
         <p class="journey-create-title">Them moc moi</p>
         <p class="journey-create-hint">Moc thoi gian co the la text tu do (vi du: "Lan dau hen ho", "Mua he 2025").</p>
+        <p class="journey-form-mode" id="journeyFormMode">Che do: Them moi</p>
         <div class="journey-create-grid">
           <label class="journey-create-label">
             Moc thoi gian
@@ -80,7 +81,12 @@
         </div>
         <div class="journey-create-actions">
           <button class="journey-create-btn ghost" id="journeyAddCancel" type="button">Dong</button>
+          <button class="journey-create-btn ghost" id="journeyResetForm" type="button">Moi form</button>
           <button class="journey-create-btn" id="journeyAddSubmit" type="button">Luu moc</button>
+        </div>
+        <div class="journey-manage">
+          <p class="journey-manage-title">Danh sach moc hien tai</p>
+          <div class="journey-manage-list" id="journeyManageList"></div>
         </div>
         <p class="journey-create-status" id="journeyAddStatus"></p>
       </div>

@@ -16,8 +16,11 @@ const addTitleInput = document.getElementById("journeyAddTitle");
 const addDescInput = document.getElementById("journeyAddDesc");
 const addFutureInput = document.getElementById("journeyAddFuture");
 const addCancelBtn = document.getElementById("journeyAddCancel");
+const resetFormBtn = document.getElementById("journeyResetForm");
 const addSubmitBtn = document.getElementById("journeyAddSubmit");
 const addStatusEl = document.getElementById("journeyAddStatus");
+const manageListEl = document.getElementById("journeyManageList");
+const formModeEl = document.getElementById("journeyFormMode");
 
 const API_BASE = "/api/journey";
 
@@ -73,9 +76,16 @@ let currentJourneyState = {
   items: fallbackData.items.slice(),
 };
 let isSavingAdd = false;
+let editingIndex = -1;
 
 function roleLabel(role) {
   return role === "toi" ? "Trong Nghia" : "Hai Anh";
+}
+
+function roleShortLabel(role) {
+  if (role === "toi") return "Trong Nghia";
+  if (role === "both") return "Ca hai";
+  return "Hai Anh";
 }
 
 function avatarOf(role, avatars) {
@@ -144,6 +154,13 @@ function buildDisplayState(state) {
     avatars: state?.avatars || fallbackData.avatars,
     items,
   };
+}
+
+function setFormMode(nextIndex) {
+  editingIndex = Number.isInteger(nextIndex) ? nextIndex : -1;
+  const editing = editingIndex >= 0;
+  if (formModeEl) formModeEl.textContent = editing ? `Che do: Dang sua moc #${editingIndex + 1}` : "Che do: Them moi";
+  if (addSubmitBtn) addSubmitBtn.textContent = editing ? "Cap nhat moc" : "Luu moc";
 }
 
 function buildStep(item, avatars, index) {
@@ -251,6 +268,51 @@ function renderTimeline(data) {
   updateFocusedStep();
 }
 
+function renderManageList() {
+  if (!manageListEl) return;
+  const items = Array.isArray(currentJourneyState?.items) ? currentJourneyState.items : [];
+  manageListEl.innerHTML = "";
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "journey-create-hint";
+    empty.textContent = "Chua co moc nao.";
+    manageListEl.appendChild(empty);
+    return;
+  }
+
+  items.forEach((item, index) => {
+    const row = document.createElement("article");
+    row.className = "journey-manage-item";
+    row.innerHTML = `
+      <div class="journey-manage-head">
+        <span class="journey-manage-time">${item.date || "Moc moi"}</span>
+        <span class="journey-manage-role">${roleShortLabel(normalizeRole(item.role))}</span>
+      </div>
+      <p class="journey-manage-name">${item.title || "(Chua co tieu de)"}</p>
+      <div class="journey-manage-actions">
+        <button class="journey-mini-btn" type="button" data-act="edit" data-idx="${index}">Sua</button>
+        <button class="journey-mini-btn danger" type="button" data-act="delete" data-idx="${index}">Xoa</button>
+      </div>
+    `;
+    manageListEl.appendChild(row);
+  });
+}
+
+async function saveJourneyState(nextState) {
+  const res = await fetch(API_BASE, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(nextState),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data?.error || "Khong the luu du lieu hanh trinh.");
+  }
+  currentJourneyState = normalizeJourneyState(data);
+  renderTimeline(buildDisplayState(currentJourneyState));
+  renderManageList();
+}
+
 async function loadTimeline() {
   try {
     const res = await fetch(API_BASE);
@@ -258,9 +320,11 @@ async function loadTimeline() {
     const data = await res.json();
     currentJourneyState = normalizeJourneyState(data);
     renderTimeline(buildDisplayState(currentJourneyState));
+    renderManageList();
   } catch (_err) {
     currentJourneyState = normalizeJourneyState(fallbackData);
     renderTimeline(buildDisplayState(currentJourneyState));
+    renderManageList();
   }
 }
 
@@ -285,6 +349,7 @@ function clearAddForm() {
   if (addTitleInput) addTitleInput.value = "";
   if (addDescInput) addDescInput.value = "";
   if (addFutureInput) addFutureInput.checked = false;
+  setFormMode(-1);
 }
 
 function collectAddItem() {
@@ -314,24 +379,20 @@ async function submitAddItem() {
   if (addStatusEl) addStatusEl.textContent = "Dang luu moc...";
 
   try {
+    const wasEditing = editingIndex >= 0;
+    const existing = Array.isArray(currentJourneyState.items) ? currentJourneyState.items.slice() : [];
+    if (editingIndex >= 0 && editingIndex < existing.length) {
+      existing[editingIndex] = item;
+    } else {
+      existing.push(item);
+    }
     const nextState = {
       avatars: currentJourneyState.avatars || fallbackData.avatars,
-      items: [...(currentJourneyState.items || []), item],
+      items: existing,
     };
-    const res = await fetch(API_BASE, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nextState),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      throw new Error(data?.error || "Khong the luu moc moi.");
-    }
-    currentJourneyState = normalizeJourneyState(data);
-    renderTimeline(buildDisplayState(currentJourneyState));
+    await saveJourneyState(nextState);
     clearAddForm();
-    setAddPanelOpen(false);
-    if (addStatusEl) addStatusEl.textContent = "Da luu moc moi.";
+    if (addStatusEl) addStatusEl.textContent = wasEditing ? "Da cap nhat moc." : "Da luu moc moi.";
   } catch (err) {
     if (addStatusEl) addStatusEl.textContent = `Loi: ${err.message}`;
   } finally {
@@ -380,10 +441,58 @@ addToggleBtn?.addEventListener("click", () => {
 
 addCancelBtn?.addEventListener("click", () => {
   setAddPanelOpen(false);
+  clearAddForm();
 });
 
 addSubmitBtn?.addEventListener("click", () => {
   submitAddItem();
+});
+
+resetFormBtn?.addEventListener("click", () => {
+  clearAddForm();
+  if (addStatusEl) addStatusEl.textContent = "Da reset form.";
+});
+
+manageListEl?.addEventListener("click", async (event) => {
+  const btn = event.target.closest("button[data-act]");
+  if (!btn) return;
+  const act = btn.getAttribute("data-act");
+  const idx = Number(btn.getAttribute("data-idx"));
+  if (!Number.isInteger(idx)) return;
+  const items = Array.isArray(currentJourneyState.items) ? currentJourneyState.items : [];
+  const target = items[idx];
+  if (!target) return;
+
+  if (act === "edit") {
+    if (addDateInput) addDateInput.value = target.date || "";
+    if (addRoleInput) addRoleInput.value = normalizeRole(target.role);
+    if (addTitleInput) addTitleInput.value = target.title || "";
+    if (addDescInput) addDescInput.value = target.desc || "";
+    if (addFutureInput) addFutureInput.checked = Boolean(target.future);
+    setFormMode(idx);
+    if (addStatusEl) addStatusEl.textContent = `Dang sua moc #${idx + 1}`;
+    if (addPanelEl?.hidden) setAddPanelOpen(true);
+    addTitleInput?.focus();
+    return;
+  }
+
+  if (act === "delete") {
+    const ok = window.confirm(`Xoa moc "${target.title || "khong tieu de"}"?`);
+    if (!ok) return;
+    if (addStatusEl) addStatusEl.textContent = "Dang xoa moc...";
+    try {
+      const nextItems = items.filter((_, i) => i !== idx);
+      await saveJourneyState({
+        avatars: currentJourneyState.avatars || fallbackData.avatars,
+        items: nextItems,
+      });
+      if (editingIndex === idx) clearAddForm();
+      if (editingIndex > idx) setFormMode(editingIndex - 1);
+      if (addStatusEl) addStatusEl.textContent = "Da xoa moc.";
+    } catch (err) {
+      if (addStatusEl) addStatusEl.textContent = `Loi: ${err.message}`;
+    }
+  }
 });
 
 document.addEventListener("keydown", (event) => {

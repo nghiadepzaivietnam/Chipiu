@@ -52,6 +52,8 @@
   let dragOffsetX = 0;
   let dragOffsetY = 0;
   let suppressToggleClick = false;
+  let lastPointerX = 0;
+  let lastPointerY = 0;
 
   function makeAssistantGreeting() {
     return {
@@ -233,8 +235,10 @@
     const margin = 8;
     const width = toggleBtn.offsetWidth || 68;
     const height = toggleBtn.offsetHeight || 68;
-    const maxX = Math.max(margin, window.innerWidth - width - margin);
-    const maxY = Math.max(margin, window.innerHeight - height - margin);
+    const viewportWidth = window.visualViewport?.width || window.innerWidth;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const maxX = Math.max(margin, viewportWidth - width - margin);
+    const maxY = Math.max(margin, viewportHeight - height - margin);
     return {
       x: Math.min(maxX, Math.max(margin, Math.round(x))),
       y: Math.min(maxY, Math.max(margin, Math.round(y))),
@@ -466,12 +470,14 @@
   toggleBtn.addEventListener("pointerdown", (event) => {
     if (event.button !== 0) return;
     suppressToggleClick = false;
+    lastPointerX = event.clientX;
+    lastPointerY = event.clientY;
     dragTimer = setTimeout(() => {
       dragging = true;
       root.classList.add("dragging");
-      const rect = root.getBoundingClientRect();
-      dragOffsetX = event.clientX - rect.left;
-      dragOffsetY = event.clientY - rect.top;
+      const rect = toggleBtn.getBoundingClientRect();
+      dragOffsetX = lastPointerX - rect.left;
+      dragOffsetY = lastPointerY - rect.top;
       try {
         toggleBtn.setPointerCapture(event.pointerId);
       } catch (_err) {
@@ -481,6 +487,8 @@
   });
 
   toggleBtn.addEventListener("pointermove", (event) => {
+    lastPointerX = event.clientX;
+    lastPointerY = event.clientY;
     if (!dragging) return;
     event.preventDefault();
     const x = event.clientX - dragOffsetX;
@@ -497,7 +505,7 @@
     dragging = false;
     root.classList.remove("dragging");
     suppressToggleClick = true;
-    const rect = root.getBoundingClientRect();
+    const rect = toggleBtn.getBoundingClientRect();
     applyWidgetPosition(rect.left, rect.top, true);
     try {
       toggleBtn.releasePointerCapture(event.pointerId);
@@ -518,10 +526,14 @@
   }, true);
 
   window.addEventListener("resize", () => {
-    const rect = root.getBoundingClientRect();
-    if (root.style.top && root.style.left) {
-      applyWidgetPosition(rect.left, rect.top, true);
+    const savedX = state?.widgetPosition?.x;
+    const savedY = state?.widgetPosition?.y;
+    if (Number.isFinite(savedX) && Number.isFinite(savedY)) {
+      applyWidgetPosition(savedX, savedY, false);
+      return;
     }
+    const rect = toggleBtn.getBoundingClientRect();
+    applyWidgetPosition(rect.left, rect.top, false);
   });
 
   document.addEventListener("keydown", (event) => {

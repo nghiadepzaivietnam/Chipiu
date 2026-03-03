@@ -101,7 +101,6 @@ body.period-page .ai-chat-widget {
   transform-origin: left bottom;
   pointer-events: none;
   transition: opacity 220ms ease, transform 220ms ease;
-  position: relative;
 }
 
 .ai-chat-widget.open .ai-chat-panel {

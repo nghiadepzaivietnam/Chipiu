@@ -399,6 +399,13 @@ body.journey-love-page::before {
   font-size: 12px;
 }
 
+.journey-form-mode {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffd5e5;
+}
+
 .journey-create-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -471,6 +478,88 @@ body.journey-love-page::before {
   color: #ffd0e1;
   font-size: 12px;
   font-weight: 700;
+}
+
+.journey-manage {
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  padding-top: 10px;
+}
+
+.journey-manage-title {
+  margin: 0 0 8px;
+  color: #ffe8f1;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.journey-manage-list {
+  display: grid;
+  gap: 7px;
+  max-height: 190px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.journey-manage-item {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  display: grid;
+  gap: 6px;
+}
+
+.journey-manage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.journey-manage-time {
+  color: #ffd9e7;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.journey-manage-role {
+  color: #ffeef5;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.journey-manage-name {
+  margin: 0;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.journey-manage-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.journey-mini-btn {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffe5ef;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.journey-mini-btn.danger {
+  border-color: rgba(255, 132, 160, 0.4);
+  background: rgba(255, 66, 108, 0.22);
 }
 
 @keyframes futureGlow {
@@ -729,6 +818,11 @@ body.journey-love-page::before {
     font-size: 11px;
   }
 
+  .journey-form-mode {
+    margin-bottom: 8px;
+    font-size: 10px;
+  }
+
   .journey-create-label {
     font-size: 11px;
     gap: 4px;
@@ -752,5 +846,18 @@ body.journey-love-page::before {
   .journey-create-status {
     margin-top: 6px;
     font-size: 11px;
+  }
+
+  .journey-manage {
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .journey-manage-list {
+    max-height: 150px;
+  }
+
+  .journey-manage-name {
+    font-size: 12px;
   }
 }
