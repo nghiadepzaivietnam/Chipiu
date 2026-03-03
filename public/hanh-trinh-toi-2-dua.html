@@ -45,6 +45,46 @@
       </section>
       <p class="journey-empty" id="journeyEmpty" hidden>Chưa có cột mốc nào. Thêm dữ liệu ở trang builder nhé.</p>
     </main>
+    <section class="journey-create-dock" aria-label="Them hanh trinh nhanh">
+      <button class="journey-create-toggle" id="journeyAddToggle" type="button" aria-expanded="false" aria-controls="journeyAddPanel">
+        Them hanh trinh
+      </button>
+      <div class="journey-create-panel" id="journeyAddPanel" hidden>
+        <p class="journey-create-title">Them moc moi</p>
+        <p class="journey-create-hint">Moc thoi gian co the la text tu do (vi du: "Lan dau hen ho", "Mua he 2025").</p>
+        <div class="journey-create-grid">
+          <label class="journey-create-label">
+            Moc thoi gian
+            <input class="journey-create-input" id="journeyAddDateText" maxlength="80" placeholder="Text tu do..." />
+          </label>
+          <label class="journey-create-label">
+            Vai tro
+            <select class="journey-create-input" id="journeyAddRole">
+              <option value="haianh">Hai Anh (tren)</option>
+              <option value="toi">Trong Nghia (duoi)</option>
+              <option value="both">Ca hai</option>
+            </select>
+          </label>
+          <label class="journey-create-label journey-create-span2">
+            Tieu de
+            <input class="journey-create-input" id="journeyAddTitle" maxlength="180" placeholder="Tieu de ngan..." />
+          </label>
+          <label class="journey-create-label journey-create-span2">
+            Mo ta
+            <textarea class="journey-create-input" id="journeyAddDesc" maxlength="700" rows="3" placeholder="Mo ta ngan cho moc nay..."></textarea>
+          </label>
+          <label class="journey-create-check">
+            <input type="checkbox" id="journeyAddFuture" />
+            Moc dac biet (phat sang)
+          </label>
+        </div>
+        <div class="journey-create-actions">
+          <button class="journey-create-btn ghost" id="journeyAddCancel" type="button">Dong</button>
+          <button class="journey-create-btn" id="journeyAddSubmit" type="button">Luu moc</button>
+        </div>
+        <p class="journey-create-status" id="journeyAddStatus"></p>
+      </div>
+    </section>
 
     <script src="/user-context.js"></script>
     <script src="/journey-love.js"></script>

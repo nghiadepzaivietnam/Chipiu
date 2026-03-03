@@ -8,6 +8,18 @@ const prevBtn = document.getElementById("journeyPrev");
 const nextBtn = document.getElementById("journeyNext");
 const emptyEl = document.getElementById("journeyEmpty");
 const heroEl = document.querySelector(".journey-hero");
+const addToggleBtn = document.getElementById("journeyAddToggle");
+const addPanelEl = document.getElementById("journeyAddPanel");
+const addDateInput = document.getElementById("journeyAddDateText");
+const addRoleInput = document.getElementById("journeyAddRole");
+const addTitleInput = document.getElementById("journeyAddTitle");
+const addDescInput = document.getElementById("journeyAddDesc");
+const addFutureInput = document.getElementById("journeyAddFuture");
+const addCancelBtn = document.getElementById("journeyAddCancel");
+const addSubmitBtn = document.getElementById("journeyAddSubmit");
+const addStatusEl = document.getElementById("journeyAddStatus");
+
+const API_BASE = "/api/journey";
 
 const fallbackData = {
   avatars: {
@@ -56,6 +68,11 @@ const fallbackData = {
 let fillTarget = 0;
 let fillCurrent = 0;
 let fillRaf = 0;
+let currentJourneyState = {
+  avatars: { ...fallbackData.avatars },
+  items: fallbackData.items.slice(),
+};
+let isSavingAdd = false;
 
 function roleLabel(role) {
   return role === "toi" ? "Trong Nghia" : "Hai Anh";
@@ -97,6 +114,36 @@ function normalizeItems(items) {
     expandItemByRole({ ...base, role: item.role }).forEach((x) => mapped.push(x));
   });
   return mapped;
+}
+
+function normalizeJourneyState(data) {
+  const avatars = {
+    haianh: String(data?.avatars?.haianh || DEFAULT_HAIANH).trim() || DEFAULT_HAIANH,
+    toi: String(data?.avatars?.toi || DEFAULT_TOI).trim() || DEFAULT_TOI,
+  };
+  const items = Array.isArray(data?.items)
+    ? data.items
+        .map((item) => ({
+          date: String(item?.date || "").trim().slice(0, 80),
+          role: normalizeRole(item?.role),
+          title: String(item?.title || "").trim().slice(0, 180),
+          desc: String(item?.desc || "").trim().slice(0, 700),
+          future: Boolean(item?.future),
+        }))
+        .filter((item) => item.title)
+    : [];
+  return { avatars, items };
+}
+
+function buildDisplayState(state) {
+  const items = Array.isArray(state?.items) ? state.items.slice() : [];
+  if (!items.some((item) => item && item.future)) {
+    items.push(fallbackData.items[fallbackData.items.length - 1]);
+  }
+  return {
+    avatars: state?.avatars || fallbackData.avatars,
+    items,
+  };
 }
 
 function buildStep(item, avatars, index) {
@@ -206,20 +253,83 @@ function renderTimeline(data) {
 
 async function loadTimeline() {
   try {
-    const res = await fetch("/api/journey");
+    const res = await fetch(API_BASE);
     if (!res.ok) throw new Error("load fail");
     const data = await res.json();
-
-    const items = Array.isArray(data?.items) ? data.items.slice() : [];
-    if (!items.some((x) => x && x.future)) {
-      items.push(fallbackData.items[fallbackData.items.length - 1]);
-    }
-    renderTimeline({
-      avatars: data?.avatars || fallbackData.avatars,
-      items,
-    });
+    currentJourneyState = normalizeJourneyState(data);
+    renderTimeline(buildDisplayState(currentJourneyState));
   } catch (_err) {
-    renderTimeline(fallbackData);
+    currentJourneyState = normalizeJourneyState(fallbackData);
+    renderTimeline(buildDisplayState(currentJourneyState));
+  }
+}
+
+function setAddPanelOpen(open) {
+  if (!addPanelEl || !addToggleBtn) return;
+  addPanelEl.hidden = !open;
+  addToggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  addToggleBtn.textContent = open ? "Dong them hanh trinh" : "Them hanh trinh";
+  if (open) addTitleInput?.focus();
+}
+
+function clearAddForm() {
+  if (addDateInput) addDateInput.value = "";
+  if (addRoleInput) addRoleInput.value = "haianh";
+  if (addTitleInput) addTitleInput.value = "";
+  if (addDescInput) addDescInput.value = "";
+  if (addFutureInput) addFutureInput.checked = false;
+}
+
+function collectAddItem() {
+  const title = String(addTitleInput?.value || "").trim().slice(0, 180);
+  if (!title) {
+    return { error: "Can nhap tieu de moc." };
+  }
+  const role = normalizeRole(addRoleInput?.value || "haianh");
+  const date = String(addDateInput?.value || "").trim().slice(0, 80) || "Moc moi";
+  const desc = String(addDescInput?.value || "").trim().slice(0, 700);
+  const future = Boolean(addFutureInput?.checked);
+  return {
+    item: { date, role, title, desc, future },
+  };
+}
+
+async function submitAddItem() {
+  if (isSavingAdd) return;
+  const { item, error } = collectAddItem();
+  if (error) {
+    if (addStatusEl) addStatusEl.textContent = error;
+    return;
+  }
+
+  isSavingAdd = true;
+  if (addSubmitBtn) addSubmitBtn.disabled = true;
+  if (addStatusEl) addStatusEl.textContent = "Dang luu moc...";
+
+  try {
+    const nextState = {
+      avatars: currentJourneyState.avatars || fallbackData.avatars,
+      items: [...(currentJourneyState.items || []), item],
+    };
+    const res = await fetch(API_BASE, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nextState),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data?.error || "Khong the luu moc moi.");
+    }
+    currentJourneyState = normalizeJourneyState(data);
+    renderTimeline(buildDisplayState(currentJourneyState));
+    clearAddForm();
+    setAddPanelOpen(false);
+    if (addStatusEl) addStatusEl.textContent = "Da luu moc moi.";
+  } catch (err) {
+    if (addStatusEl) addStatusEl.textContent = `Loi: ${err.message}`;
+  } finally {
+    isSavingAdd = false;
+    if (addSubmitBtn) addSubmitBtn.disabled = false;
   }
 }
 
@@ -255,6 +365,19 @@ window.addEventListener("resize", () => {
   updateFill();
   updateFocusedStep();
 }, { passive: true });
+
+addToggleBtn?.addEventListener("click", () => {
+  const willOpen = addPanelEl?.hidden;
+  setAddPanelOpen(Boolean(willOpen));
+});
+
+addCancelBtn?.addEventListener("click", () => {
+  setAddPanelOpen(false);
+});
+
+addSubmitBtn?.addEventListener("click", () => {
+  submitAddItem();
+});
 
 bindHeroMotion();
 loadTimeline();
