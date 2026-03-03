@@ -66,7 +66,9 @@ function avatarOf(role, avatars) {
 }
 
 function normalizeRole(value) {
-  if (value === "toi" || value === "haianh" || value === "both") return value;
+  const raw = String(value || "").trim().toLowerCase();
+  if (raw === "toi" || raw === "me" || raw === "trongnghia" || raw === "trong nghia") return "toi";
+  if (raw === "both" || raw === "ca2" || raw === "ca 2" || raw === "hai nguoi") return "both";
   return "haianh";
 }
 
@@ -101,6 +103,7 @@ function buildStep(item, avatars, index) {
   const step = document.createElement("article");
   step.className = `journey-step ${item.side} ${item.future ? "future" : ""}`;
   step.setAttribute("data-step", "");
+  step.setAttribute("data-role", item.role);
   step.style.setProperty("--stagger", `${Math.min(index * 55, 480)}ms`);
   step.innerHTML = `
     <div class="journey-card">
