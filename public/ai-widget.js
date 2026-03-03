@@ -44,6 +44,9 @@
   const form = root.querySelector("#aiChatForm");
   const input = root.querySelector("#aiChatInput");
   const list = root.querySelector("#aiChatMessages");
+  const canDragWidget =
+    window.matchMedia("(pointer: fine)").matches &&
+    !window.matchMedia("(max-width: 768px)").matches;
 
   let state = loadLocalState();
   let historySaveTimer = null;
@@ -467,63 +470,65 @@
     persistAll();
   });
 
-  toggleBtn.addEventListener("pointerdown", (event) => {
-    if (event.button !== 0) return;
-    suppressToggleClick = false;
-    lastPointerX = event.clientX;
-    lastPointerY = event.clientY;
-    dragTimer = setTimeout(() => {
-      dragging = true;
-      root.classList.add("dragging");
+  if (canDragWidget) {
+    toggleBtn.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      suppressToggleClick = false;
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
+      dragTimer = setTimeout(() => {
+        dragging = true;
+        root.classList.add("dragging");
+        const rect = toggleBtn.getBoundingClientRect();
+        dragOffsetX = lastPointerX - rect.left;
+        dragOffsetY = lastPointerY - rect.top;
+        try {
+          toggleBtn.setPointerCapture(event.pointerId);
+        } catch (_err) {
+          // ignore
+        }
+      }, 260);
+    });
+
+    toggleBtn.addEventListener("pointermove", (event) => {
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
+      if (!dragging) return;
+      event.preventDefault();
+      const x = event.clientX - dragOffsetX;
+      const y = event.clientY - dragOffsetY;
+      applyWidgetPosition(x, y, false);
+    });
+
+    function stopDrag(event) {
+      if (dragTimer) {
+        clearTimeout(dragTimer);
+        dragTimer = null;
+      }
+      if (!dragging) return;
+      dragging = false;
+      root.classList.remove("dragging");
+      suppressToggleClick = true;
       const rect = toggleBtn.getBoundingClientRect();
-      dragOffsetX = lastPointerX - rect.left;
-      dragOffsetY = lastPointerY - rect.top;
+      applyWidgetPosition(rect.left, rect.top, true);
       try {
-        toggleBtn.setPointerCapture(event.pointerId);
+        toggleBtn.releasePointerCapture(event.pointerId);
       } catch (_err) {
         // ignore
       }
-    }, 260);
-  });
-
-  toggleBtn.addEventListener("pointermove", (event) => {
-    lastPointerX = event.clientX;
-    lastPointerY = event.clientY;
-    if (!dragging) return;
-    event.preventDefault();
-    const x = event.clientX - dragOffsetX;
-    const y = event.clientY - dragOffsetY;
-    applyWidgetPosition(x, y, false);
-  });
-
-  function stopDrag(event) {
-    if (dragTimer) {
-      clearTimeout(dragTimer);
-      dragTimer = null;
+      setTimeout(() => {
+        suppressToggleClick = false;
+      }, 120);
     }
-    if (!dragging) return;
-    dragging = false;
-    root.classList.remove("dragging");
-    suppressToggleClick = true;
-    const rect = toggleBtn.getBoundingClientRect();
-    applyWidgetPosition(rect.left, rect.top, true);
-    try {
-      toggleBtn.releasePointerCapture(event.pointerId);
-    } catch (_err) {
-      // ignore
-    }
-    setTimeout(() => {
-      suppressToggleClick = false;
-    }, 120);
+
+    toggleBtn.addEventListener("pointerup", stopDrag);
+    toggleBtn.addEventListener("pointercancel", stopDrag);
+    toggleBtn.addEventListener("click", (event) => {
+      if (!suppressToggleClick) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
   }
-
-  toggleBtn.addEventListener("pointerup", stopDrag);
-  toggleBtn.addEventListener("pointercancel", stopDrag);
-  toggleBtn.addEventListener("click", (event) => {
-    if (!suppressToggleClick) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-  }, true);
 
   window.addEventListener("resize", () => {
     const savedX = state?.widgetPosition?.x;
