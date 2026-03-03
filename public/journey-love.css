@@ -240,6 +240,7 @@ body.journey-love-page::before {
   min-height: 420px;
   scroll-snap-align: center;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 .journey-node {
@@ -259,6 +260,8 @@ body.journey-love-page::before {
 .journey-card {
   position: absolute;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border-radius: 14px;
   padding: 14px;
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -266,6 +269,7 @@ body.journey-love-page::before {
   backdrop-filter: blur(7px);
   box-shadow: 0 16px 30px rgba(0, 0, 0, 0.36);
   opacity: 0;
+  overflow: hidden;
   transition: opacity 420ms ease, transform 420ms ease, box-shadow 220ms ease;
   transition-delay: var(--stagger, 0ms);
 }
@@ -321,6 +325,7 @@ body.journey-love-page::before {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  max-width: 100%;
   border-radius: 999px;
   padding: 6px 8px 6px 12px;
   color: #fff;
@@ -328,6 +333,15 @@ body.journey-love-page::before {
   font-size: 25px;
   line-height: 1;
   font-weight: 800;
+  box-sizing: border-box;
+}
+
+.journey-date span {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .journey-step[data-role="haianh"] .journey-date {
@@ -362,6 +376,10 @@ body.journey-love-page::before {
   font-family: "Baloo 2", sans-serif;
   font-size: 27px;
   line-height: 1.04;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .journey-step-desc {
@@ -369,6 +387,10 @@ body.journey-love-page::before {
   color: rgba(255, 255, 255, 0.74);
   font-size: 14px;
   line-height: 1.35;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .journey-step.future .journey-card {
@@ -928,5 +950,33 @@ body.journey-love-page::before {
 
   .journey-manage-name {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .journey-step {
+    width: 85vw;
+    min-width: 85vw;
+    max-width: 320px;
+    min-height: 432px;
+  }
+
+  .journey-card {
+    padding: 12px;
+  }
+
+  .journey-step-title {
+    font-size: 20px;
+    line-height: 1.1;
+  }
+
+  .journey-step-desc {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .journey-date {
+    max-width: 100%;
+    overflow: hidden;
   }
 }
