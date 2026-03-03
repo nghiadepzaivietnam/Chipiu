@@ -155,10 +155,10 @@ saveBtn?.addEventListener(
     }
     const iso = d.toISOString();
     currentStartDate = d;
-    saveMsg.textContent = 'Dang luu...';
+    saveMsg.textContent = '\u0110ang l\u01b0u...';
     saveStartToServer(iso)
       .then(() => {
-        saveMsg.textContent = 'Da luu len server.';
+        saveMsg.textContent = '\u0110\u00e3 l\u01b0u l\u00ean server.';
       })
       .catch(() => {
         saveMsg.textContent = 'Luu that bai, thu lai sau.';

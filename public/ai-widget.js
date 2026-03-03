@@ -12,24 +12,24 @@
     <div class="ai-chat-panel" aria-label="AI chat panel">
       <div class="ai-chat-head">
         <div class="ai-chat-head-top">
-          <p class="ai-chat-title">AI tu van</p>
+          <p class="ai-chat-title">AI t\u01b0 v\u1ea5n</p>
           <div class="ai-chat-head-actions">
-            <button class="ai-chat-mini" id="aiChatNew" type="button" aria-label="Thêm đoạn chat mới">Thêm đoạn chat mới</button>
-            <button class="ai-chat-mini" id="aiChatRename" type="button" aria-label="Đổi tên đoạn chat">Đổi tên đoạn chat</button>
-            <button class="ai-chat-mini danger" id="aiChatDelete" type="button" aria-label="Xóa đoạn chat">Xóa đoạn chat</button>
-            <button class="ai-chat-close" type="button" aria-label="Dong chat">x</button>
+            <button class="ai-chat-mini" id="aiChatNew" type="button" aria-label="Th\u00eam \u0111o\u1ea1n chat m\u1edbi">Th\u00eam \u0111o\u1ea1n chat m\u1edbi</button>
+            <button class="ai-chat-mini" id="aiChatRename" type="button" aria-label="\u0110\u1ed5i t\u00ean \u0111o\u1ea1n chat">\u0110\u1ed5i t\u00ean \u0111o\u1ea1n chat</button>
+            <button class="ai-chat-mini danger" id="aiChatDelete" type="button" aria-label="X\u00f3a \u0111o\u1ea1n chat">X\u00f3a \u0111o\u1ea1n chat</button>
+            <button class="ai-chat-close" type="button" aria-label="\u0110\u00f3ng chat">x</button>
           </div>
         </div>
-        <select class="ai-chat-thread-select" id="aiChatThreads" aria-label="Danh sach doan chat"></select>
+        <select class="ai-chat-thread-select" id="aiChatThreads" aria-label="Danh s\u00e1ch \u0111o\u1ea1n chat"></select>
       </div>
       <div class="ai-chat-messages" id="aiChatMessages"></div>
       <form class="ai-chat-form" id="aiChatForm">
-        <textarea class="ai-chat-input" id="aiChatInput" placeholder="Nhap cau hoi..."></textarea>
-        <button class="ai-chat-send" type="submit">Gui</button>
-        <p class="ai-chat-note">Thong tin chi de tham khao.</p>
+        <textarea class="ai-chat-input" id="aiChatInput" placeholder="Nh\u1eadp c\u00e2u h\u1ecfi..."></textarea>
+        <button class="ai-chat-send" type="submit">G\u1eedi</button>
+        <p class="ai-chat-note">Th\u00f4ng tin ch\u1ec9 \u0111\u1ec3 tham kh\u1ea3o.</p>
       </form>
     </div>
-    <button class="ai-chat-toggle" type="button" aria-label="Mo AI chat" aria-expanded="false" aria-controls="aiChatMessages">
+    <button class="ai-chat-toggle" type="button" aria-label="M\u1edf AI chat" aria-expanded="false" aria-controls="aiChatMessages">
       <span class="ai-chat-toggle-icon" aria-hidden="true">AI</span>
     </button>
   `;
@@ -58,7 +58,7 @@
   function makeAssistantGreeting() {
     return {
       role: "assistant",
-      content: "Xin chao, minh la AI nho cua ban. Ban co the hoi ve cuoc song, hoc tap, suc khoe chu ky, hoac kien thuc thong dung.",
+      content: "Xin ch\u00e0o, m\u00ecnh l\u00e0 AI nh\u1ecf c\u1ee7a b\u1ea1n. B\u1ea1n c\u00f3 th\u1ec3 h\u1ecfi v\u1ec1 cu\u1ed9c s\u1ed1ng, h\u1ecdc t\u1eadp, s\u1ee9c kh\u1ecfe chu k\u1ef3, ho\u1eb7c ki\u1ebfn th\u1ee9c th\u00f4ng d\u1ee5ng.",
     };
   }
 
@@ -66,7 +66,7 @@
     const now = new Date().toISOString();
     return {
       id: `conv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      title: (seedTitle || "Doan chat moi").slice(0, 120),
+      title: (seedTitle || "\u0110o\u1ea1n chat m\u1edbi").slice(0, 120),
       messages: [makeAssistantGreeting()],
       createdAt: now,
       updatedAt: now,
@@ -96,7 +96,7 @@
       ids.add(id);
       out.push({
         id,
-        title: (typeof c?.title === "string" ? c.title.trim() : "") || "Doan chat moi",
+        title: (typeof c?.title === "string" ? c.title.trim() : "") || "\u0110o\u1ea1n chat m\u1edbi",
         messages: normalizeMessages(c?.messages || []),
         createdAt: c?.createdAt || new Date().toISOString(),
         updatedAt: c?.updatedAt || new Date().toISOString(),
@@ -109,7 +109,7 @@
   function normalizeState(raw) {
     // Backward compat: legacy shape was just message array.
     if (Array.isArray(raw)) {
-      const legacy = makeConversation("Doan chat cu");
+      const legacy = makeConversation("\u0110o\u1ea1n chat c\u0169");
       legacy.id = "legacy";
       legacy.messages = normalizeMessages(raw);
       if (!legacy.messages.length) legacy.messages = [makeAssistantGreeting()];
@@ -160,7 +160,7 @@
 
   function summarizeTitle(text) {
     const clean = (text || "").replace(/\s+/g, " ").trim();
-    return clean ? clean.slice(0, 46) : "Doan chat moi";
+    return clean ? clean.slice(0, 46) : "\u0110o\u1ea1n chat m\u1edbi";
   }
 
   function renderThreadSelector() {
@@ -372,30 +372,30 @@
     if ((/hom nay|today/.test(t) && isAdd) || (isAdd && !dateIso && /ky kinh/.test(t))) {
       const iso = p.getTodayIso();
       p.addLoggedDate(iso);
-      return `Da tich ngay hom nay (${iso}) vao lich ky kinh.`;
+      return `\u0110\u00e3 t\u00edch ng\u00e0y h\u00f4m nay (${iso}) v\u00e0o l\u1ecbch k\u1ef3 kinh.`;
     }
     if (/hom nay|today/.test(t) && isRemove) {
       const iso = p.getTodayIso();
       p.removeLoggedDate(iso);
-      return `Da bo tich ngay hom nay (${iso}).`;
+      return `\u0110\u00e3 b\u1ecf t\u00edch ng\u00e0y h\u00f4m nay (${iso}).`;
     }
     if (dateIso && isAdd) {
       p.addLoggedDate(dateIso);
-      return `Da tich ngay ${dateIso} vao lich ky kinh.`;
+      return `\u0110\u00e3 t\u00edch ng\u00e0y ${dateIso} v\u00e0o l\u1ecbch k\u1ef3 kinh.`;
     }
     if (dateIso && isRemove) {
       p.removeLoggedDate(dateIso);
-      return `Da bo tich ngay ${dateIso}.`;
+      return `\u0110\u00e3 b\u1ecf t\u00edch ng\u00e0y ${dateIso}.`;
     }
     const cycleMatch = t.match(/chu ky\s*(\d{2})\s*ngay/);
     if (cycleMatch) {
       const est = p.getEstimatedCycleLength?.();
-      return `Chu ky uoc tinh hien tai: ${est || "dang cap nhat"} ngay.`;
+      return `Chu k\u1ef3 \u01b0\u1edbc t\u00ednh hi\u1ec7n t\u1ea1i: ${est || "\u0111ang c\u1eadp nh\u1eadt"} ng\u00e0y.`;
     }
     const periodMatch = t.match(/hanh kinh\s*(\d{1,2})\s*ngay/);
     if (periodMatch) {
       const v = p.setPeriodLength(Number(periodMatch[1]));
-      return `Da cap nhat so ngay hanh kinh: ${v} ngay.`;
+      return `\u0110\u00e3 c\u1eadp nh\u1eadt s\u1ed1 ng\u00e0y h\u00e0nh kinh: ${v} ng\u00e0y.`;
     }
     return null;
   }
@@ -413,8 +413,8 @@
       body: JSON.stringify(payload),
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || "AI dang ban, thu lai sau.");
-    return (data.reply || "").trim() || "Minh chua co cau tra loi phu hop.";
+    if (!res.ok) throw new Error(data.error || "AI \u0111ang b\u1eadn, th\u1eed l\u1ea1i sau.");
+    return (data.reply || "").trim() || "M\u00ecnh ch\u01b0a c\u00f3 c\u00e2u tr\u1ea3 l\u1eddi ph\u00f9 h\u1ee3p.";
   }
 
   toggleBtn.addEventListener("click", () => setOpen(!root.classList.contains("open")));
@@ -432,7 +432,7 @@
   renameBtn.addEventListener("click", () => {
     const active = getActiveConversation();
     if (!active) return;
-    const nextTitle = window.prompt("Nhap ten moi cho doan chat:", active.title || "");
+    const nextTitle = window.prompt("Nh\u1eadp t\u00ean m\u1edbi cho \u0111o\u1ea1n chat:", active.title || "");
     if (nextTitle == null) return;
     const title = nextTitle.trim().slice(0, 120);
     if (!title) return;
@@ -447,7 +447,7 @@
   deleteBtn.addEventListener("click", () => {
     const active = getActiveConversation();
     if (!active) return;
-    const ok = window.confirm(`Xoa doan chat "${active.title}"?`);
+    const ok = window.confirm(`X\u00f3a \u0111o\u1ea1n chat "${active.title}"?`);
     if (!ok) return;
     state.conversations = state.conversations.filter((c) => c.id !== active.id);
     if (!state.conversations.length) {
@@ -548,7 +548,7 @@
     const active = getActiveConversation();
     if (!active) return;
 
-    if (active.title === "Doan chat moi" || active.title === "Cuoc tro chuyen moi") {
+    if (active.title === "\u0110o\u1ea1n chat m\u1edbi" || active.title === "Cu\u1ed9c tr\u00f2 chuy\u1ec7n m\u1edbi") {
       active.title = summarizeTitle(text);
     }
 
@@ -561,7 +561,7 @@
     renderAll();
     persistAll();
 
-    const thinking = { role: "assistant", content: "Dang suy nghi..." };
+    const thinking = { role: "assistant", content: "\u0110ang suy ngh\u0129..." };
     active.messages.push(thinking);
     renderMessages();
 
@@ -570,7 +570,7 @@
       const reply = localActionReply || (await askAi(active.messages));
       active.messages[active.messages.length - 1] = { role: "assistant", content: reply };
     } catch (err) {
-      active.messages[active.messages.length - 1] = { role: "assistant", content: `Loi: ${err.message}` };
+      active.messages[active.messages.length - 1] = { role: "assistant", content: `L\u1ed7i: ${err.message}` };
     }
 
     active.messages = normalizeMessages(active.messages);
@@ -594,3 +594,5 @@
     })
     .catch(() => {});
 })();
+
+

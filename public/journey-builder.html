@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Trinh tao Hanh Trinh 2 Dua</title>
+  <title>Tr&#236;nh t&#7841;o H&#224;nh Tr&#236;nh 2 &#272;&#7913;a</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -279,65 +279,65 @@
   </style>
 </head>
 <body>
-  <nav class="top-links" aria-label="Dieu huong hanh trinh">
-    <a class="top-link" href="/hanh-trinh-toi-2-dua.html">← Quay ve trang hanh trinh</a>
+  <nav class="top-links" aria-label="&#272;i&#7873;u h&#432;&#7899;ng h&#224;nh tr&#236;nh">
+    <a class="top-link" href="/hanh-trinh-toi-2-dua.html">&larr; Quay v&#7873; trang h&#224;nh tr&#236;nh</a>
   </nav>
   <main class="shell">
     <section class="card left">
-      <h1>Trinh tao hanh trinh</h1>
-      <p class="sub">Du lieu duoc luu MongoDB de len web va co backup local tren may ban.</p>
+      <h1>Tr&#236;nh t&#7841;o h&#224;nh tr&#236;nh</h1>
+      <p class="sub">D&#7919; li&#7879;u &#273;&#432;&#7907;c l&#432;u MongoDB &#273;&#7875; l&#234;n web v&#224; c&#243; backup local tr&#234;n m&#225;y b&#7841;n.</p>
 
       <div class="grid">
         <label>Avatar Hai Anh</label>
         <input type="file" id="avatarHaiAnhFile" accept="image/*" />
       </div>
       <div class="grid">
-        <label>Avatar Trọng Nghĩa</label>
+        <label>Avatar Tr&#7885;ng Ngh&#297;a</label>
         <input type="file" id="avatarToiFile" accept="image/*" />
       </div>
 
       <hr style="border:none;border-top:1px solid rgba(255,95,141,.18);width:100%;margin:2px 0;">
 
       <div class="grid">
-        <label>Ngay / moc thoi gian</label>
-        <input id="fDate" placeholder="Vi du: 01 / 06 / 2025" />
+        <label>Ng&#224;y / m&#7889;c th&#7901;i gian</label>
+        <input id="fDate" placeholder="V&#237; d&#7909;: 01 / 06 / 2025" />
       </div>
       <div class="grid">
-        <label>Vai tro</label>
+        <label>Vai tr&#242;</label>
         <select id="fRole">
-          <option value="haianh">Hai Anh (tren)</option>
-          <option value="toi">Trọng Nghĩa (duoi)</option>
-          <option value="both">Ca hai</option>
+          <option value="haianh">H&#7843;i Anh (tr&#234;n)</option>
+          <option value="toi">Tr&#7885;ng Ngh&#297;a (d&#432;&#7899;i)</option>
+          <option value="both">C&#7843; hai</option>
         </select>
       </div>
       <div class="grid">
-        <label>Tieu de ngan</label>
-        <input id="fTitle" placeholder="Vi du: Chinh thuc ben nhau" />
+        <label>Ti&#234;u &#273;&#7873; ng&#7855;n</label>
+        <input id="fTitle" placeholder="V&#237; d&#7909;: Ch&#237;nh th&#7913;c b&#234;n nhau" />
       </div>
       <div class="grid">
-        <label>Mo ta</label>
-        <textarea id="fDesc" placeholder="1-2 dong mo ta"></textarea>
+        <label>M&#244; t&#7843;</label>
+        <textarea id="fDesc" placeholder="1-2 d&#242;ng m&#244; t&#7843;"></textarea>
       </div>
       <div class="row2">
         <label style="display:flex;gap:8px;align-items:center;">
           <input type="checkbox" id="fFuture" style="width:auto;" />
-          Moc dac biet (phat sang)
+          M&#7889;c &#273;&#7863;c bi&#7879;t (ph&#225;t s&#225;ng)
         </label>
-        <button class="btn" id="addBtn" type="button">+ Them moc</button>
+        <button class="btn" id="addBtn" type="button">+ Th&#234;m m&#7889;c</button>
       </div>
 
       <div class="actions">
-        <button class="btn ghost" id="exportBtn" type="button">Xuat JSON</button>
+        <button class="btn ghost" id="exportBtn" type="button">Xu&#7845;t JSON</button>
         <input type="file" id="importFile" accept="application/json" style="display:none;" />
-        <button class="btn ghost" id="importBtn" type="button">Nhap JSON</button>
+        <button class="btn ghost" id="importBtn" type="button">Nh&#7853;p JSON</button>
       </div>
-      <button class="btn ghost" id="clearBtn" type="button">Xoa tat ca moc</button>
+      <button class="btn ghost" id="clearBtn" type="button">X&#243;a t&#7845;t c&#7843; m&#7889;c</button>
 
       <div class="list" id="itemsList"></div>
     </section>
 
     <section class="card right">
-      <p class="preview-title">Preview: Hanh Trinh Toi 2 Dua</p>
+      <p class="preview-title">Preview: H&#224;nh Tr&#236;nh T&#7899;i 2 &#272;&#7913;a</p>
       <div class="scroll" id="scroll">
         <div class="track" id="track">
           <div class="line"><div class="line-fill" id="lineFill"></div></div>
@@ -375,7 +375,7 @@
 
     async function loadServerState() {
       const res = await fetch(API_BASE);
-      if (!res.ok) throw new Error("Khong the tai du lieu tu server.");
+      if (!res.ok) throw new Error("Kh\u00f4ng th\u1ec3 t\u1ea3i d\u1eef li\u1ec7u t\u1eeb server.");
       const data = await res.json();
       return {
         avatars: {
@@ -394,13 +394,13 @@
       });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
-        throw new Error(d?.error || "Luu server that bai.");
+        throw new Error(d?.error || "L\u01b0u server th\u1ea5t b\u1ea1i.");
       }
     }
 
     async function loadDraftState() {
       const res = await fetch(DRAFT_ENDPOINT);
-      if (!res.ok) throw new Error("Khong the tai ban nhap tu server.");
+      if (!res.ok) throw new Error("Kh\u00f4ng th\u1ec3 t\u1ea3i b\u1ea3n nh\u00e1p t\u1eeb server.");
       const data = await res.json();
       return {
         avatars: {
@@ -419,7 +419,7 @@
       });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
-        throw new Error(d?.error || "Luu nhap server that bai.");
+        throw new Error(d?.error || "L\u01b0u nh\u00e1p server th\u1ea5t b\u1ea1i.");
       }
     }
 
@@ -436,7 +436,7 @@
       const res = await fetch(`${API_BASE}/avatar`, { method: "POST", body: form });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
-        throw new Error(d?.error || "Upload avatar that bai.");
+        throw new Error(d?.error || "Upload avatar th\u1ea5t b\u1ea1i.");
       }
       const data = await res.json();
       return String(data?.url || "").trim();
@@ -444,8 +444,8 @@
 
     function roleLabel(role) {
       if (role === "haianh") return "Hai Anh";
-      if (role === "toi") return "Trọng Nghĩa";
-      return "Ca hai";
+      if (role === "toi") return "Tr&#7885;ng Ngh&#297;a";
+      return "C&#7843; hai";
     }
 
     function isTop(role, index) {
@@ -456,10 +456,10 @@
 
     function buildAvatarHtml(role) {
       const a1 = `<img class="avatar" src="${state.avatars.haianh}" alt="Hai Anh" data-fallback="${DEFAULT_HAIANH}">`;
-      const a2 = `<img class="avatar" src="${state.avatars.toi}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
+      const a2 = `<img class="avatar" src="${state.avatars.toi}" alt="Tr&#7885;ng Ngh&#297;a" data-fallback="${DEFAULT_HAIANH}">`;
       if (role === "haianh") return a1;
       if (role === "toi") return a2;
-      return `${a1}<img class="avatar pair" src="${state.avatars.toi}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
+      return `${a1}<img class="avatar pair" src="${state.avatars.toi}" alt="Tr&#7885;ng Ngh&#297;a" data-fallback="${DEFAULT_HAIANH}">`;
     }
 
     function bindAvatarFallback(scope) {
@@ -475,7 +475,7 @@
     function renderList() {
       itemsList.innerHTML = "";
       if (!state.items.length) {
-        itemsList.innerHTML = '<p class="sub" style="margin:0;">Chua co moc nao. Them moc dau tien o phia tren.</p>';
+        itemsList.innerHTML = '<p class="sub" style="margin:0;">Ch&#432;a c&#243; m&#7889;c n&#224;o. Th&#234;m m&#7889;c &#273;&#7847;u ti&#234;n &#7903; ph&#237;a tr&#234;n.</p>';
         return;
       }
       state.items.forEach((item, idx) => {
@@ -483,15 +483,15 @@
         wrap.className = "item";
         wrap.innerHTML = `
           <div class="item-top">
-            <strong>${item.date || "Chua co ngay"} · ${roleLabel(item.role)}</strong>
+            <strong>${item.date || "Ch&#432;a c&#243; ng&#224;y"} &middot; ${roleLabel(item.role)}</strong>
             <span>${item.future ? "*" : ""}</span>
           </div>
-          <p class="item-title">${item.title || "(Chua co tieu de)"}</p>
+          <p class="item-title">${item.title || "(Ch&#432;a c&#243; ti&#234;u &#273;&#7873;)"}</p>
           <div class="item-btns">
             <button class="small" data-act="up" data-idx="${idx}">Up</button>
             <button class="small" data-act="down" data-idx="${idx}">Down</button>
-            <button class="small" data-act="edit" data-idx="${idx}">Sua</button>
-            <button class="small" data-act="del" data-idx="${idx}">Xoa</button>
+            <button class="small" data-act="edit" data-idx="${idx}">S&#7917;a</button>
+            <button class="small" data-act="del" data-idx="${idx}">X&#243;a</button>
           </div>
         `;
         itemsList.appendChild(wrap);
@@ -509,7 +509,7 @@
           <div class="box">
             <div class="pill">${item.date || "?"} ${buildAvatarHtml(item.role)}</div>
             <p class="role">${roleLabel(item.role)}</p>
-            <h3 class="title">${item.title || "(Chua co tieu de)"}</h3>
+            <h3 class="title">${item.title || "(Ch&#432;a c&#243; ti&#234;u &#273;&#7873;)"}</h3>
             <p class="desc">${item.desc || ""}</p>
           </div>
           <div class="node" aria-hidden="true"></div>
@@ -531,7 +531,7 @@
       const date = fDate.value.trim();
       const title = fTitle.value.trim();
       const desc = fDesc.value.trim();
-      if (!title) return alert("Nhap tieu de moc truoc nhe.");
+      if (!title) return alert("Nh\u1eadp ti\u00eau \u0111\u1ec1 m\u1ed1c tr\u01b0\u1edbc nh\u00e9.");
       state.items.push({ date, role: fRole.value, title, desc, future: Boolean(fFuture.checked) });
       fDate.value = "";
       fTitle.value = "";
@@ -576,11 +576,11 @@
         [state.items[idx + 1], state.items[idx]] = [state.items[idx], state.items[idx + 1]];
       } else if (act === "edit") {
         const item = state.items[idx];
-        const title = prompt("Sua tieu de:", item.title || "");
+        const title = prompt("S\u1eeda ti\u00eau \u0111\u1ec1:", item.title || "");
         if (title === null) return;
-        const desc = prompt("Sua mo ta:", item.desc || "");
+        const desc = prompt("S\u1eeda m\u00f4 t\u1ea3:", item.desc || "");
         if (desc === null) return;
-        const date = prompt("Sua ngay/moc:", item.date || "");
+        const date = prompt("S\u1eeda ng\u00e0y/m\u1ed1c:", item.date || "");
         if (date === null) return;
         item.title = title.trim();
         item.desc = desc.trim();
@@ -648,13 +648,13 @@
         renderAll();
         await saveServerState();
       } catch (_e) {
-        alert("File JSON khong hop le.");
+        alert("File JSON kh\u00f4ng h\u1ee3p l\u1ec7.");
       }
       importFile.value = "";
     });
 
     clearBtn.addEventListener("click", () => {
-      if (!confirm("Xoa toan bo moc hanh trinh?")) return;
+      if (!confirm("X\u00f3a to\u00e0n b\u1ed9 m\u1ed1c h\u00e0nh tr\u00ecnh?")) return;
       state.items = [];
       renderAll();
       saveServerState().catch(() => {});
@@ -685,3 +685,6 @@
   </script>
 </body>
 </html>
+
+
+

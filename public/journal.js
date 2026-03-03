@@ -1,4 +1,4 @@
-﻿const feedEl = document.getElementById('journal-feed');
+const feedEl = document.getElementById('journal-feed');
 const ownerSelectBtn = document.getElementById('ownerSelectBtn');
 const ownerSelectLabel = document.getElementById('ownerSelectLabel');
 const ownerMenu = document.getElementById('ownerMenu');
@@ -68,7 +68,7 @@ function openLightbox(item) {
   } else {
     const text = document.createElement('p');
     text.className = 'lightbox-only-text';
-    text.textContent = item.caption || 'Khong co media';
+    text.textContent = item.caption || 'Kh\u00f4ng c\u00f3 media';
     lightboxMediaWrap.appendChild(text);
   }
 
@@ -110,7 +110,7 @@ async function downloadCurrentMoment() {
 
   try {
     const res = await fetch(activeMoment.mediaUrl);
-    if (!res.ok) throw new Error('Tai file that bai');
+    if (!res.ok) throw new Error('T\u1ea3i file th\u1ea5t b\u1ea1i');
     const blob = await res.blob();
     const objectUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -120,31 +120,31 @@ async function downloadCurrentMoment() {
     link.click();
     link.remove();
     URL.revokeObjectURL(objectUrl);
-    if (lightboxActionStatus) lightboxActionStatus.textContent = 'Da tai xuong.';
+    if (lightboxActionStatus) lightboxActionStatus.textContent = '\u0110\u00e3 t\u1ea3i xu\u1ed1ng.';
   } catch (_err) {
     window.open(activeMoment.mediaUrl, '_blank', 'noopener,noreferrer');
     if (lightboxActionStatus) {
-      lightboxActionStatus.textContent = 'Khong tai truc tiep duoc, da mo file o tab moi.';
+      lightboxActionStatus.textContent = 'Kh\u00f4ng t\u1ea3i tr\u1ef1c ti\u1ebfp \u0111\u01b0\u1ee3c, \u0111\u00e3 m\u1edf file \u1edf tab m\u1edbi.';
     }
   }
 }
 
 async function deleteCurrentMoment() {
   if (!activeMoment?._id) return;
-  const ok = window.confirm('Ban chac chan muon xoa khoanh khac nay?');
+  const ok = window.confirm('B\u1ea1n ch\u1eafc ch\u1eafn mu\u1ed1n x\u00f3a kho\u1ea3nh kh\u1eafc n\u00e0y?');
   if (!ok) return;
 
   try {
     if (lightboxDelete) lightboxDelete.disabled = true;
     const res = await fetch(`/api/moments/${activeMoment._id}`, { method: 'DELETE' });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'Xoa that bai');
+    if (!res.ok) throw new Error(data.error || 'X\u00f3a th\u1ea5t b\u1ea1i');
 
     cache = cache.filter((m) => m._id !== activeMoment._id);
     render();
     closeLightbox();
   } catch (err) {
-    if (lightboxActionStatus) lightboxActionStatus.textContent = `Khong xoa duoc: ${err.message}`;
+    if (lightboxActionStatus) lightboxActionStatus.textContent = `Kh\u00f4ng x\u00f3a \u0111\u01b0\u1ee3c: ${err.message}`;
   } finally {
     if (lightboxDelete) lightboxDelete.disabled = !activeMoment?._id;
   }
@@ -159,7 +159,7 @@ function createCard(item) {
   } else if (item.mediaType === 'video' && item.mediaUrl) {
     card.innerHTML = `<video src="${item.mediaUrl}" muted playsinline webkit-playsinline autoplay loop preload="metadata"></video>`;
   } else {
-    const safeText = item.caption ? item.caption : 'Khoanh khac';
+    const safeText = item.caption ? item.caption : 'Kho\u1ea3nh kh\u1eafc';
     card.classList.add('text-tile');
     card.innerHTML = `<p>${safeText}</p>`;
   }
@@ -186,7 +186,7 @@ function ownerMatches(owner, selected) {
 
 function render() {
   if (!cache.length) {
-    feedEl.innerHTML = '<p class="status camera-empty">Chua co bai dang nao.</p>';
+    feedEl.innerHTML = '<p class="status camera-empty">Ch\u01b0a c\u00f3 b\u00e0i \u0111\u0103ng n\u00e0o.</p>';
     return;
   }
 
@@ -197,7 +197,7 @@ function render() {
   });
 
   if (!items.length) {
-    feedEl.innerHTML = '<p class="status camera-empty">Khong co bai dang cho bo loc nay.</p>';
+    feedEl.innerHTML = '<p class="status camera-empty">Kh\u00f4ng c\u00f3 b\u00e0i \u0111\u0103ng cho b\u1ed9 l\u1ecdc n\u00e0y.</p>';
     return;
   }
 
@@ -214,7 +214,7 @@ async function fetchMoments() {
     cache = await res.json();
     render();
   } catch (_err) {
-    feedEl.innerHTML = '<p class="status camera-empty">Khong tai duoc du lieu.</p>';
+    feedEl.innerHTML = '<p class="status camera-empty">Kh\u00f4ng t\u1ea3i \u0111\u01b0\u1ee3c d\u1eef li\u1ec7u.</p>';
   }
 }
 
@@ -233,7 +233,7 @@ ownerSelectBtn?.addEventListener('click', () => {
 ownerOptions.forEach((option) => {
   option.addEventListener('click', () => {
     current = option.dataset.filter || 'all';
-    if (ownerSelectLabel) ownerSelectLabel.textContent = option.dataset.label || 'Mọi người';
+    if (ownerSelectLabel) ownerSelectLabel.textContent = option.dataset.label || 'M\u1ecdi ng\u01b0\u1eddi';
     ownerOptions.forEach((opt) => opt.classList.remove('active'));
     option.classList.add('active');
     closeOwnerMenu();
@@ -263,3 +263,5 @@ document.addEventListener('click', (e) => {
 tickClock();
 setInterval(tickClock, 30000);
 fetchMoments();
+
+

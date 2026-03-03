@@ -123,9 +123,9 @@ function cleanTime(value, fallback) {
 }
 
 function describeLevel(value) {
-  if (value <= 1) return "Ổn";
-  if (value <= 3) return "Vừa";
-  return "Nặng";
+  if (value <= 1) return "\u1ed4n";
+  if (value <= 3) return "V\u1eeba";
+  return "N\u1eb7ng";
 }
 
 function paintSlider(input, valueEl) {
@@ -133,7 +133,7 @@ function paintSlider(input, valueEl) {
   const value = clampNum(input.value, 0, 5, 0);
   const fill = `${(value / 5) * 100}%`;
   input.style.setProperty("--range-fill", fill);
-  if (valueEl) valueEl.textContent = `${value} • ${describeLevel(value)}`;
+  if (valueEl) valueEl.textContent = `${value} \u2022 ${describeLevel(value)}`;
 }
 
 function renderSymptomMeter() {
@@ -235,11 +235,11 @@ function scheduleRemoteSave() {
   saveTimer = setTimeout(() => {
     saveRemote()
       .then(() => {
-        if (saveStatus) saveStatus.textContent = "Da luu";
-        if (symptomStatus) symptomStatus.textContent = "Du lieu da dong bo";
+        if (saveStatus) saveStatus.textContent = "\u0110\u00e3 l\u01b0u";
+        if (symptomStatus) symptomStatus.textContent = "D\u1eef li\u1ec7u \u0111\u00e3 \u0111\u1ed3ng b\u1ed9";
       })
       .catch(() => {
-        if (saveStatus) saveStatus.textContent = "Luu that bai, thu lai sau";
+        if (saveStatus) saveStatus.textContent = "L\u01b0u th\u1ea5t b\u1ea1i, th\u1eed l\u1ea1i sau";
       });
   }, 250);
 }
@@ -436,39 +436,39 @@ function pickRandom(list) {
 
 const reminderMap = {
   no_data: [
-    "Bam vai ngay co kinh gan nhat de minh bat dau du doan chuan hon cho ban nha.",
-    "Ban chua danh dau ky kinh, hom nay thu luu ky gan nhat de app hoc chu ky cua ban.",
-    "Tip nhe: chi can tich dung 2-3 ky gan nhat la du bao da on hon rat nhieu.",
+    "B\u1ea5m v\u00e0i ng\u00e0y c\u00f3 kinh g\u1ea7n nh\u1ea5t \u0111\u1ec3 m\u00ecnh b\u1eaft \u0111\u1ea7u d\u1ef1 \u0111o\u00e1n chu\u1ea9n h\u01a1n cho b\u1ea1n nha.",
+    "B\u1ea1n ch\u01b0a \u0111\u00e1nh d\u1ea5u k\u1ef3 kinh, h\u00f4m nay th\u1eed l\u01b0u k\u1ef3 g\u1ea7n nh\u1ea5t \u0111\u1ec3 app h\u1ecdc chu k\u1ef3 c\u1ee7a b\u1ea1n.",
+    "Tip nh\u1eb9: ch\u1ec9 c\u1ea7n t\u00edch \u0111\u00fang 2-3 k\u1ef3 g\u1ea7n nh\u1ea5t l\u00e0 d\u1ef1 b\u00e1o \u0111\u00e3 \u1ed5n h\u01a1n r\u1ea5t nhi\u1ec1u.",
   ],
   in_period: [
-    "Hom nay co the la ngay trong ky, nho uong du nuoc am va nghi ngoi them mot chut.",
-    "Neu bung kho chiu, ban co the chuom am va giam do uong lanh hom nay nhe.",
-    "Ngay trong ky: uu tien ngu som, an nhe va giu co the thoai mai.",
+    "H\u00f4m nay c\u00f3 th\u1ec3 l\u00e0 ng\u00e0y trong k\u1ef3, nh\u1edb u\u1ed1ng \u0111\u1ee7 n\u01b0\u1edbc \u1ea5m v\u00e0 ngh\u1ec9 ng\u01a1i th\u00eam m\u1ed9t ch\u00fat.",
+    "N\u1ebfu b\u1ee5ng kh\u00f3 ch\u1ecbu, b\u1ea1n c\u00f3 th\u1ec3 ch\u01b0\u1eddm \u1ea5m v\u00e0 gi\u1ea3m \u0111\u1ed3 u\u1ed1ng l\u1ea1nh h\u00f4m nay nh\u00e9.",
+    "Ng\u00e0y trong k\u1ef3: \u01b0u ti\u00ean ng\u1ee7 s\u1edbm, \u0103n nh\u1eb9 v\u00e0 gi\u1eef c\u01a1 th\u1ec3 tho\u1ea3i m\u00e1i.",
   ],
   due_today: [
-    "Du bao hom nay co the bat dau ky moi, chuan bi san do can thiet nhe.",
-    "Hom nay la ngay sat chu ky, ban nho mang theo bang/tampon/coc nguyet san.",
-    "Co kha nang bat dau ky hom nay, uu tien lich lam viec nhe nhang hon mot chut.",
+    "D\u1ef1 b\u00e1o h\u00f4m nay c\u00f3 th\u1ec3 b\u1eaft \u0111\u1ea7u k\u1ef3 m\u1edbi, chu\u1ea9n b\u1ecb s\u1eb5n \u0111\u1ed3 c\u1ea7n thi\u1ebft nh\u00e9.",
+    "H\u00f4m nay l\u00e0 ng\u00e0y s\u00e1t chu k\u1ef3, b\u1ea1n nh\u1edb mang theo b\u0103ng/tampon/c\u1ed1c nguy\u1ec7t san.",
+    "C\u00f3 kh\u1ea3 n\u0103ng b\u1eaft \u0111\u1ea7u k\u1ef3 h\u00f4m nay, \u01b0u ti\u00ean l\u1ecbch l\u00e0m vi\u1ec7c nh\u1eb9 nh\u00e0ng h\u01a1n m\u1ed9t ch\u00fat.",
   ],
   very_near: [
-    "Con rat gan toi ky, ban co the chuan bi truoc do can thiet tu hom nay.",
-    "Sap toi ngay roi, nho ngu som va giam ca phe neu ban hay nhay cam.",
-    "Ban dang o giai doan can ky, giu lich lam viec thoang hon se de chiu hon.",
+    "C\u00f2n r\u1ea5t g\u1ea7n t\u1edbi k\u1ef3, b\u1ea1n c\u00f3 th\u1ec3 chu\u1ea9n b\u1ecb tr\u01b0\u1edbc \u0111\u1ed3 c\u1ea7n thi\u1ebft t\u1eeb h\u00f4m nay.",
+    "S\u1eafp t\u1edbi ng\u00e0y r\u1ed3i, nh\u1edb ng\u1ee7 s\u1edbm v\u00e0 gi\u1ea3m c\u00e0 ph\u00ea n\u1ebfu b\u1ea1n hay nh\u1ea1y c\u1ea3m.",
+    "B\u1ea1n \u0111ang \u1edf giai \u0111o\u1ea1n c\u1eadn k\u1ef3, gi\u1eef l\u1ecbch l\u00e0m vi\u1ec7c tho\u00e1ng h\u01a1n s\u1ebd d\u1ec5 ch\u1ecbu h\u01a1n.",
   ],
   near: [
-    "Khoang 1 tuan nua la toi ky du bao, minh chuan bi dan tu bay gio nhe.",
-    "Ban dang trong tuan can ky, giu nhip sinh hoat deu se do met hon.",
-    "Day la luc tot de chuan bi vat dung can thiet cho ky toi.",
+    "Kho\u1ea3ng 1 tu\u1ea7n n\u1eefa l\u00e0 t\u1edbi k\u1ef3 d\u1ef1 b\u00e1o, m\u00ecnh chu\u1ea9n b\u1ecb d\u1ea7n t\u1eeb b\u00e2y gi\u1edd nh\u00e9.",
+    "B\u1ea1n \u0111ang trong tu\u1ea7n c\u1eadn k\u1ef3, gi\u1eef nh\u1ecbp sinh ho\u1ea1t \u0111\u1ec1u s\u1ebd \u0111\u1ee1 m\u1ec7t h\u01a1n.",
+    "\u0110\u00e2y l\u00e0 l\u00fac t\u1ed1t \u0111\u1ec3 chu\u1ea9n b\u1ecb v\u1eadt d\u1ee5ng c\u1ea7n thi\u1ebft cho k\u1ef3 t\u1edbi.",
   ],
   post_period: [
-    "Ban vua qua ky gan day, nho an uong du chat de hoi suc nhe.",
-    "Sau ky kinh, co the can phuc hoi nang luong nen dung bo bua nha.",
-    "Giai doan sau ky la luc tot de quay lai nhip van dong nhe.",
+    "B\u1ea1n v\u1eeba qua k\u1ef3 g\u1ea7n \u0111\u00e2y, nh\u1edb \u0103n u\u1ed1ng \u0111\u1ee7 ch\u1ea5t \u0111\u1ec3 h\u1ed3i s\u1ee9c nh\u00e9.",
+    "Sau k\u1ef3 kinh, c\u00f3 th\u1ec3 c\u1ea7n ph\u1ee5c h\u1ed3i n\u0103ng l\u01b0\u1ee3ng n\u00ean \u0111\u1eebng b\u1ecf b\u1eefa nha.",
+    "Giai \u0111o\u1ea1n sau k\u1ef3 l\u00e0 l\u00fac t\u1ed1t \u0111\u1ec3 quay l\u1ea1i nh\u1ecbp v\u1eadn \u0111\u1ed9ng nh\u1eb9.",
   ],
   normal: [
-    "Hom nay la mot ngay on dinh, cu giu nhip sinh hoat deu nhu hien tai nhe.",
-    "Ban dang theo doi chu ky rat tot, duy tri deu dan la du tuyet voi roi.",
-    "Nhac nhe: ngu du giac luon giup chu ky on dinh hon.",
+    "H\u00f4m nay l\u00e0 m\u1ed9t ng\u00e0y \u1ed5n \u0111\u1ecbnh, c\u1ee9 gi\u1eef nh\u1ecbp sinh ho\u1ea1t \u0111\u1ec1u nh\u01b0 hi\u1ec7n t\u1ea1i nh\u00e9.",
+    "B\u1ea1n \u0111ang theo d\u00f5i chu k\u1ef3 r\u1ea5t t\u1ed1t, duy tr\u00ec \u0111\u1ec1u \u0111\u1eb7n l\u00e0 \u0111\u1ee7 tuy\u1ec7t v\u1eddi r\u1ed3i.",
+    "Nh\u1eafc nh\u1eb9: ng\u1ee7 \u0111\u1ee7 gi\u1ea5c lu\u00f4n gi\u00fap chu k\u1ef3 \u1ed5n \u0111\u1ecbnh h\u01a1n.",
   ],
 };
 
@@ -502,17 +502,17 @@ function getTodayTaskReminders() {
   if (todayUtc && next) {
     const until = Math.round((next.getTime() - todayUtc.getTime()) / DAY_MS);
     if (state.reminders.periodLeadDays.includes(until)) {
-      lines.push(`Con ${until} ngay nua du kien toi ky. Nho chuan bi do dung can thiet.`);
+      lines.push(`C\u00f2n ${until} ng\u00e0y n\u1eefa d\u1ef1 ki\u1ebfn t\u1edbi k\u1ef3. Nh\u1edb chu\u1ea9n b\u1ecb \u0111\u1ed3 d\u00f9ng c\u1ea7n thi\u1ebft.`);
     }
   }
   if (state.reminders.pill.enabled) {
-    lines.push(`Nhac thuoc tranh thai luc ${state.reminders.pill.time}.`);
+    lines.push(`Nh\u1eafc thu\u1ed1c tr\u00e1nh thai l\u00fac ${state.reminders.pill.time}.`);
   }
   if (state.reminders.iron.enabled) {
-    lines.push(`Nhac bo sung sat luc ${state.reminders.iron.time}.`);
+    lines.push(`Nh\u1eafc b\u1ed5 sung s\u1eaft l\u00fac ${state.reminders.iron.time}.`);
   }
   if (state.reminders.padChange.enabled && state.loggedDates.has(todayIso)) {
-    lines.push(`Ngay dau ky: thay bang moi ${state.reminders.padChange.intervalHours} gio.`);
+    lines.push(`Ng\u00e0y \u0111\u1ea7u k\u1ef3: thay b\u0103ng m\u1edbi ${state.reminders.padChange.intervalHours} gi\u1edd.`);
   }
   return lines;
 }
@@ -543,7 +543,7 @@ function renderList() {
   const sorted = getSortedLoggedIso().sort((a, b) => b.localeCompare(a));
   if (!sorted.length) {
     const li = document.createElement("li");
-    li.textContent = "Chua co ngay nao.";
+    li.textContent = "Ch\u01b0a c\u00f3 ng\u00e0y n\u00e0o.";
     loggedList.appendChild(li);
     return;
   }
@@ -560,13 +560,13 @@ function renderSymptomList() {
   const entries = Object.entries(state.symptomLogs).sort((a, b) => b[0].localeCompare(a[0]));
   if (!entries.length) {
     const li = document.createElement("li");
-    li.textContent = "Chua co du lieu trieu chung.";
+    li.textContent = "Ch\u01b0a c\u00f3 d\u1eef li\u1ec7u tri\u1ec7u ch\u1ee9ng.";
     symptomList.appendChild(li);
     return;
   }
   entries.slice(0, 60).forEach(([iso, s]) => {
     const li = document.createElement("li");
-    li.textContent = `${formatVi(iso)} | Mood ${s.mood}, Dau bung ${s.cramps}, Dau lung ${s.backPain}, Mun ${s.acne}, Mat ngu ${s.sleep}, Dich ${s.discharge}${s.medication ? ` | Thuoc: ${s.medication}` : ""}`;
+    li.textContent = `${formatVi(iso)} | Mood ${s.mood}, \u0110au b\u1ee5ng ${s.cramps}, \u0110au l\u01b0ng ${s.backPain}, M\u1ee5n ${s.acne}, M\u1ea5t ng\u1ee7 ${s.sleep}, D\u1ecbch ${s.discharge}${s.medication ? ` | Thu\u1ed1c: ${s.medication}` : ""}`;
     symptomList.appendChild(li);
   });
 }
@@ -574,14 +574,14 @@ function renderSymptomList() {
 function renderPredictionSummary() {
   const insight = getInsights();
   if (!insight) {
-    nextPeriodLine.textContent = "Ky ke tiep: chua co du lieu.";
-    fertilityLine.textContent = "Cua so de thu thai: chua co du lieu.";
-    ovulationLine.textContent = "Ngay rung trung: chua co du lieu.";
+    nextPeriodLine.textContent = "K\u1ef3 k\u1ebf ti\u1ebfp: ch\u01b0a c\u00f3 d\u1eef li\u1ec7u.";
+    fertilityLine.textContent = "C\u1eeda s\u1ed5 d\u1ec5 th\u1ee5 thai: ch\u01b0a c\u00f3 d\u1eef li\u1ec7u.";
+    ovulationLine.textContent = "Ng\u00e0y r\u1ee5ng tr\u1ee9ng: ch\u01b0a c\u00f3 d\u1eef li\u1ec7u.";
     return;
   }
-  nextPeriodLine.textContent = `Ky ke tiep: ${formatVi(insight.nextStart)} (sai so du kien ${formatVi(insight.nextRangeStart)} - ${formatVi(insight.nextRangeEnd)}).`;
-  fertilityLine.textContent = `Cua so de thu thai: ${formatVi(insight.fertileStart)} - ${formatVi(insight.fertileEnd)}.`;
-  ovulationLine.textContent = `Ngay rung trung du kien: ${formatVi(insight.ovulationDate)}.`;
+  nextPeriodLine.textContent = `K\u1ef3 k\u1ebf ti\u1ebfp: ${formatVi(insight.nextStart)} (sai s\u1ed1 d\u1ef1 ki\u1ebfn ${formatVi(insight.nextRangeStart)} - ${formatVi(insight.nextRangeEnd)}).`;
+  fertilityLine.textContent = `C\u1eeda s\u1ed5 d\u1ec5 th\u1ee5 thai: ${formatVi(insight.fertileStart)} - ${formatVi(insight.fertileEnd)}.`;
+  ovulationLine.textContent = `Ng\u00e0y r\u1ee5ng tr\u1ee9ng d\u1ef1 ki\u1ebfn: ${formatVi(insight.ovulationDate)}.`;
 }
 
 function renderTodayWidget() {
@@ -596,26 +596,26 @@ function renderTodayWidget() {
 
   const cycleInfo = getCycleDayInfo();
   if (!cycleInfo) {
-    if (widgetCycleChip) widgetCycleChip.textContent = "Chua co du lieu chu ky";
-    if (widgetPhaseLabel) widgetPhaseLabel.textContent = "Rung trung sau";
-    if (widgetOvulationCountdown) widgetOvulationCountdown.textContent = "-- ngay";
-    if (widgetChanceLabel) widgetChanceLabel.textContent = "Co hoi thu thai: chua xac dinh";
-    if (quickLogTodayBtn) quickLogTodayBtn.textContent = state.loggedDates.has(todayIso) ? "Bo danh dau hom nay" : "Ghi ky kinh hom nay";
+    if (widgetCycleChip) widgetCycleChip.textContent = "Ch\u01b0a c\u00f3 d\u1eef li\u1ec7u chu k\u1ef3";
+    if (widgetPhaseLabel) widgetPhaseLabel.textContent = "R\u1ee5ng tr\u1ee9ng sau";
+    if (widgetOvulationCountdown) widgetOvulationCountdown.textContent = "-- ng\u00e0y";
+    if (widgetChanceLabel) widgetChanceLabel.textContent = "C\u01a1 h\u1ed9i th\u1ee5 thai: ch\u01b0a x\u00e1c \u0111\u1ecbnh";
+    if (quickLogTodayBtn) quickLogTodayBtn.textContent = state.loggedDates.has(todayIso) ? "Bo danh dau h\u00f4m nay" : "Ghi k\u1ef3 kinh h\u00f4m nay";
     return;
   }
 
-  if (widgetCycleChip) widgetCycleChip.textContent = `Ngay ${cycleInfo.cycleDay} / ${cycleInfo.cycleLen}`;
-  if (widgetPhaseLabel) widgetPhaseLabel.textContent = "Rung trung sau";
+  if (widgetCycleChip) widgetCycleChip.textContent = `Ng\u00e0y ${cycleInfo.cycleDay} / ${cycleInfo.cycleLen}`;
+  if (widgetPhaseLabel) widgetPhaseLabel.textContent = "R\u1ee5ng tr\u1ee9ng sau";
   if (widgetOvulationCountdown) {
-    const dayText = cycleInfo.untilOvulation <= 0 ? "hom nay" : `${cycleInfo.untilOvulation} ngay`;
+    const dayText = cycleInfo.untilOvulation <= 0 ? "h\u00f4m nay" : `${cycleInfo.untilOvulation} ng\u00e0y`;
     widgetOvulationCountdown.textContent = dayText;
   }
   if (widgetChanceLabel) {
     widgetChanceLabel.textContent = cycleInfo.fertileNow
-      ? "Co hoi thu thai: Cao (dang trong cua so fertile)"
-      : "Co hoi thu thai: Trung binh/Thap";
+      ? "C\u01a1 h\u1ed9i th\u1ee5 thai: Cao (\u0111ang trong c\u1eeda s\u1ed5 fertile)"
+      : "C\u01a1 h\u1ed9i th\u1ee5 thai: Trung b\u00ecnh/Th\u1ea5p";
   }
-  if (quickLogTodayBtn) quickLogTodayBtn.textContent = state.loggedDates.has(todayIso) ? "Bo danh dau hom nay" : "Ghi ky kinh hom nay";
+  if (quickLogTodayBtn) quickLogTodayBtn.textContent = state.loggedDates.has(todayIso) ? "Bo danh dau h\u00f4m nay" : "Ghi k\u1ef3 kinh h\u00f4m nay";
 }
 
 function loadSymptomForm(iso) {
@@ -637,7 +637,7 @@ function renderCalendar() {
   const gridEnd = addDays(gridStart, 41);
   const meta = getPredictedMeta(gridStart, gridEnd);
 
-  monthTitle.textContent = `Thang ${String(monthStart.getUTCMonth() + 1).padStart(2, "0")}/${monthStart.getUTCFullYear()}`;
+  monthTitle.textContent = `Th\u00e1ng ${String(monthStart.getUTCMonth() + 1).padStart(2, "0")}/${monthStart.getUTCFullYear()}`;
   calendarDays.innerHTML = "";
 
   for (let i = 0; i < 42; i += 1) {
@@ -721,7 +721,7 @@ function applyQuickPreset(preset) {
       markPeriod: false,
     },
     "period-heavy": {
-      mood: 3, cramps: 5, backPain: 4, acne: 2, sleep: 4, discharge: 2, medication: "Thuoc giam dau (neu co)",
+      mood: 3, cramps: 5, backPain: 4, acne: 2, sleep: 4, discharge: 2, medication: "Thu\u1ed1c gi\u1ea3m \u0111au (n\u1ebfu c\u00f3)",
       markPeriod: true,
     },
     "period-start": {
@@ -740,8 +740,8 @@ function applyQuickPreset(preset) {
   if (presetData.markPeriod) state.loggedDates.add(todayIso);
 
   loadSymptomForm(todayIso);
-  if (symptomStatus) symptomStatus.textContent = "Da luu nhanh hom nay";
-  if (saveStatus) saveStatus.textContent = "Dang luu...";
+  if (symptomStatus) symptomStatus.textContent = "\u0110\u00e3 l\u01b0u nhanh h\u00f4m nay";
+  if (saveStatus) saveStatus.textContent = "\u0110ang l\u01b0u...";
   saveAll();
   return true;
 }
@@ -779,7 +779,7 @@ function buildAiAdviceContext() {
 async function askPeriodAi() {
   const iso = state.selectedLogDate || todayIso;
   const symptom = sanitizeSymptomEntry(state.symptomLogs[iso] || readSymptomForm());
-  const message = `Hay tu van ngan gon dua tren log ngay ${iso}: mood ${symptom.mood}/5, dau bung ${symptom.cramps}/5, dau lung ${symptom.backPain}/5, mun ${symptom.acne}/5, mat ngu ${symptom.sleep}/5, dich am dao ${symptom.discharge}/5, thuoc: ${symptom.medication || "khong"}.`;
+  const message = `H\u00e3y t\u01b0 v\u1ea5n ng\u1eafn g\u1ecdn d\u1ef1a tr\u00ean log ng\u00e0y ${iso}: mood ${symptom.mood}/5, \u0111au b\u1ee5ng ${symptom.cramps}/5, \u0111au l\u01b0ng ${symptom.backPain}/5, m\u1ee5n ${symptom.acne}/5, m\u1ea5t ng\u1ee7 ${symptom.sleep}/5, d\u1ecbch \u00e2m \u0111\u1ea1o ${symptom.discharge}/5, thu\u1ed1c: ${symptom.medication || "kh\u00f4ng"}.`;
   const res = await fetch(PERIOD_AI_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -789,7 +789,7 @@ async function askPeriodAi() {
     }),
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || "Khong the lay tu van AI luc nay.");
+  if (!res.ok) throw new Error(data.error || "Kh\u00f4ng th\u1ec3 l\u1ea5y t\u01b0 v\u1ea5n AI l\u00fac n\u00e0y.");
   return (data.reply || "").trim();
 }
 
@@ -799,13 +799,13 @@ function bindEvents() {
     state.cycleLength = clampNum(cycleLengthInput.value, 20, 45, state.cycleLength);
     state.periodLength = clampNum(periodLengthInput.value, 2, 10, state.periodLength);
     readReminderForm();
-    if (saveStatus) saveStatus.textContent = "Dang luu...";
+    if (saveStatus) saveStatus.textContent = "\u0110ang l\u01b0u...";
     saveAll();
   });
 
   clearBtn?.addEventListener("click", () => {
     state.loggedDates.clear();
-    if (saveStatus) saveStatus.textContent = "Dang luu...";
+    if (saveStatus) saveStatus.textContent = "\u0110ang l\u01b0u...";
     saveAll();
   });
 
@@ -834,7 +834,7 @@ function bindEvents() {
       state.loggedDates.add(dateIso);
     }
 
-    if (saveStatus) saveStatus.textContent = "Dang luu...";
+    if (saveStatus) saveStatus.textContent = "\u0110ang l\u01b0u...";
     saveAll();
   });
 
@@ -855,19 +855,19 @@ function bindEvents() {
     state.selectedLogDate = iso;
     state.symptomLogs[iso] = readSymptomForm();
     readReminderForm();
-    if (symptomStatus) symptomStatus.textContent = "Dang luu trieu chung...";
+    if (symptomStatus) symptomStatus.textContent = "\u0110ang l\u01b0u tri\u1ec7u ch\u1ee9ng...";
     saveAll();
   });
 
   quickLogTodayBtn?.addEventListener("click", () => {
     if (state.loggedDates.has(todayIso)) {
       state.loggedDates.delete(todayIso);
-      if (symptomStatus) symptomStatus.textContent = "Da bo danh dau ky kinh hom nay";
+      if (symptomStatus) symptomStatus.textContent = "\u0110\u00e3 b\u1ecf \u0111\u00e1nh d\u1ea5u k\u1ef3 kinh h\u00f4m nay";
     } else {
       state.loggedDates.add(todayIso);
-      if (symptomStatus) symptomStatus.textContent = "Da danh dau ky kinh hom nay";
+      if (symptomStatus) symptomStatus.textContent = "\u0110\u00e3 \u0111\u00e1nh d\u1ea5u k\u1ef3 kinh h\u00f4m nay";
     }
-    if (saveStatus) saveStatus.textContent = "Dang luu...";
+    if (saveStatus) saveStatus.textContent = "\u0110ang l\u01b0u...";
     saveAll();
   });
 
@@ -875,7 +875,7 @@ function bindEvents() {
     state.selectedLogDate = todayIso;
     if (logDateInput) logDateInput.value = todayIso;
     loadSymptomForm(todayIso);
-    if (symptomStatus) symptomStatus.textContent = "Dang mo log hom nay";
+    if (symptomStatus) symptomStatus.textContent = "Dang mo log h\u00f4m nay";
   });
 
   quickPresetButtons.forEach((btn) => {
@@ -892,13 +892,13 @@ function bindEvents() {
       state.symptomLogs[iso] = readSymptomForm();
       saveAll();
     }
-    if (aiAdviceText) aiAdviceText.textContent = "AI dang phan tich du lieu...";
+    if (aiAdviceText) aiAdviceText.textContent = "AI \u0111ang ph\u00e2n t\u00edch d\u1eef li\u1ec7u...";
     try {
       const reply = await askPeriodAi();
-      if (aiAdviceText) aiAdviceText.textContent = reply || "AI chua co du lieu phu hop.";
-      if (symptomStatus) symptomStatus.textContent = "Da nhan tu van AI";
+      if (aiAdviceText) aiAdviceText.textContent = reply || "AI ch\u01b0a c\u00f3 d\u1eef li\u1ec7u ph\u00f9 h\u1ee3p.";
+      if (symptomStatus) symptomStatus.textContent = "\u0110\u00e3 nh\u1eadn t\u01b0 v\u1ea5n AI";
     } catch (err) {
-      if (aiAdviceText) aiAdviceText.textContent = `Loi AI: ${err.message}`;
+      if (aiAdviceText) aiAdviceText.textContent = `L\u1ed7i AI: ${err.message}`;
     }
   });
 
@@ -958,3 +958,4 @@ async function init() {
 }
 
 init();
+
