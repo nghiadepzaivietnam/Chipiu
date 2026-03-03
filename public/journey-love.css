@@ -88,6 +88,8 @@ body.journey-love-page::before {
   background: linear-gradient(180deg, rgba(37, 22, 28, 0.76), rgba(24, 14, 18, 0.78));
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 20px 42px rgba(0, 0, 0, 0.35);
+  transform: translate(var(--mx, 0px), var(--my, 0px));
+  transition: transform 180ms ease;
 }
 
 .journey-kicker {
@@ -198,6 +200,7 @@ body.journey-love-page::before {
   background: linear-gradient(90deg, #ff1f49 0%, #ff3d67 42%, #ff8ca6 100%);
   box-shadow: 0 0 20px rgba(255, 35, 84, 0.64);
   transition: width 110ms ease-out;
+  animation: linePulse 2.8s ease-in-out infinite;
 }
 
 .journey-step {
@@ -220,6 +223,7 @@ body.journey-love-page::before {
   border: 4px solid #fff;
   background: #fff;
   box-shadow: 0 0 0 8px rgba(255, 24, 71, 0.24);
+  transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
 .journey-card {
@@ -233,6 +237,7 @@ body.journey-love-page::before {
   box-shadow: 0 16px 30px rgba(0, 0, 0, 0.36);
   opacity: 0;
   transition: opacity 400ms ease, transform 400ms ease, box-shadow 220ms ease;
+  transition-delay: var(--stagger, 0ms);
 }
 
 .journey-step.top .journey-card::before,
@@ -265,6 +270,15 @@ body.journey-love-page::before {
 .journey-step.visible .journey-card {
   opacity: 1;
   transform: translateY(0);
+}
+
+.journey-step.focus .journey-node {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 0 0 9px rgba(255, 99, 161, 0.34), 0 0 24px rgba(255, 79, 146, 0.56);
+}
+
+.journey-step.focus .journey-card {
+  box-shadow: 0 0 0 1px rgba(255, 135, 182, 0.64), 0 0 26px rgba(255, 93, 155, 0.42);
 }
 
 .journey-step:hover .journey-card {
@@ -349,6 +363,18 @@ body.journey-love-page::before {
   }
 }
 
+@keyframes linePulse {
+  0%,
+  100% {
+    filter: saturate(1);
+    opacity: 0.92;
+  }
+  50% {
+    filter: saturate(1.15);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 980px) {
   .journey-love-main {
     padding: 0 10px;
@@ -364,7 +390,7 @@ body.journey-love-page::before {
 
   .journey-track {
     gap: 24px;
-    min-height: 560px;
+    min-height: 520px;
     padding: 12px 8px 8px;
   }
 
@@ -376,9 +402,9 @@ body.journey-love-page::before {
   }
 
   .journey-step {
-    width: min(84vw, 270px);
-    min-width: min(84vw, 270px);
-    min-height: 500px;
+    width: min(82vw, 248px);
+    min-width: min(82vw, 248px);
+    min-height: 452px;
   }
 
   .journey-node {
@@ -403,10 +429,11 @@ body.journey-love-page::before {
   }
 
   .journey-step-title {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .journey-step-desc {
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.4;
   }
 }
