@@ -201,6 +201,8 @@
     }
     .step.top .step-card { bottom: calc(50% + 34px); transform: translateY(22px); }
     .step.bottom .step-card { top: calc(50% + 34px); transform: translateY(-22px); }
+    .step.both .step-card.top-card { bottom: calc(50% + 34px); transform: translateY(22px); }
+    .step.both .step-card.bottom-card { top: calc(50% + 34px); transform: translateY(-22px); }
     .step.visible .step-card { opacity: 1; transform: translateY(0); }
     .year-pill {
       display: inline-flex;
@@ -316,8 +318,20 @@
         top: 126px;
         bottom: auto;
       }
+      .step.both {
+        min-height: 650px;
+      }
+      .step.both .step-card.top-card {
+        top: 126px;
+        bottom: auto;
+      }
+      .step.both .step-card.bottom-card {
+        top: 356px;
+        bottom: auto;
+      }
       .step.top .step-card { transform: translateY(14px); }
       .step.bottom .step-card { transform: translateY(14px); }
+      .step.both .step-card { transform: translateY(14px); }
       .step.visible .step-card { transform: translateY(0); }
       .step-card { padding: 11px; }
       .year-pill { font-size: 19px; padding: 5px 7px 5px 10px; }
@@ -386,12 +400,24 @@
 
     function avatarHtml(role, avatars) {
       const a1 = `<img class="avatar" src="${avatars.haianh || DEFAULT_HAIANH}" alt="Hai Anh" data-fallback="${DEFAULT_HAIANH}">`;
-      const a2 = `<img class="avatar" src="${avatars.toi || DEFAULT_TOI}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
+      const a2 = `<img class="avatar" src="${avatars.toi || DEFAULT_TOI}" alt="Trong Nghia" data-fallback="${DEFAULT_HAIANH}">`;
       if (role === "haianh") return a1;
       if (role === "toi") return a2;
-      return `<span class="avatar-stack">${a1}<img class="avatar pair" src="${avatars.toi || DEFAULT_TOI}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}"></span>`;
+      return `<span class="avatar-stack">${a1}<img class="avatar pair" src="${avatars.toi || DEFAULT_TOI}" alt="Trong Nghia" data-fallback="${DEFAULT_HAIANH}"></span>`;
     }
-
+    function stepCardHtml(item, role, avatars, className = "") {
+      return `
+        <div class="step-card ${className}">
+          <div class="year-pill">
+            ${item.date || "?"}
+            ${avatarHtml(role, avatars)}
+          </div>
+          <span class="role-tag">${roleLabel(role)}</span>
+          <h3 class="step-title">${item.title || "(Chua co tieu de)"}</h3>
+          <p class="step-desc">${item.desc || ""}</p>
+        </div>
+      `;
+    }
     function bindAvatarFallback(scope) {
       scope.querySelectorAll("img.avatar").forEach((img) => {
         const fallback = img.getAttribute("data-fallback") || DEFAULT_HAIANH;
@@ -428,22 +454,23 @@
       emptyState.hidden = items.length > 0;
 
       items.forEach((item, idx) => {
-        const top = topByRole(item.role, idx);
         const step = document.createElement("article");
-        step.className = `step ${top ? "top" : "bottom"} ${item.future ? "future" : ""}`;
+        if (item.role === "both") {
+          step.className = `step both ${item.future ? "future" : ""}`;
+          step.innerHTML = `
+            ${stepCardHtml(item, "haianh", avatars, "top-card")}
+            ${stepCardHtml(item, "toi", avatars, "bottom-card")}
+            <div class="step-node" aria-hidden="true"></div>
+          `;
+        } else {
+          const top = topByRole(item.role, idx);
+          step.className = `step ${top ? "top" : "bottom"} ${item.future ? "future" : ""}`;
+          step.innerHTML = `
+            ${stepCardHtml(item, item.role, avatars)}
+            <div class="step-node" aria-hidden="true"></div>
+          `;
+        }
         step.setAttribute("data-step", "");
-        step.innerHTML = `
-          <div class="step-card">
-            <div class="year-pill">
-              ${item.date || "?"}
-              ${avatarHtml(item.role, avatars)}
-            </div>
-            <span class="role-tag">${roleLabel(item.role)}</span>
-            <h3 class="step-title">${item.title || "(Chua co tieu de)"}</h3>
-            <p class="step-desc">${item.desc || ""}</p>
-          </div>
-          <div class="step-node" aria-hidden="true"></div>
-        `;
         trackEl.appendChild(step);
       });
 
@@ -478,3 +505,5 @@
   </script>
 </body>
 </html>
+
+

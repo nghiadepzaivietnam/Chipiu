@@ -221,6 +221,8 @@
     }
     .step.top .box { bottom: calc(50% + 32px); transform: translateY(18px); }
     .step.bottom .box { top: calc(50% + 32px); transform: translateY(-18px); }
+    .step.both .box.top-box { bottom: calc(50% + 32px); transform: translateY(18px); }
+    .step.both .box.bottom-box { top: calc(50% + 32px); transform: translateY(-18px); }
     .step.visible .box { opacity: 1; transform: translateY(0); }
     .pill {
       display: inline-flex;
@@ -443,12 +445,21 @@
 
     function buildAvatarHtml(role) {
       const a1 = `<img class="avatar" src="${state.avatars.haianh}" alt="Hai Anh" data-fallback="${DEFAULT_HAIANH}">`;
-      const a2 = `<img class="avatar" src="${state.avatars.toi}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
+      const a2 = `<img class="avatar" src="${state.avatars.toi}" alt="Trong Nghia" data-fallback="${DEFAULT_HAIANH}">`;
       if (role === "haianh") return a1;
       if (role === "toi") return a2;
-      return `${a1}<img class="avatar pair" src="${state.avatars.toi}" alt="Trọng Nghĩa" data-fallback="${DEFAULT_HAIANH}">`;
+      return `${a1}<img class="avatar pair" src="${state.avatars.toi}" alt="Trong Nghia" data-fallback="${DEFAULT_HAIANH}">`;
     }
-
+    function buildStepBoxHtml(item, role, className = "") {
+      return `
+          <div class="box ${className}">
+            <div class="pill">${item.date || "?"} ${buildAvatarHtml(role)}</div>
+            <p class="role">${roleLabel(role)}</p>
+            <h3 class="title">${item.title || "(Chua co tieu de)"}</h3>
+            <p class="desc">${item.desc || ""}</p>
+          </div>
+      `;
+    }
     function bindAvatarFallback(scope) {
       scope.querySelectorAll("img.avatar").forEach((img) => {
         const fallback = img.getAttribute("data-fallback") || DEFAULT_HAIANH;
@@ -488,19 +499,23 @@
     function renderPreview() {
       track.querySelectorAll(".step").forEach((n) => n.remove());
       state.items.forEach((item, idx) => {
-        const top = isTop(item.role, idx);
         const step = document.createElement("article");
-        step.className = `step ${top ? "top" : "bottom"} ${item.future ? "future" : ""}`;
+        if (item.role === "both") {
+          step.className = `step both ${item.future ? "future" : ""}`;
+          step.innerHTML = `
+            ${buildStepBoxHtml(item, "haianh", "top-box")}
+            ${buildStepBoxHtml(item, "toi", "bottom-box")}
+            <div class="node" aria-hidden="true"></div>
+          `;
+        } else {
+          const top = isTop(item.role, idx);
+          step.className = `step ${top ? "top" : "bottom"} ${item.future ? "future" : ""}`;
+          step.innerHTML = `
+            ${buildStepBoxHtml(item, item.role)}
+            <div class="node" aria-hidden="true"></div>
+          `;
+        }
         step.setAttribute("data-step", "");
-        step.innerHTML = `
-          <div class="box">
-            <div class="pill">${item.date || "?"} ${buildAvatarHtml(item.role)}</div>
-            <p class="role">${roleLabel(item.role)}</p>
-            <h3 class="title">${item.title || "(Chua co tieu de)"}</h3>
-            <p class="desc">${item.desc || ""}</p>
-          </div>
-          <div class="node" aria-hidden="true"></div>
-        `;
         track.appendChild(step);
       });
       bindAvatarFallback(track);
@@ -662,3 +677,4 @@
   </script>
 </body>
 </html>
+
