@@ -23,6 +23,7 @@ body.journey-love-page {
     radial-gradient(circle at 50% 16%, rgba(255, 73, 121, 0.24), transparent 34%),
     linear-gradient(180deg, rgba(16, 10, 13, 0.68), rgba(15, 10, 12, 0.9)),
     url("/hello-kitty-wallpaper.jpg") center / cover no-repeat fixed;
+  overflow-x: hidden;
 }
 
 body.journey-love-page::before {
@@ -75,10 +76,12 @@ body.journey-love-page::before {
 
 .journey-love-main {
   width: min(1220px, 100%);
+  max-width: 100vw;
   margin: 0 auto;
   padding: 0 12px;
   display: grid;
   gap: 12px;
+  min-width: 0;
 }
 
 .journey-hero {
@@ -116,11 +119,36 @@ body.journey-love-page::before {
 
 .journey-timeline-shell {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border-radius: 20px;
   background: linear-gradient(180deg, rgba(26, 15, 20, 0.72), rgba(18, 11, 14, 0.74));
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 24px 46px rgba(0, 0, 0, 0.38);
   padding: 16px 48px 14px;
+  overflow: hidden;
+}
+
+.journey-timeline-shell::before,
+.journey-timeline-shell::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22px;
+  z-index: 7;
+  pointer-events: none;
+}
+
+.journey-timeline-shell::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(18, 11, 14, 0.78), rgba(18, 11, 14, 0));
+}
+
+.journey-timeline-shell::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(18, 11, 14, 0.78), rgba(18, 11, 14, 0));
 }
 
 .journey-arrow {
@@ -148,6 +176,10 @@ body.journey-love-page::before {
 }
 
 .journey-scroll {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -171,8 +203,10 @@ body.journey-love-page::before {
   display: flex;
   gap: 52px;
   width: max-content;
+  max-width: none;
   min-height: 490px;
   padding: 18px 16px 10px;
+  white-space: nowrap;
 }
 
 .journey-line {
@@ -202,8 +236,9 @@ body.journey-love-page::before {
   position: relative;
   width: 280px;
   min-width: 280px;
+  max-width: 86vw;
   min-height: 420px;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   z-index: 2;
 }
 
@@ -600,7 +635,21 @@ body.journey-love-page::before {
     padding: 12px 12px 14px;
   }
 
+  .journey-timeline-shell::before,
+  .journey-timeline-shell::after {
+    width: 12px;
+  }
+
   .journey-arrow {
+    display: none;
+  }
+
+  .journey-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .journey-scroll::-webkit-scrollbar {
     display: none;
   }
 
@@ -729,6 +778,11 @@ body.journey-love-page::before {
   .journey-timeline-shell {
     padding: 10px 8px 10px;
     border-radius: 14px;
+  }
+
+  .journey-timeline-shell::before,
+  .journey-timeline-shell::after {
+    width: 8px;
   }
 
   .journey-track {
