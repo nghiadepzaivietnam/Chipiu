@@ -1,6 +1,10 @@
 const express = require('express');
+const AiChatHistory = require('../models/AiChatHistory');
 
 const router = express.Router();
+const HISTORY_KEY = 'global';
+const MAX_HISTORY_MESSAGES = 20;
+const MAX_CONVERSATIONS = 30;
 
 const SYSTEM_PROMPT = [
   'Ban la tro ly AI than thien tren website ca nhan.',
@@ -58,10 +62,37 @@ function normalizeMessages(messages) {
     .filter((m) => m && typeof m.role === 'string' && typeof m.content === 'string')
     .map((m) => ({
       role: m.role === 'assistant' ? 'assistant' : 'user',
-      content: m.content.trim(),
+      content: m.content.trim().slice(0, 2000),
     }))
     .filter((m) => m.content.length > 0)
-    .slice(-12);
+    .slice(-MAX_HISTORY_MESSAGES);
+}
+
+function sanitizeTitle(value) {
+  if (typeof value !== 'string') return 'Cuoc tro chuyen moi';
+  const t = value.trim().slice(0, 120);
+  return t || 'Cuoc tro chuyen moi';
+}
+
+function normalizeConversations(conversations) {
+  if (!Array.isArray(conversations)) return [];
+  const out = [];
+  const used = new Set();
+  conversations.forEach((conv) => {
+    const idRaw = typeof conv?.id === 'string' ? conv.id.trim().slice(0, 64) : '';
+    const id = idRaw || `conv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    if (used.has(id)) return;
+    used.add(id);
+    out.push({
+      id,
+      title: sanitizeTitle(conv?.title),
+      messages: normalizeMessages(conv?.messages),
+      createdAt: conv?.createdAt ? new Date(conv.createdAt) : new Date(),
+      updatedAt: conv?.updatedAt ? new Date(conv.updatedAt) : new Date(),
+    });
+  });
+  out.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  return out.slice(0, MAX_CONVERSATIONS);
 }
 
 function normalizeContext(context) {
@@ -156,6 +187,81 @@ async function callOpenAiResponses({ input }) {
   if (!reply) throw new Error('OpenAI khong tra ve noi dung hop le.');
   return reply;
 }
+
+router.get('/history', async (_req, res) => {
+  try {
+    const doc = await AiChatHistory.findOne({ key: HISTORY_KEY });
+    let conversations = normalizeConversations(doc?.conversations || []);
+    if (!conversations.length) {
+      const legacyMessages = normalizeMessages(doc?.messages || []);
+      if (legacyMessages.length) {
+        conversations = [
+          {
+            id: 'legacy',
+            title: 'Cuoc tro chuyen cu',
+            messages: legacyMessages,
+            createdAt: doc?.createdAt || new Date(),
+            updatedAt: doc?.updatedAt || new Date(),
+          },
+        ];
+      }
+    }
+    const knownIds = new Set(conversations.map((c) => c.id));
+    const activeConversationId = knownIds.has(doc?.activeConversationId) ? doc.activeConversationId : (conversations[0]?.id || '');
+    return res.json({
+      conversations,
+      activeConversationId,
+      updatedAt: doc?.updatedAt || null,
+    });
+  } catch (_err) {
+    return res.status(500).json({ error: 'Khong the tai lich su chat.' });
+  }
+});
+
+router.put('/history', async (req, res) => {
+  try {
+    let conversations = normalizeConversations(req.body?.conversations);
+    if (!conversations.length) {
+      const legacyMessages = normalizeMessages(req.body?.messages);
+      if (legacyMessages.length) {
+        conversations = [
+          {
+            id: 'legacy',
+            title: 'Cuoc tro chuyen cu',
+            messages: legacyMessages,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        ];
+      }
+    }
+    const requestedActive = typeof req.body?.activeConversationId === 'string' ? req.body.activeConversationId.trim() : '';
+    const knownIds = new Set(conversations.map((c) => c.id));
+    const activeConversationId = knownIds.has(requestedActive) ? requestedActive : (conversations[0]?.id || '');
+    const activeMessages = conversations.find((c) => c.id === activeConversationId)?.messages || [];
+    const doc = await AiChatHistory.findOneAndUpdate(
+      { key: HISTORY_KEY },
+      {
+        key: HISTORY_KEY,
+        conversations,
+        activeConversationId,
+        messages: activeMessages,
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+    const responseConversations = normalizeConversations(doc?.conversations || []);
+    const responseActive = responseConversations.some((c) => c.id === doc?.activeConversationId)
+      ? doc.activeConversationId
+      : (responseConversations[0]?.id || '');
+    return res.json({
+      conversations: responseConversations,
+      activeConversationId: responseActive,
+      updatedAt: doc?.updatedAt || null,
+    });
+  } catch (err) {
+    return res.status(400).json({ error: err.message || 'Khong the luu lich su chat.' });
+  }
+});
 
 router.post('/', async (req, res) => {
   const history = normalizeMessages(req.body?.messages);

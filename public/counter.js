@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'loveStartISO';
+const COUNTER_CONFIG_ENDPOINT = '/api/counter-config';
 
 const startDateInput = document.getElementById('startDate');
 const startTimeInput = document.getElementById('startTime');
@@ -49,6 +50,33 @@ function loadSaved() {
   const timePart = iso.slice(11, 16);
   if (timePart) startTimeInput.value = timePart;
   return d;
+}
+
+async function loadSavedFromServer() {
+  const res = await fetch(COUNTER_CONFIG_ENDPOINT);
+  if (!res.ok) throw new Error('Cannot load counter config');
+  const data = await res.json().catch(() => ({}));
+  const iso = data?.loveStartISO;
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  const normalized = d.toISOString();
+  localStorage.setItem(STORAGE_KEY, normalized);
+  startDateInput.value = normalized.slice(0, 10);
+  startTimeInput.value = normalized.slice(11, 16);
+  return d;
+}
+
+async function saveStartToServer(iso) {
+  const res = await fetch(COUNTER_CONFIG_ENDPOINT, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ loveStartISO: iso }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Could not save counter config');
+  }
 }
 
 function buildDate() {
@@ -134,6 +162,35 @@ saveBtn?.addEventListener('click', () => {
 });
 
 refreshBtn?.addEventListener('click', render);
+
+saveBtn?.addEventListener(
+  'click',
+  (event) => {
+    // Intercept legacy save flow and sync with server.
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const d = buildDate();
+    if (!d) {
+      saveMsg.textContent = 'Ngay/gio khong hop le.';
+      return;
+    }
+    const iso = d.toISOString();
+    localStorage.setItem(STORAGE_KEY, iso);
+    saveMsg.textContent = 'Dang luu...';
+    saveStartToServer(iso)
+      .then(() => {
+        saveMsg.textContent = 'Da luu len server.';
+      })
+      .catch(() => {
+        saveMsg.textContent = 'Da luu local (mang yeu).';
+      })
+      .finally(() => {
+        render();
+      });
+  },
+  true
+);
 
 bgImageInput?.addEventListener('change', () => {
   const file = bgImageInput.files?.[0];
@@ -306,5 +363,21 @@ if (canvas && ctx) {
   window.addEventListener('resize', resizeCanvas);
 }
 
-loadSavedBackground();
-render();
+async function initCounter() {
+  loadSavedBackground();
+  render();
+
+  const local = localStorage.getItem(STORAGE_KEY);
+  try {
+    const fromServer = await loadSavedFromServer();
+    if (!fromServer && local) {
+      await saveStartToServer(local);
+    }
+  } catch (_err) {
+    // keep local fallback
+  }
+
+  render();
+}
+
+initCounter();

@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/moments', require('./routes/moments'));
 app.use('/api/status', require('./routes/status'));
 app.use('/api/counter-bg', require('./routes/counterBackground'));
+app.use('/api/counter-config', require('./routes/counterConfig'));
 app.use('/api/period', require('./routes/period'));
 app.use('/api/period-ai', require('./routes/periodAi'));
 app.use('/api/ai-chat', require('./routes/aiChat'));

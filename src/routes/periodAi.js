@@ -14,10 +14,34 @@ function buildFallbackReply(message, context) {
   const period = Number(context?.periodLength) || 5;
   const nextStart = context?.nextPredictedStart || 'chua xac dinh';
   const logged = Array.isArray(context?.recentLoggedDates) ? context.recentLoggedDates.length : 0;
+  const symptom = context?.selectedSymptomLog || {};
+  const symptomSummary = [
+    `mood ${Number(symptom.mood) || 0}/5`,
+    `dau bung ${Number(symptom.cramps) || 0}/5`,
+    `dau lung ${Number(symptom.backPain) || 0}/5`,
+    `mun ${Number(symptom.acne) || 0}/5`,
+    `mat ngu ${Number(symptom.sleep) || 0}/5`,
+    `dich am dao ${Number(symptom.discharge) || 0}/5`,
+  ].join(', ');
+  const medication = typeof symptom.medication === 'string' && symptom.medication.trim()
+    ? symptom.medication.trim()
+    : 'khong';
+  const fertility = context?.fertilityWindow
+    ? `${context.fertilityWindow.start || '?'} -> ${context.fertilityWindow.end || '?'}`
+    : 'chua xac dinh';
+  const ovulation = context?.ovulationDate || 'chua xac dinh';
 
   return [
     `Minh da nhan cau hoi: "${message.trim()}".`,
     `Du lieu hien tai: chu ky ~${cycle} ngay, hanh kinh ~${period} ngay, ky du doan tiep theo: ${nextStart}.`,
+    `Cua so de thu thai du kien: ${fertility}, ngay rung trung du kien: ${ovulation}.`,
+    `Trieu chung ngay dang xem: ${symptomSummary}; thuoc da dung: ${medication}.`,
+    Number(symptom.cramps) >= 4 || Number(symptom.backPain) >= 4
+      ? 'Dau dang o muc cao, uu tien nghi ngoi, giu am, bo sung nuoc, co the dung thuoc giam dau phu hop neu da duoc bac si huong dan.'
+      : 'Neu trieu chung o muc nhe-vua, tiep tuc theo doi 2-3 ngay, ngu du, uong du nuoc va han che chat kich thich.',
+    Number(symptom.discharge) >= 4
+      ? 'Neu dich am dao kem mui hoi, vang-xanh, ngua rat hoac dau, nen di kham phu khoa som.'
+      : 'Theo doi mau/su thay doi dich am dao, neu co bat thuong keo dai thi nen di kham.',
     logged
       ? `Ban da co ${logged} moc gan day, hay tiep tuc tich deu moi thang de du doan chinh hon.`
       : 'Ban nen tich them ngay thuc te tren lich de ket qua du doan on dinh hon.',

@@ -1,6 +1,8 @@
 (function initAiWidget() {
-  const STORAGE_KEY = "hdha.ai.chat.v1";
+  const STORAGE_KEY = "hdha.ai.chat.v2";
+  const HISTORY_ENDPOINT = "/api/ai-chat/history";
   const MAX_MESSAGES = 20;
+  const MAX_CONVERSATIONS = 30;
 
   if (document.querySelector(".ai-chat-widget")) return;
 
@@ -9,8 +11,15 @@
   root.innerHTML = `
     <div class="ai-chat-panel" aria-label="AI chat panel">
       <div class="ai-chat-head">
-        <p class="ai-chat-title">AI tu van</p>
-        <button class="ai-chat-close" type="button" aria-label="Dong chat">×</button>
+        <div class="ai-chat-head-top">
+          <p class="ai-chat-title">AI tu van</p>
+          <div class="ai-chat-head-actions">
+            <button class="ai-chat-mini" id="aiChatNew" type="button" aria-label="Tao doan chat moi">Moi</button>
+            <button class="ai-chat-mini danger" id="aiChatDelete" type="button" aria-label="Xoa doan chat hien tai">Xoa</button>
+            <button class="ai-chat-close" type="button" aria-label="Dong chat">x</button>
+          </div>
+        </div>
+        <select class="ai-chat-thread-select" id="aiChatThreads" aria-label="Danh sach doan chat"></select>
       </div>
       <div class="ai-chat-messages" id="aiChatMessages"></div>
       <form class="ai-chat-form" id="aiChatForm">
@@ -20,55 +29,146 @@
       </form>
     </div>
     <button class="ai-chat-toggle" type="button" aria-label="Mo AI chat" aria-expanded="false" aria-controls="aiChatMessages">
-      <span class="ai-chat-toggle-icon" aria-hidden="true">😺</span>
+      <span class="ai-chat-toggle-icon" aria-hidden="true">AI</span>
     </button>
   `;
   document.body.appendChild(root);
 
-  const panel = root.querySelector(".ai-chat-panel");
   const toggleBtn = root.querySelector(".ai-chat-toggle");
   const closeBtn = root.querySelector(".ai-chat-close");
+  const newBtn = root.querySelector("#aiChatNew");
+  const deleteBtn = root.querySelector("#aiChatDelete");
+  const threadSelect = root.querySelector("#aiChatThreads");
   const form = root.querySelector("#aiChatForm");
   const input = root.querySelector("#aiChatInput");
   const list = root.querySelector("#aiChatMessages");
 
-  let messages = loadMessages();
+  let state = loadLocalState();
+  let historySaveTimer = null;
 
-  if (!messages.length) {
-    messages = [
-      {
-        role: "assistant",
-        content: "Xin chao, minh la AI nho cua ban. Ban co the hoi ve cuoc song, hoc tap, suc khoe chu ky, hoac kien thuc thong dung.",
-      },
-    ];
+  function makeAssistantGreeting() {
+    return {
+      role: "assistant",
+      content: "Xin chao, minh la AI nho cua ban. Ban co the hoi ve cuoc song, hoc tap, suc khoe chu ky, hoac kien thuc thong dung.",
+    };
   }
 
-  function saveMessages() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-MAX_MESSAGES)));
+  function makeConversation(seedTitle) {
+    const now = new Date().toISOString();
+    return {
+      id: `conv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      title: (seedTitle || "Doan chat moi").slice(0, 120),
+      messages: [makeAssistantGreeting()],
+      createdAt: now,
+      updatedAt: now,
+    };
   }
 
-  function loadMessages() {
+  function normalizeMessages(list) {
+    if (!Array.isArray(list)) return [];
+    return list
+      .filter((m) => m && typeof m.role === "string" && typeof m.content === "string")
+      .map((m) => ({
+        role: m.role === "assistant" ? "assistant" : "user",
+        content: m.content.trim().slice(0, 2000),
+      }))
+      .filter((m) => m.content.length > 0)
+      .slice(-MAX_MESSAGES);
+  }
+
+  function normalizeConversations(conversations) {
+    if (!Array.isArray(conversations)) return [];
+    const out = [];
+    const ids = new Set();
+    conversations.forEach((c) => {
+      const idRaw = typeof c?.id === "string" ? c.id.trim().slice(0, 64) : "";
+      const id = idRaw || `conv-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      if (ids.has(id)) return;
+      ids.add(id);
+      out.push({
+        id,
+        title: (typeof c?.title === "string" ? c.title.trim() : "") || "Doan chat moi",
+        messages: normalizeMessages(c?.messages || []),
+        createdAt: c?.createdAt || new Date().toISOString(),
+        updatedAt: c?.updatedAt || new Date().toISOString(),
+      });
+    });
+    out.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    return out.slice(0, MAX_CONVERSATIONS);
+  }
+
+  function normalizeState(raw) {
+    // Backward compat: legacy shape was just message array.
+    if (Array.isArray(raw)) {
+      const legacy = makeConversation("Doan chat cu");
+      legacy.id = "legacy";
+      legacy.messages = normalizeMessages(raw);
+      if (!legacy.messages.length) legacy.messages = [makeAssistantGreeting()];
+      return { conversations: [legacy], activeConversationId: legacy.id };
+    }
+
+    const conversations = normalizeConversations(raw?.conversations || []);
+    if (!conversations.length) {
+      const fallback = makeConversation();
+      return { conversations: [fallback], activeConversationId: fallback.id };
+    }
+    const requested = typeof raw?.activeConversationId === "string" ? raw.activeConversationId.trim() : "";
+    const activeConversationId = conversations.some((c) => c.id === requested) ? requested : conversations[0].id;
+    return { conversations, activeConversationId };
+  }
+
+  function loadLocalState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return [];
-      return parsed
-        .filter((m) => m && typeof m.role === "string" && typeof m.content === "string")
-        .map((m) => ({
-          role: m.role === "assistant" ? "assistant" : "user",
-          content: m.content.trim(),
-        }))
-        .filter((m) => m.content.length > 0)
-        .slice(-MAX_MESSAGES);
+      if (!raw) {
+        const fallback = makeConversation();
+        return { conversations: [fallback], activeConversationId: fallback.id };
+      }
+      return normalizeState(JSON.parse(raw));
     } catch (_err) {
-      return [];
+      const fallback = makeConversation();
+      return { conversations: [fallback], activeConversationId: fallback.id };
     }
   }
 
+  function saveLocalState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function getActiveConversation() {
+    const active = state.conversations.find((c) => c.id === state.activeConversationId);
+    if (active) return active;
+    const first = state.conversations[0];
+    state.activeConversationId = first?.id || "";
+    return first || null;
+  }
+
+  function syncConversationOrder() {
+    state.conversations.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  }
+
+  function summarizeTitle(text) {
+    const clean = (text || "").replace(/\s+/g, " ").trim();
+    return clean ? clean.slice(0, 46) : "Doan chat moi";
+  }
+
+  function renderThreadSelector() {
+    threadSelect.innerHTML = "";
+    state.conversations.forEach((c, idx) => {
+      const op = document.createElement("option");
+      op.value = c.id;
+      op.textContent = `${idx + 1}. ${c.title}`;
+      threadSelect.appendChild(op);
+    });
+    threadSelect.value = state.activeConversationId;
+    deleteBtn.disabled = state.conversations.length <= 1;
+  }
+
   function renderMessages() {
+    const active = getActiveConversation();
     list.innerHTML = "";
-    messages.forEach((msg) => {
+    if (!active) return;
+    active.messages.forEach((msg) => {
       const item = document.createElement("div");
       item.className = `ai-msg ${msg.role}`;
       item.textContent = msg.content;
@@ -81,6 +181,41 @@
     root.classList.toggle("open", open);
     toggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
     if (open) input.focus();
+  }
+
+  function renderAll() {
+    renderThreadSelector();
+    renderMessages();
+  }
+
+  function scheduleSaveRemoteHistory() {
+    if (historySaveTimer) clearTimeout(historySaveTimer);
+    historySaveTimer = setTimeout(() => {
+      saveRemoteHistory().catch(() => {});
+    }, 300);
+  }
+
+  function persistAll() {
+    saveLocalState();
+    scheduleSaveRemoteHistory();
+  }
+
+  async function loadRemoteHistory() {
+    const res = await fetch(HISTORY_ENDPOINT);
+    if (!res.ok) return null;
+    const data = await res.json().catch(() => ({}));
+    return normalizeState(data || {});
+  }
+
+  async function saveRemoteHistory() {
+    await fetch(HISTORY_ENDPOINT, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        conversations: state.conversations,
+        activeConversationId: state.activeConversationId,
+      }),
+    });
   }
 
   function textOf(selector, fallback = "") {
@@ -112,7 +247,7 @@
     }
 
     if (pathname === "/period.html") {
-      const logged = Array.from(document.querySelectorAll("#loggedDateList li"))
+      const logged = Array.from(document.querySelectorAll("#loggedList li"))
         .map((li) => (li.textContent || "").trim())
         .filter(Boolean)
         .slice(0, 20);
@@ -177,7 +312,6 @@
 
     const t = normalizeText(question);
     const dateIso = parseDateFromText(t);
-
     const isRemove = /bo tich|bo tick|xoa tich|xoa tick|huy tich|huy tick/.test(t);
     const isAdd = /tich|tick|danh dau|mark/.test(t);
 
@@ -186,42 +320,36 @@
       p.addLoggedDate(iso);
       return `Da tich ngay hom nay (${iso}) vao lich ky kinh.`;
     }
-
     if (/hom nay|today/.test(t) && isRemove) {
       const iso = p.getTodayIso();
       p.removeLoggedDate(iso);
       return `Da bo tich ngay hom nay (${iso}).`;
     }
-
     if (dateIso && isAdd) {
       p.addLoggedDate(dateIso);
       return `Da tich ngay ${dateIso} vao lich ky kinh.`;
     }
-
     if (dateIso && isRemove) {
       p.removeLoggedDate(dateIso);
       return `Da bo tich ngay ${dateIso}.`;
     }
-
     const cycleMatch = t.match(/chu ky\s*(\d{2})\s*ngay/);
     if (cycleMatch) {
       const est = p.getEstimatedCycleLength?.();
-      return `Trang nay dang du doan chu ky tu dong tu du lieu da tich. Chu ky uoc tinh hien tai: ${est || "dang cap nhat"} ngay.`;
+      return `Chu ky uoc tinh hien tai: ${est || "dang cap nhat"} ngay.`;
     }
-
     const periodMatch = t.match(/hanh kinh\s*(\d{1,2})\s*ngay/);
     if (periodMatch) {
       const v = p.setPeriodLength(Number(periodMatch[1]));
       return `Da cap nhat so ngay hanh kinh: ${v} ngay.`;
     }
-
     return null;
   }
 
-  async function askAi(question) {
+  async function askAi(activeMessages) {
     const payload = {
       page: location.pathname,
-      messages: messages.slice(-12),
+      messages: activeMessages.slice(-12),
       context: collectPageContext(),
     };
 
@@ -230,18 +358,45 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      throw new Error(data.error || "AI dang ban, thu lai sau.");
-    }
+    if (!res.ok) throw new Error(data.error || "AI dang ban, thu lai sau.");
     return (data.reply || "").trim() || "Minh chua co cau tra loi phu hop.";
   }
 
-  toggleBtn.addEventListener("click", () => {
-    setOpen(!root.classList.contains("open"));
-  });
+  toggleBtn.addEventListener("click", () => setOpen(!root.classList.contains("open")));
   closeBtn.addEventListener("click", () => setOpen(false));
+
+  newBtn.addEventListener("click", () => {
+    const next = makeConversation();
+    state.conversations.unshift(next);
+    state.activeConversationId = next.id;
+    renderAll();
+    persistAll();
+    input.focus();
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    const active = getActiveConversation();
+    if (!active) return;
+    const ok = window.confirm(`Xoa doan chat "${active.title}"?`);
+    if (!ok) return;
+    state.conversations = state.conversations.filter((c) => c.id !== active.id);
+    if (!state.conversations.length) {
+      const fallback = makeConversation();
+      state.conversations = [fallback];
+      state.activeConversationId = fallback.id;
+    } else {
+      state.activeConversationId = state.conversations[0].id;
+    }
+    renderAll();
+    persistAll();
+  });
+
+  threadSelect.addEventListener("change", () => {
+    state.activeConversationId = threadSelect.value;
+    renderMessages();
+    persistAll();
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") setOpen(false);
@@ -252,31 +407,50 @@
     const text = input.value.trim();
     if (!text) return;
 
-    messages.push({ role: "user", content: text });
-    messages = messages.slice(-MAX_MESSAGES);
+    const active = getActiveConversation();
+    if (!active) return;
+
+    if (active.title === "Doan chat moi" || active.title === "Cuoc tro chuyen moi") {
+      active.title = summarizeTitle(text);
+    }
+
+    active.messages.push({ role: "user", content: text });
+    active.messages = normalizeMessages(active.messages);
+    active.updatedAt = new Date().toISOString();
     input.value = "";
-    renderMessages();
-    saveMessages();
+    syncConversationOrder();
+    state.activeConversationId = active.id;
+    renderAll();
+    persistAll();
 
     const thinking = { role: "assistant", content: "Dang suy nghi..." };
-    messages.push(thinking);
+    active.messages.push(thinking);
     renderMessages();
 
     try {
       const localActionReply = tryPeriodAction(text);
-      const reply = localActionReply || (await askAi(text));
-      messages[messages.length - 1] = { role: "assistant", content: reply };
+      const reply = localActionReply || (await askAi(active.messages));
+      active.messages[active.messages.length - 1] = { role: "assistant", content: reply };
     } catch (err) {
-      messages[messages.length - 1] = {
-        role: "assistant",
-        content: `Loi: ${err.message}`,
-      };
+      active.messages[active.messages.length - 1] = { role: "assistant", content: `Loi: ${err.message}` };
     }
 
-    messages = messages.slice(-MAX_MESSAGES);
-    renderMessages();
-    saveMessages();
+    active.messages = normalizeMessages(active.messages);
+    active.updatedAt = new Date().toISOString();
+    syncConversationOrder();
+    state.activeConversationId = active.id;
+    renderAll();
+    persistAll();
   });
 
-  renderMessages();
+  renderAll();
+
+  loadRemoteHistory()
+    .then((remote) => {
+      if (!remote) return;
+      state = remote;
+      renderAll();
+      saveLocalState();
+    })
+    .catch(() => {});
 })();

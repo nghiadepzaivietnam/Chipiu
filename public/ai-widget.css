@@ -134,13 +134,51 @@ body.period-page .ai-chat-widget {
 }
 
 .ai-chat-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
   gap: 8px;
   padding: 11px 12px;
   border-bottom: 1px solid rgba(223, 126, 174, 0.26);
   background: rgba(255, 255, 255, 0.36);
+}
+.ai-chat-head-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.ai-chat-head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ai-chat-mini {
+  border: 1px solid rgba(223, 126, 174, 0.35);
+  border-radius: 10px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  color: #b14f7d;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 9px;
+}
+.ai-chat-mini.danger {
+  color: #b33f53;
+  border-color: rgba(195, 89, 116, 0.45);
+}
+.ai-chat-mini:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ai-chat-thread-select {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid rgba(224, 124, 174, 0.34);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #47202c;
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
 }
 
 .ai-chat-title {

@@ -20,12 +20,82 @@ function sanitizeLoggedDates(values) {
   return Array.from(unique).sort();
 }
 
+function sanitizeScale(value) {
+  return clampNumber(value, 0, 5, 0);
+}
+
+function sanitizeMedication(value) {
+  if (typeof value !== 'string') return '';
+  return value.trim().slice(0, 240);
+}
+
+function sanitizeSymptomLogs(mapLike) {
+  if (!mapLike || typeof mapLike !== 'object') return {};
+  const out = {};
+  for (const [iso, raw] of Object.entries(mapLike)) {
+    if (!isIsoDate(iso)) continue;
+    if (!raw || typeof raw !== 'object') continue;
+    out[iso] = {
+      mood: sanitizeScale(raw.mood),
+      cramps: sanitizeScale(raw.cramps),
+      backPain: sanitizeScale(raw.backPain),
+      acne: sanitizeScale(raw.acne),
+      sleep: sanitizeScale(raw.sleep),
+      discharge: sanitizeScale(raw.discharge),
+      medication: sanitizeMedication(raw.medication),
+      updatedAt: new Date(),
+    };
+  }
+  return out;
+}
+
+function sanitizeLeadDays(values) {
+  if (!Array.isArray(values)) return [1, 2, 3];
+  const clean = Array.from(
+    new Set(
+      values
+        .map((v) => clampNumber(v, 1, 3, 0))
+        .filter((v) => v >= 1 && v <= 3)
+    )
+  ).sort((a, b) => a - b);
+  return clean.length ? clean : [1, 2, 3];
+}
+
+function sanitizeTime(value, fallback) {
+  if (typeof value !== 'string') return fallback;
+  const m = value.match(/^([01]\d|2[0-3]):([0-5]\d)$/);
+  return m ? value : fallback;
+}
+
+function sanitizeReminders(raw) {
+  return {
+    periodLeadDays: sanitizeLeadDays(raw?.periodLeadDays),
+    pill: {
+      enabled: Boolean(raw?.pill?.enabled),
+      time: sanitizeTime(raw?.pill?.time, '21:00'),
+    },
+    iron: {
+      enabled: Boolean(raw?.iron?.enabled),
+      time: sanitizeTime(raw?.iron?.time, '08:00'),
+    },
+    padChange: {
+      enabled: Boolean(raw?.padChange?.enabled),
+      intervalHours: clampNumber(raw?.padChange?.intervalHours, 1, 8, 4),
+    },
+  };
+}
+
 function toClientShape(doc) {
+  const symptomLogsObj = doc?.symptomLogs
+    ? (doc.symptomLogs.toObject ? doc.symptomLogs.toObject() : doc.symptomLogs)
+    : {};
   return {
     anchorDate: doc?.anchorDate || '',
     periodLength: clampNumber(doc?.periodLength, 2, 10, 5),
     cycleLength: clampNumber(doc?.cycleLength, 20, 45, 28),
     loggedDates: sanitizeLoggedDates(doc?.loggedDates || []),
+    symptomLogs: sanitizeSymptomLogs(symptomLogsObj),
+    reminders: sanitizeReminders(doc?.reminders || {}),
     updatedAt: doc?.updatedAt || null,
   };
 }
@@ -48,6 +118,8 @@ router.put('/', async (req, res) => {
       periodLength: clampNumber(payload.periodLength, 2, 10, 5),
       cycleLength: clampNumber(payload.cycleLength, 20, 45, 28),
       loggedDates: sanitizeLoggedDates(payload.loggedDates),
+      symptomLogs: sanitizeSymptomLogs(payload.symptomLogs || {}),
+      reminders: sanitizeReminders(payload.reminders || {}),
     };
 
     const doc = await PeriodTracker.findOneAndUpdate(

@@ -106,6 +106,124 @@
         color: var(--rose);
       }
       .hero p { margin: 0; font-weight: 700; color: #8f4b70; }
+      .today-widget {
+        position: relative;
+        overflow: hidden;
+        border-radius: 26px;
+        padding: 16px;
+        background: linear-gradient(170deg, rgba(191, 237, 239, 0.95), rgba(106, 201, 208, 0.92));
+        color: #143e48;
+      }
+      .today-widget::before {
+        content: "";
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        right: -140px;
+        top: -180px;
+        background: rgba(255, 255, 255, 0.32);
+      }
+      .today-widget > * {
+        position: relative;
+        z-index: 1;
+      }
+      .widget-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .widget-date {
+        margin: 0;
+        font-family: "Baloo 2", sans-serif;
+        font-size: clamp(24px, 6vw, 34px);
+        color: #0f3c46;
+      }
+      .chip {
+        border: 1px solid rgba(15, 76, 88, 0.22);
+        background: rgba(255, 255, 255, 0.7);
+        color: #0f4a56;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .widget-main {
+        display: grid;
+        gap: 6px;
+      }
+      .widget-label {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 700;
+        color: #1e5965;
+      }
+      .widget-value {
+        margin: 0;
+        font-size: clamp(34px, 11vw, 56px);
+        line-height: 1;
+        font-family: "Baloo 2", sans-serif;
+        color: #082f38;
+      }
+      .widget-sub {
+        margin: 2px 0 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1b5e6a;
+      }
+      .widget-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .btn.light {
+        background: rgba(255, 255, 255, 0.9);
+        color: #0f5d6c;
+        border: 1px solid rgba(28, 109, 123, 0.2);
+      }
+      .quick-log {
+        margin-top: 12px;
+        border: 1px solid rgba(22, 110, 123, 0.2);
+        background: rgba(255, 255, 255, 0.48);
+        border-radius: 16px;
+        padding: 10px;
+      }
+      .quick-log h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        color: #114854;
+        font-family: "Baloo 2", sans-serif;
+      }
+      .quick-presets {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .quick-btn {
+        border: 1px solid rgba(15, 93, 107, 0.2);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #14515d;
+        padding: 9px 10px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        text-align: left;
+      }
+      .quick-btn strong {
+        display: block;
+        font-size: 13px;
+      }
+      .quick-btn span {
+        display: block;
+        margin-top: 2px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #3f7480;
+      }
 
       .grid {
         display: grid;
@@ -220,6 +338,27 @@
         background: rgba(245, 215, 233, 0.9);
         border: 1px dashed rgba(210, 130, 177, 0.78);
       }
+      .day.predicted:not(.logged)::before {
+        content: "✿";
+        position: absolute;
+        top: 4px;
+        left: 5px;
+        font-size: 10px;
+        line-height: 1;
+        color: rgba(196, 105, 158, 0.95);
+      }
+      .day.fertile:not(.logged) {
+        background: rgba(207, 237, 255, 0.9);
+        border-color: rgba(120, 187, 226, 0.7);
+        color: #305571;
+      }
+      .day.ovulation:not(.logged) {
+        box-shadow: inset 0 0 0 2px #66a9d3;
+      }
+      .day.uncertain:not(.logged) {
+        border-style: dashed;
+        border-color: rgba(203, 148, 189, 0.95);
+      }
 
       .legend {
         margin-top: 10px;
@@ -239,7 +378,131 @@
       }
       .dot.logged { background: #ff5fa6; }
       .dot.predicted { background: #d7a4c4; }
+      .dot.fertile { background: #9acde9; }
       .dot.today { background: #f7bb6f; }
+      .summary {
+        margin-top: 10px;
+        border: 1px dashed rgba(233, 128, 184, 0.55);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.72);
+        padding: 10px;
+        font-weight: 700;
+        color: #7a3f5e;
+      }
+      .summary p {
+        margin: 0 0 6px;
+        font-size: 14px;
+      }
+      .summary p:last-child { margin-bottom: 0; }
+      .check-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 7px 0;
+      }
+      .check-row label {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 700;
+        color: #7f4563;
+      }
+      .hint {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: #9a6782;
+      }
+      .ai-box {
+        margin-top: 10px;
+        border: 1px dashed rgba(129, 190, 225, 0.7);
+        border-radius: 14px;
+        background: rgba(239, 250, 255, 0.8);
+        padding: 10px;
+      }
+      .ai-box p {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.45;
+        color: #3b6380;
+        white-space: pre-line;
+      }
+      .symptom-note {
+        margin: -2px 0 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #9a6782;
+      }
+      .symptom-panel {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .symptom-item {
+        border: 1px dashed rgba(230, 130, 184, 0.5);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.78);
+        padding: 8px 10px 10px;
+      }
+      .symptom-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .symptom-name {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #894867;
+      }
+      .symptom-score {
+        border-radius: 999px;
+        background: linear-gradient(135deg, #ff7ebc, #ff9fcc);
+        color: #fff;
+        padding: 3px 9px;
+        font-size: 12px;
+        font-weight: 700;
+        min-width: 68px;
+        text-align: center;
+      }
+      .symptom-scale {
+        margin: 2px 0 6px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        font-weight: 700;
+        color: #a56f8d;
+      }
+      .symptom-slider {
+        width: 100%;
+        appearance: none;
+        -webkit-appearance: none;
+        height: 8px;
+        border-radius: 999px;
+        background:
+          linear-gradient(90deg, #ff73b4 0 var(--range-fill, 0%), #efd5e3 var(--range-fill, 0%) 100%);
+        border: 1px solid rgba(225, 150, 190, 0.5);
+        outline: none;
+      }
+      .symptom-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: #fff;
+        border: 3px solid #ff67ad;
+        box-shadow: 0 2px 6px rgba(197, 77, 140, 0.35);
+      }
+      .symptom-slider::-moz-range-thumb {
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: #fff;
+        border: 3px solid #ff67ad;
+        box-shadow: 0 2px 6px rgba(197, 77, 140, 0.35);
+      }
 
       .list {
         margin: 8px 0 0;
@@ -325,6 +588,13 @@
         .grid { grid-template-columns: 1fr; }
       }
       @media (max-width: 520px) {
+        .today-widget {
+          border-radius: 22px;
+          padding: 14px;
+        }
+        .quick-presets {
+          grid-template-columns: 1fr;
+        }
         .calendar-head {
           padding-left: max(20px, env(safe-area-inset-left, 0px));
           padding-right: max(20px, env(safe-area-inset-right, 0px));
@@ -350,8 +620,46 @@
 
     <main class="period-main">
       <section class="card hero">
-        <h1>Lịch kỳ kinh mới</h1>
-        <p>Trang mới tối giản cho điện thoại, bấm vào ngày để đánh dấu nhanh, không lag.</p>
+        <h1>Lịch trình em yêu</h1>
+        <p>Theo dõi những thay đổi tự nhiên theo cách nhẹ nhàng nhất. Mỗi tháng đều có một nhịp điệu dịu dàng của riêng em.</p>
+      </section>
+
+      <section class="today-widget">
+        <div class="widget-top">
+          <p class="widget-date" id="widgetDate">Hôm nay</p>
+          <span class="chip" id="widgetCycleChip">Chưa có dữ liệu</span>
+        </div>
+        <div class="widget-main">
+          <p class="widget-label" id="widgetPhaseLabel">Rụng trứng sau</p>
+          <p class="widget-value" id="widgetOvulationCountdown">-- ngày</p>
+          <p class="widget-sub" id="widgetChanceLabel">Cơ hội thụ thai: chưa xác định</p>
+        </div>
+        <div class="widget-actions">
+          <button class="btn light" id="quickLogTodayBtn" type="button">Ghi kỳ kinh hôm nay</button>
+          <button class="btn light" id="openSymptomTodayBtn" type="button">Mở log hôm nay</button>
+        </div>
+
+        <section class="quick-log">
+          <h3>Nhập nhanh 1 chạm</h3>
+          <div class="quick-presets">
+            <button class="quick-btn" type="button" data-quick-preset="balanced">
+              <strong>Hôm nay ổn</strong>
+              <span>Tất cả mức nhẹ, lưu ngay</span>
+            </button>
+            <button class="quick-btn" type="button" data-quick-preset="pms-light">
+              <strong>Tiền kinh nhẹ</strong>
+              <span>Căng nhẹ, khó ngủ nhẹ</span>
+            </button>
+            <button class="quick-btn" type="button" data-quick-preset="period-heavy">
+              <strong>Đang đau nhiều</strong>
+              <span>Đau bụng/lưng cao, mất ngủ</span>
+            </button>
+            <button class="quick-btn" type="button" data-quick-preset="period-start">
+              <strong>Đến kỳ hôm nay</strong>
+              <span>Đánh dấu ngày kinh + lưu log</span>
+            </button>
+          </div>
+        </section>
       </section>
 
       <div class="grid">
@@ -374,6 +682,11 @@
             <button class="btn soft" id="clearBtn" type="button">Xóa ngày đã chọn</button>
           </div>
           <p class="status" id="saveStatus"></p>
+          <section class="summary" id="summaryText">
+            <p id="nextPeriodLine">Kỳ kế tiếp: chưa có dữ liệu.</p>
+            <p id="fertilityLine">Cửa sổ dễ thụ thai: chưa có dữ liệu.</p>
+            <p id="ovulationLine">Ngày rụng trứng: chưa có dữ liệu.</p>
+          </section>
           <section class="reminder-gift">
             <button class="reminder-toggle" id="reminderToggle" type="button" aria-expanded="false">
               <span class="gift-icon" aria-hidden="true">🎀</span>
@@ -385,8 +698,111 @@
             </div>
           </section>
 
+          <h3 class="section-title" style="font-size:22px;margin-top:12px;">Nhật ký triệu chứng</h3>
+          <p class="symptom-note">Thang điểm: 0 = không/ổn định, 5 = rất nặng. Kéo thanh để chấm nhanh.</p>
+          <div class="field">
+            <label class="label" for="logDate">Ngày ghi nhận</label>
+            <input class="input" id="logDate" type="date" />
+          </div>
+          <section class="symptom-panel">
+            <article class="symptom-item">
+              <div class="symptom-head">
+                <h4 class="symptom-name">Mood</h4>
+                <span class="symptom-score" id="moodValue">0 • Ổn</span>
+              </div>
+              <div class="symptom-scale"><span>Ổn</span><span>Nặng</span></div>
+              <input class="symptom-slider" id="moodLevel" type="range" min="0" max="5" step="1" />
+            </article>
+            <article class="symptom-item">
+              <div class="symptom-head">
+                <h4 class="symptom-name">Đau bụng</h4>
+                <span class="symptom-score" id="crampsValue">0 • Ổn</span>
+              </div>
+              <div class="symptom-scale"><span>Không đau</span><span>Rất đau</span></div>
+              <input class="symptom-slider" id="crampsLevel" type="range" min="0" max="5" step="1" />
+            </article>
+            <article class="symptom-item">
+              <div class="symptom-head">
+                <h4 class="symptom-name">Đau lưng</h4>
+                <span class="symptom-score" id="backPainValue">0 • Ổn</span>
+              </div>
+              <div class="symptom-scale"><span>Không đau</span><span>Rất đau</span></div>
+              <input class="symptom-slider" id="backPainLevel" type="range" min="0" max="5" step="1" />
+            </article>
+            <article class="symptom-item">
+              <div class="symptom-head">
+                <h4 class="symptom-name">Mụn</h4>
+                <span class="symptom-score" id="acneValue">0 • Ổn</span>
+              </div>
+              <div class="symptom-scale"><span>Ít/không có</span><span>Nhiều</span></div>
+              <input class="symptom-slider" id="acneLevel" type="range" min="0" max="5" step="1" />
+            </article>
+            <article class="symptom-item">
+              <div class="symptom-head">
+                <h4 class="symptom-name">Mất ngủ</h4>
+                <span class="symptom-score" id="sleepValue">0 • Ổn</span>
+              </div>
+              <div class="symptom-scale"><span>Ngủ tốt</span><span>Mất ngủ nhiều</span></div>
+              <input class="symptom-slider" id="sleepLevel" type="range" min="0" max="5" step="1" />
+            </article>
+            <article class="symptom-item">
+              <div class="symptom-head">
+                <h4 class="symptom-name">Dịch âm đạo</h4>
+                <span class="symptom-score" id="dischargeValue">0 • Ổn</span>
+              </div>
+              <div class="symptom-scale"><span>Bình thường</span><span>Bất thường</span></div>
+              <input class="symptom-slider" id="dischargeLevel" type="range" min="0" max="5" step="1" />
+            </article>
+          </section>
+          <div class="field">
+            <label class="label" for="medicationInput">Thuốc đã uống</label>
+            <input class="input" id="medicationInput" type="text" maxlength="240" placeholder="Ví dụ: Ibuprofen 200mg lúc 08:00" />
+          </div>
+          <div class="row">
+            <button class="btn primary" id="saveSymptomBtn" type="button">Lưu triệu chứng</button>
+            <button class="btn soft" id="askAiAdviceBtn" type="button">Nhờ AI tư vấn</button>
+          </div>
+          <p class="status" id="symptomStatus"></p>
+          <section class="ai-box">
+            <p id="aiAdviceText">Khi bạn lưu triệu chứng, bấm "Nhờ AI tư vấn" để nhận gợi ý theo dữ liệu chu kỳ.</p>
+          </section>
+
+          <h3 class="section-title" style="font-size:22px;margin-top:12px;">Nhắc nhở linh hoạt</h3>
+          <div class="field">
+            <span class="label">Nhắc trước kỳ kinh</span>
+            <div class="check-row">
+              <label><input id="lead1" type="checkbox" /> 1 ngày</label>
+              <label><input id="lead2" type="checkbox" /> 2 ngày</label>
+              <label><input id="lead3" type="checkbox" /> 3 ngày</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">Nhắc uống thuốc tránh thai</span>
+            <div class="check-row">
+              <label><input id="pillEnabled" type="checkbox" /> Bật</label>
+              <input class="input" id="pillTime" type="time" style="max-width:140px;" />
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">Nhắc bổ sung sắt</span>
+            <div class="check-row">
+              <label><input id="ironEnabled" type="checkbox" /> Bật</label>
+              <input class="input" id="ironTime" type="time" style="max-width:140px;" />
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">Thay băng ngày đầu</span>
+            <div class="check-row">
+              <label><input id="padEnabled" type="checkbox" /> Bật</label>
+              <input class="input" id="padInterval" type="number" min="1" max="8" style="max-width:140px;" />
+            </div>
+            <p class="hint">Nhắc mỗi bao nhiêu giờ trong ngày đầu kỳ.</p>
+          </div>
+
           <h3 class="section-title" style="font-size:22px;margin-top:12px;">Ngày đã chọn</h3>
           <ul class="list" id="loggedList"></ul>
+          <h3 class="section-title" style="font-size:22px;margin-top:12px;">Nhật ký gần đây</h3>
+          <ul class="list" id="symptomList"></ul>
         </section>
 
         <section class="card">
@@ -403,7 +819,8 @@
 
           <div class="legend">
             <span><i class="dot logged"></i> Đã chọn</span>
-            <span><i class="dot predicted"></i> Dự đoán</span>
+            <span><i class="dot predicted"></i> Dự đoán ✿</span>
+            <span><i class="dot fertile"></i> Dễ thụ thai</span>
             <span><i class="dot today"></i> Hôm nay</span>
           </div>
         </section>
