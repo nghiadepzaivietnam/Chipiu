@@ -382,6 +382,8 @@ body.journey-love-page::before {
   backdrop-filter: blur(8px);
   box-shadow: 0 20px 38px rgba(0, 0, 0, 0.4);
   padding: 12px;
+  max-height: min(72vh, 680px);
+  overflow: auto;
 }
 
 .journey-create-title {
@@ -511,9 +513,9 @@ body.journey-love-page::before {
   }
 
   .journey-step {
-    width: min(82vw, 248px);
-    min-width: min(82vw, 248px);
-    min-height: 460px;
+    width: min(82vw, 244px);
+    min-width: min(82vw, 244px);
+    min-height: 442px;
   }
 
   .journey-node {
@@ -548,12 +550,23 @@ body.journey-love-page::before {
   }
 
   .journey-step-title {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .journey-step-desc {
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.35;
+  }
+
+  .journey-create-dock {
+    width: calc(100% - 16px);
+    left: 8px;
+    transform: none;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .journey-create-panel {
+    max-height: min(64vh, 520px);
   }
 
   .journey-create-grid {
@@ -563,5 +576,181 @@ body.journey-love-page::before {
   .journey-create-span2,
   .journey-create-check {
     grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  body.journey-love-page.journey-sheet-open {
+    overflow: hidden;
+  }
+
+  body.journey-love-page {
+    padding-top: calc(78px + env(safe-area-inset-top, 0px));
+    padding-bottom: 86px;
+  }
+
+  .journey-nav {
+    top: calc(6px + env(safe-area-inset-top, 0px));
+    left: 8px;
+    right: 8px;
+    padding: 6px;
+    border-radius: 12px;
+  }
+
+  .journey-nav-link {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .journey-love-main {
+    gap: 10px;
+    padding: 0 8px;
+  }
+
+  .journey-hero {
+    padding: 13px 12px;
+    border-radius: 14px;
+  }
+
+  .journey-title {
+    font-size: clamp(22px, 8.2vw, 30px);
+    line-height: 1.08;
+  }
+
+  .journey-subtitle {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .journey-timeline-shell {
+    padding: 10px 8px 10px;
+    border-radius: 14px;
+  }
+
+  .journey-track {
+    gap: 14px;
+    min-height: 418px;
+    padding: 8px 4px 6px;
+  }
+
+  .journey-line {
+    left: 4px;
+    right: 4px;
+  }
+
+  .journey-step {
+    width: min(86vw, 214px);
+    min-width: min(86vw, 214px);
+    min-height: 386px;
+  }
+
+  .journey-node {
+    width: 38px;
+    height: 38px;
+    border-width: 3px;
+  }
+
+  .journey-step[data-role="haianh"] .journey-card {
+    bottom: calc(50% + 24px);
+    transform: translateY(10px);
+  }
+
+  .journey-step[data-role="toi"] .journey-card {
+    top: calc(50% + 24px);
+    transform: translateY(-10px);
+  }
+
+  .journey-step[data-role="haianh"] .journey-card::before,
+  .journey-step[data-role="toi"] .journey-card::before {
+    height: 22px;
+  }
+
+  .journey-card {
+    border-radius: 11px;
+    padding: 10px;
+  }
+
+  .journey-date {
+    font-size: 17px;
+    padding: 6px 7px 6px 10px;
+  }
+
+  .journey-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .journey-role {
+    margin-top: 6px;
+    font-size: 10px;
+  }
+
+  .journey-step-title {
+    font-size: 16px;
+    margin: 4px 0 3px;
+  }
+
+  .journey-step-desc {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
+  .journey-create-dock {
+    left: 8px;
+    right: 8px;
+    width: auto;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    z-index: 45;
+  }
+
+  .journey-create-toggle {
+    padding: 11px 12px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+
+  .journey-create-panel {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    margin-top: 0;
+    border-radius: 14px;
+    max-height: min(62vh, 460px);
+    padding: 10px;
+  }
+
+  .journey-create-title {
+    font-size: 14px;
+  }
+
+  .journey-create-hint {
+    margin: 4px 0 8px;
+    font-size: 11px;
+  }
+
+  .journey-create-label {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .journey-create-input {
+    padding: 8px 9px;
+    font-size: 13px;
+    border-radius: 9px;
+  }
+
+  .journey-create-actions {
+    margin-top: 8px;
+  }
+
+  .journey-create-btn {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .journey-create-status {
+    margin-top: 6px;
+    font-size: 11px;
   }
 }

@@ -269,7 +269,14 @@ function setAddPanelOpen(open) {
   addPanelEl.hidden = !open;
   addToggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
   addToggleBtn.textContent = open ? "Dong them hanh trinh" : "Them hanh trinh";
-  if (open) addTitleInput?.focus();
+  document.body.classList.toggle("journey-sheet-open", Boolean(open));
+  if (addStatusEl && open) addStatusEl.textContent = "";
+  if (open) {
+    addTitleInput?.focus();
+    if (window.matchMedia("(max-width: 640px)").matches) {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+  }
 }
 
 function clearAddForm() {
@@ -377,6 +384,10 @@ addCancelBtn?.addEventListener("click", () => {
 
 addSubmitBtn?.addEventListener("click", () => {
   submitAddItem();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") setAddPanelOpen(false);
 });
 
 bindHeroMotion();
