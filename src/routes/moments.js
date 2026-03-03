@@ -76,6 +76,7 @@ router.post('/', (req, res) => {
     }
 
     try {
+      const userId = req.userId || 'default';
       const { owner, caption, allowCombined } = req.body;
       const normalizedOwner = normalizeOwnerInput(owner);
       let mediaType = 'none';
@@ -97,6 +98,7 @@ router.post('/', (req, res) => {
       }
 
       const moment = await Moment.create({
+        userId,
         owner: normalizedOwner,
         caption,
         mediaType,
@@ -116,8 +118,9 @@ router.post('/', (req, res) => {
 // List moments (optionally by owner or combined flag)
 router.get('/', async (req, res) => {
   try {
+    const userId = req.userId || 'default';
     const { owner, combined } = req.query;
-    const filter = {};
+    const filter = { userId };
     if (owner) filter.owner = normalizeOwnerInput(owner);
     if (combined === 'true') filter.allowCombined = true;
 
@@ -131,7 +134,8 @@ router.get('/', async (req, res) => {
 // Delete a moment by id
 router.delete('/:id', async (req, res) => {
   try {
-    const moment = await Moment.findById(req.params.id);
+    const userId = req.userId || 'default';
+    const moment = await Moment.findOne({ _id: req.params.id, userId });
     if (!moment) {
       return res.status(404).json({ error: 'Moment not found' });
     }
@@ -139,7 +143,7 @@ router.delete('/:id', async (req, res) => {
     const oldDiskPath = buildDiskPathFromUrl(moment.mediaUrl);
     const oldPublicId = toPublicIdFromUrl(moment.mediaUrl);
 
-    await Moment.deleteOne({ _id: moment._id });
+    await Moment.deleteOne({ _id: moment._id, userId });
     await safeDeleteFile(oldDiskPath);
 
     if (isCloudinaryEnabled && oldPublicId) {

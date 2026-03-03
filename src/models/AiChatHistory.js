@@ -21,12 +21,19 @@ const conversationSchema = new mongoose.Schema(
 
 const aiChatHistorySchema = new mongoose.Schema(
   {
-    key: { type: String, default: 'global', unique: true },
+    userId: { type: String, default: 'default', index: true },
+    key: { type: String, default: 'global' },
     messages: { type: [messageSchema], default: [] },
     conversations: { type: [conversationSchema], default: [] },
     activeConversationId: { type: String, default: '' },
+    widgetPosition: {
+      x: { type: Number, default: null },
+      y: { type: Number, default: null },
+    },
   },
   { timestamps: true }
 );
+
+aiChatHistorySchema.index({ userId: 1, key: 1 }, { unique: true });
 
 module.exports = mongoose.model('AiChatHistory', aiChatHistorySchema);

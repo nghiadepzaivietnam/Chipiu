@@ -53,7 +53,8 @@ const upload = multer({
 // Get current counter background
 router.get('/', async (_req, res) => {
   try {
-    const background = await CounterBackground.findOne().sort({ updatedAt: -1 });
+    const userId = _req.userId || 'default';
+    const background = await CounterBackground.findOne({ userId }).sort({ updatedAt: -1 });
     res.json(background || {});
   } catch (err) {
     console.error('Counter background get error:', err.message);
@@ -68,7 +69,8 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 
   try {
-    const existing = await CounterBackground.findOne().sort({ updatedAt: -1 });
+    const userId = req.userId || 'default';
+    const existing = await CounterBackground.findOne({ userId }).sort({ updatedAt: -1 });
 
     let newImageUrl = `/uploads/${req.file.filename}`;
     let newImagePublicId = null;
@@ -89,9 +91,11 @@ router.post('/', upload.single('image'), async (req, res) => {
     if (existing) {
       existing.imageUrl = newImageUrl;
       existing.imagePublicId = newImagePublicId;
+      existing.userId = userId;
       background = await existing.save();
     } else {
       background = await CounterBackground.create({
+        userId,
         imageUrl: newImageUrl,
         imagePublicId: newImagePublicId,
       });
@@ -114,7 +118,8 @@ router.post('/', upload.single('image'), async (req, res) => {
 // Remove current counter background
 router.delete('/', async (_req, res) => {
   try {
-    const existing = await CounterBackground.findOne().sort({ updatedAt: -1 });
+    const userId = _req.userId || 'default';
+    const existing = await CounterBackground.findOne({ userId }).sort({ updatedAt: -1 });
     if (!existing) return res.json({ ok: true });
 
     const oldImagePath = buildDiskPathFromUrl(existing.imageUrl);

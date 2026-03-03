@@ -102,7 +102,8 @@ function toClientShape(doc) {
 
 router.get('/', async (_req, res) => {
   try {
-    const doc = await PeriodTracker.findOne({ key: GLOBAL_KEY });
+    const userId = _req.userId || 'default';
+    const doc = await PeriodTracker.findOne({ userId, key: GLOBAL_KEY });
     return res.json(toClientShape(doc));
   } catch (_err) {
     return res.status(500).json({ error: 'Could not fetch period tracker' });
@@ -111,8 +112,10 @@ router.get('/', async (_req, res) => {
 
 router.put('/', async (req, res) => {
   try {
+    const userId = req.userId || 'default';
     const payload = req.body || {};
     const update = {
+      userId,
       key: GLOBAL_KEY,
       anchorDate: isIsoDate(payload.anchorDate) ? payload.anchorDate : '',
       periodLength: clampNumber(payload.periodLength, 2, 10, 5),
@@ -123,7 +126,7 @@ router.put('/', async (req, res) => {
     };
 
     const doc = await PeriodTracker.findOneAndUpdate(
-      { key: GLOBAL_KEY },
+      { userId, key: GLOBAL_KEY },
       update,
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );

@@ -346,9 +346,10 @@
     </section>
   </main>
 
+  <script src="/user-context.js"></script>
   <script>
-    const STORAGE_KEY = "hdha.journey.builder.v1";
     const API_BASE = "/api/journey";
+    const DRAFT_ENDPOINT = "/api/journey/draft";
     const DEFAULT_HAIANH = "/hai-anh.jpg";
     const DEFAULT_TOI = "/uploads/1772244572266-5389.jpg";
 
@@ -369,28 +370,8 @@
     const track = document.getElementById("track");
     const lineFill = document.getElementById("lineFill");
 
-    let state = loadLocalState();
-
-    function loadLocalState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return { avatars: { haianh: DEFAULT_HAIANH, toi: DEFAULT_TOI }, items: [] };
-        const parsed = JSON.parse(raw);
-        return {
-          avatars: {
-            haianh: parsed?.avatars?.haianh || DEFAULT_HAIANH,
-            toi: parsed?.avatars?.toi || DEFAULT_TOI,
-          },
-          items: Array.isArray(parsed?.items) ? parsed.items : [],
-        };
-      } catch (_e) {
-        return { avatars: { haianh: DEFAULT_HAIANH, toi: DEFAULT_TOI }, items: [] };
-      }
-    }
-
-    function saveLocalState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
+    let state = { avatars: { haianh: DEFAULT_HAIANH, toi: DEFAULT_TOI }, items: [] };
+    let draftSaveTimer = null;
 
     async function loadServerState() {
       const res = await fetch(API_BASE);
@@ -415,6 +396,38 @@
         const d = await res.json().catch(() => ({}));
         throw new Error(d?.error || "Luu server that bai.");
       }
+    }
+
+    async function loadDraftState() {
+      const res = await fetch(DRAFT_ENDPOINT);
+      if (!res.ok) throw new Error("Khong the tai ban nhap tu server.");
+      const data = await res.json();
+      return {
+        avatars: {
+          haianh: data?.avatars?.haianh || DEFAULT_HAIANH,
+          toi: data?.avatars?.toi || DEFAULT_TOI,
+        },
+        items: Array.isArray(data?.items) ? data.items : [],
+      };
+    }
+
+    async function saveDraftState() {
+      const res = await fetch(DRAFT_ENDPOINT, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(state),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d?.error || "Luu nhap server that bai.");
+      }
+    }
+
+    function scheduleDraftSave() {
+      if (draftSaveTimer) clearTimeout(draftSaveTimer);
+      draftSaveTimer = setTimeout(() => {
+        saveDraftState().catch(() => {});
+      }, 320);
     }
 
     async function uploadAvatar(file) {
@@ -511,7 +524,7 @@
     function renderAll() {
       renderList();
       renderPreview();
-      saveLocalState();
+      scheduleDraftSave();
     }
 
     async function addItem() {
@@ -653,10 +666,20 @@
     (async function init() {
       renderAll();
       try {
-        state = await loadServerState();
+        state = await loadDraftState();
         renderAll();
       } catch (_e) {
-        // fallback local
+        try {
+          state = await loadServerState();
+          renderAll();
+        } catch (_err) {
+          // keep in-memory defaults
+        }
+      }
+      try {
+        await saveDraftState();
+      } catch (_e) {
+        // ignore first-draft sync failures
       }
     })();
   </script>

@@ -190,7 +190,8 @@ async function callOpenAiResponses({ input }) {
 
 router.get('/history', async (_req, res) => {
   try {
-    const doc = await AiChatHistory.findOne({ key: HISTORY_KEY });
+    const userId = _req.userId || 'default';
+    const doc = await AiChatHistory.findOne({ userId, key: HISTORY_KEY });
     let conversations = normalizeConversations(doc?.conversations || []);
     if (!conversations.length) {
       const legacyMessages = normalizeMessages(doc?.messages || []);
@@ -211,6 +212,7 @@ router.get('/history', async (_req, res) => {
     return res.json({
       conversations,
       activeConversationId,
+      widgetPosition: doc?.widgetPosition || { x: null, y: null },
       updatedAt: doc?.updatedAt || null,
     });
   } catch (_err) {
@@ -220,6 +222,7 @@ router.get('/history', async (_req, res) => {
 
 router.put('/history', async (req, res) => {
   try {
+    const userId = req.userId || 'default';
     let conversations = normalizeConversations(req.body?.conversations);
     if (!conversations.length) {
       const legacyMessages = normalizeMessages(req.body?.messages);
@@ -240,12 +243,17 @@ router.put('/history', async (req, res) => {
     const activeConversationId = knownIds.has(requestedActive) ? requestedActive : (conversations[0]?.id || '');
     const activeMessages = conversations.find((c) => c.id === activeConversationId)?.messages || [];
     const doc = await AiChatHistory.findOneAndUpdate(
-      { key: HISTORY_KEY },
+      { userId, key: HISTORY_KEY },
       {
+        userId,
         key: HISTORY_KEY,
         conversations,
         activeConversationId,
         messages: activeMessages,
+        widgetPosition: {
+          x: Number.isFinite(req.body?.widgetPosition?.x) ? Math.round(req.body.widgetPosition.x) : null,
+          y: Number.isFinite(req.body?.widgetPosition?.y) ? Math.round(req.body.widgetPosition.y) : null,
+        },
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
@@ -256,6 +264,7 @@ router.put('/history', async (req, res) => {
     return res.json({
       conversations: responseConversations,
       activeConversationId: responseActive,
+      widgetPosition: doc?.widgetPosition || { x: null, y: null },
       updatedAt: doc?.updatedAt || null,
     });
   } catch (err) {

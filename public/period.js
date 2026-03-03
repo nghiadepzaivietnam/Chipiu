@@ -1,5 +1,3 @@
-const STORAGE_KEY = "hdha.period.tracker.v3";
-const LEGACY_STORAGE_KEY = "hdha.period.tracker.v2";
 const API_ENDPOINT = "/api/period";
 const PERIOD_AI_ENDPOINT = "/api/period-ai";
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -198,35 +196,6 @@ function payload() {
   };
 }
 
-function saveLocal() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload()));
-}
-
-function loadLegacyLocal() {
-  const raw = localStorage.getItem(LEGACY_STORAGE_KEY);
-  if (!raw) return;
-  try {
-    const data = JSON.parse(raw);
-    applyPayload(data);
-  } catch (_err) {
-    // ignore
-  }
-}
-
-function loadLocal() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    loadLegacyLocal();
-    return;
-  }
-  try {
-    const data = JSON.parse(raw);
-    applyPayload(data);
-  } catch (_err) {
-    // ignore
-  }
-}
-
 function applyPayload(data) {
   if (parseIso(data?.anchorDate)) state.anchorDate = data.anchorDate;
   state.cycleLength = clampNum(data?.cycleLength, 20, 45, state.cycleLength);
@@ -259,7 +228,6 @@ async function loadRemote() {
   if (!res.ok) return;
   const data = await res.json();
   applyPayload(data);
-  saveLocal();
 }
 
 function scheduleRemoteSave() {
@@ -271,7 +239,7 @@ function scheduleRemoteSave() {
         if (symptomStatus) symptomStatus.textContent = "Du lieu da dong bo";
       })
       .catch(() => {
-        if (saveStatus) saveStatus.textContent = "Da luu local (mang yeu)";
+        if (saveStatus) saveStatus.textContent = "Luu that bai, thu lai sau";
       });
   }, 250);
 }
@@ -726,7 +694,6 @@ function render() {
 }
 
 function saveAll() {
-  saveLocal();
   scheduleRemoteSave();
   render();
 }
@@ -954,7 +921,6 @@ function bindEvents() {
 }
 
 async function init() {
-  loadLocal();
   await loadRemote().catch(() => {});
 
   const anchor = parseIso(state.anchorDate) || parseIso(todayIso);

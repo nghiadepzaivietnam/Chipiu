@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const periodTrackerSchema = new mongoose.Schema(
   {
-    key: { type: String, default: 'global', unique: true },
+    userId: { type: String, default: 'default', index: true },
+    key: { type: String, default: 'global' },
     anchorDate: { type: String, default: '' }, // YYYY-MM-DD
     periodLength: { type: Number, default: 5, min: 2, max: 10 },
     cycleLength: { type: Number, default: 28, min: 20, max: 45 },
@@ -42,5 +43,7 @@ const periodTrackerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+periodTrackerSchema.index({ userId: 1, key: 1 }, { unique: true });
 
 module.exports = mongoose.model('PeriodTracker', periodTrackerSchema);

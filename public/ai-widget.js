@@ -1,6 +1,5 @@
 (function initAiWidget() {
   const STORAGE_KEY = "hdha.ai.chat.v2";
-  const POSITION_STORAGE_KEY = "hdha.ai.widget.pos.v1";
   const HISTORY_ENDPOINT = "/api/ai-chat/history";
   const MAX_MESSAGES = 20;
   const MAX_CONVERSATIONS = 30;
@@ -112,17 +111,19 @@
       legacy.id = "legacy";
       legacy.messages = normalizeMessages(raw);
       if (!legacy.messages.length) legacy.messages = [makeAssistantGreeting()];
-      return { conversations: [legacy], activeConversationId: legacy.id };
+      return { conversations: [legacy], activeConversationId: legacy.id, widgetPosition: { x: null, y: null } };
     }
 
     const conversations = normalizeConversations(raw?.conversations || []);
     if (!conversations.length) {
       const fallback = makeConversation();
-      return { conversations: [fallback], activeConversationId: fallback.id };
+      return { conversations: [fallback], activeConversationId: fallback.id, widgetPosition: { x: null, y: null } };
     }
     const requested = typeof raw?.activeConversationId === "string" ? raw.activeConversationId.trim() : "";
     const activeConversationId = conversations.some((c) => c.id === requested) ? requested : conversations[0].id;
-    return { conversations, activeConversationId };
+    const x = Number.isFinite(raw?.widgetPosition?.x) ? Math.round(raw.widgetPosition.x) : null;
+    const y = Number.isFinite(raw?.widgetPosition?.y) ? Math.round(raw.widgetPosition.y) : null;
+    return { conversations, activeConversationId, widgetPosition: { x, y } };
   }
 
   function loadLocalState() {
@@ -130,12 +131,12 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) {
         const fallback = makeConversation();
-        return { conversations: [fallback], activeConversationId: fallback.id };
+        return { conversations: [fallback], activeConversationId: fallback.id, widgetPosition: { x: null, y: null } };
       }
       return normalizeState(JSON.parse(raw));
     } catch (_err) {
       const fallback = makeConversation();
-      return { conversations: [fallback], activeConversationId: fallback.id };
+      return { conversations: [fallback], activeConversationId: fallback.id, widgetPosition: { x: null, y: null } };
     }
   }
 
@@ -223,6 +224,7 @@
       body: JSON.stringify({
         conversations: state.conversations,
         activeConversationId: state.activeConversationId,
+        widgetPosition: state.widgetPosition || { x: null, y: null },
       }),
     });
   }
@@ -240,7 +242,8 @@
   }
 
   function saveWidgetPosition(x, y) {
-    localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify({ x, y }));
+    state.widgetPosition = { x: Math.round(x), y: Math.round(y) };
+    scheduleSaveRemoteHistory();
   }
 
   function updatePanelDock(x) {
@@ -259,15 +262,10 @@
   }
 
   function applySavedWidgetPosition() {
-    try {
-      const raw = localStorage.getItem(POSITION_STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      if (!Number.isFinite(parsed?.x) || !Number.isFinite(parsed?.y)) return;
-      applyWidgetPosition(parsed.x, parsed.y, false);
-    } catch (_err) {
-      // ignore
-    }
+    const x = state?.widgetPosition?.x;
+    const y = state?.widgetPosition?.y;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    applyWidgetPosition(x, y, false);
   }
 
   function textOf(selector, fallback = "") {
@@ -580,6 +578,7 @@
       state = remote;
       renderAll();
       saveLocalState();
+      applySavedWidgetPosition();
     })
     .catch(() => {});
 })();

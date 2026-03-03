@@ -13,14 +13,25 @@ const journeyItemSchema = new mongoose.Schema(
 
 const journeySchema = new mongoose.Schema(
   {
-    key: { type: String, default: 'main', unique: true, index: true },
+    userId: { type: String, default: 'default', index: true },
+    key: { type: String, default: 'main', index: true },
     avatars: {
       haianh: { type: String, default: '/hai-anh.jpg' },
       toi: { type: String, default: '/uploads/1772244572266-5389.jpg' },
     },
     items: { type: [journeyItemSchema], default: [] },
+    builderDraft: {
+      avatars: {
+        haianh: { type: String, default: '/hai-anh.jpg' },
+        toi: { type: String, default: '/uploads/1772244572266-5389.jpg' },
+      },
+      items: { type: [journeyItemSchema], default: [] },
+      updatedAt: { type: Date, default: Date.now },
+    },
   },
   { timestamps: true }
 );
+
+journeySchema.index({ userId: 1, key: 1 }, { unique: true });
 
 module.exports = mongoose.model('Journey', journeySchema);

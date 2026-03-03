@@ -1,4 +1,3 @@
-const STORAGE_KEY = 'loveStartISO';
 const COUNTER_CONFIG_ENDPOINT = '/api/counter-config';
 
 const startDateInput = document.getElementById('startDate');
@@ -10,6 +9,7 @@ const refreshBtn = document.getElementById('refreshBtn');
 const bgImageInput = document.getElementById('bgImageInput');
 const clearBgBtn = document.getElementById('clearBgBtn');
 const bgMsg = document.getElementById('bgMsg');
+let currentStartDate = null;
 
 function applyBackgroundImage(dataUrl) {
   if (!dataUrl) {
@@ -41,17 +41,6 @@ async function loadSavedBackground() {
   }
 }
 
-function loadSaved() {
-  const iso = localStorage.getItem(STORAGE_KEY);
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  startDateInput.value = iso.slice(0, 10);
-  const timePart = iso.slice(11, 16);
-  if (timePart) startTimeInput.value = timePart;
-  return d;
-}
-
 async function loadSavedFromServer() {
   const res = await fetch(COUNTER_CONFIG_ENDPOINT);
   if (!res.ok) throw new Error('Cannot load counter config');
@@ -61,9 +50,9 @@ async function loadSavedFromServer() {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
   const normalized = d.toISOString();
-  localStorage.setItem(STORAGE_KEY, normalized);
   startDateInput.value = normalized.slice(0, 10);
   startTimeInput.value = normalized.slice(11, 16);
+  currentStartDate = d;
   return d;
 }
 
@@ -107,7 +96,7 @@ function humanDiff(start) {
 }
 
 function render() {
-  const start = loadSaved();
+  const start = currentStartDate;
   if (!start) {
     display.innerHTML = '<p class="status">Chưa có ngày bắt đầu, hãy chọn ở trên nhé.</p>';
     return;
@@ -150,17 +139,6 @@ function render() {
 
 
 
-saveBtn?.addEventListener('click', () => {
-  const d = buildDate();
-  if (!d) {
-    saveMsg.textContent = 'Ngày/giờ không hợp lệ.';
-    return;
-  }
-  localStorage.setItem(STORAGE_KEY, d.toISOString());
-  saveMsg.textContent = 'Đã lưu! Reload tự động.';
-  render();
-});
-
 refreshBtn?.addEventListener('click', render);
 
 saveBtn?.addEventListener(
@@ -176,14 +154,14 @@ saveBtn?.addEventListener(
       return;
     }
     const iso = d.toISOString();
-    localStorage.setItem(STORAGE_KEY, iso);
+    currentStartDate = d;
     saveMsg.textContent = 'Dang luu...';
     saveStartToServer(iso)
       .then(() => {
         saveMsg.textContent = 'Da luu len server.';
       })
       .catch(() => {
-        saveMsg.textContent = 'Da luu local (mang yeu).';
+        saveMsg.textContent = 'Luu that bai, thu lai sau.';
       })
       .finally(() => {
         render();
@@ -365,19 +343,15 @@ if (canvas && ctx) {
 
 async function initCounter() {
   loadSavedBackground();
-  render();
-
-  const local = localStorage.getItem(STORAGE_KEY);
+  currentStartDate = null;
   try {
-    const fromServer = await loadSavedFromServer();
-    if (!fromServer && local) {
-      await saveStartToServer(local);
-    }
+    await loadSavedFromServer();
   } catch (_err) {
-    // keep local fallback
+    // keep empty state
   }
 
   render();
 }
 
 initCounter();
+

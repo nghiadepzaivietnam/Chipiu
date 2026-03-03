@@ -20,7 +20,8 @@ function toClientShape(doc) {
 
 router.get('/', async (_req, res) => {
   try {
-    const doc = await CounterConfig.findOne({ key: GLOBAL_KEY });
+    const userId = _req.userId || 'default';
+    const doc = await CounterConfig.findOne({ userId, key: GLOBAL_KEY });
     return res.json(toClientShape(doc));
   } catch (_err) {
     return res.status(500).json({ error: 'Could not fetch counter config' });
@@ -29,10 +30,11 @@ router.get('/', async (_req, res) => {
 
 router.put('/', async (req, res) => {
   try {
+    const userId = req.userId || 'default';
     const loveStartISO = normalizeIsoDateTime(req.body?.loveStartISO);
     const doc = await CounterConfig.findOneAndUpdate(
-      { key: GLOBAL_KEY },
-      { key: GLOBAL_KEY, loveStartISO },
+      { userId, key: GLOBAL_KEY },
+      { userId, key: GLOBAL_KEY, loveStartISO },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
     return res.json(toClientShape(doc));

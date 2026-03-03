@@ -57,17 +57,18 @@ function sanitizeJourneyPayload(payload = {}) {
   };
 }
 
-async function getOrCreateJourney() {
-  let doc = await Journey.findOne({ key: 'main' });
+async function getOrCreateJourney(userId = 'default') {
+  let doc = await Journey.findOne({ userId, key: 'main' });
   if (!doc) {
-    doc = await Journey.create({ key: 'main' });
+    doc = await Journey.create({ userId, key: 'main' });
   }
   return doc;
 }
 
 router.get('/', async (_req, res) => {
   try {
-    const doc = await getOrCreateJourney();
+    const userId = _req.userId || 'default';
+    const doc = await getOrCreateJourney(userId);
     res.json({
       avatars: doc.avatars || { haianh: '/hai-anh.jpg', toi: '/uploads/1772244572266-5389.jpg' },
       items: doc.items || [],
@@ -80,10 +81,11 @@ router.get('/', async (_req, res) => {
 
 router.put('/', async (req, res) => {
   try {
+    const userId = req.userId || 'default';
     const data = sanitizeJourneyPayload(req.body);
     const doc = await Journey.findOneAndUpdate(
-      { key: 'main' },
-      { $set: { avatars: data.avatars, items: data.items } },
+      { userId, key: 'main' },
+      { $set: { userId, avatars: data.avatars, items: data.items } },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     );
 
@@ -95,6 +97,49 @@ router.put('/', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: err.message || 'Khong the luu hanh trinh.' });
+  }
+});
+
+router.get('/draft', async (req, res) => {
+  try {
+    const userId = req.userId || 'default';
+    const doc = await getOrCreateJourney(userId);
+    return res.json({
+      avatars: doc?.builderDraft?.avatars || doc.avatars,
+      items: doc?.builderDraft?.items || [],
+      updatedAt: doc?.builderDraft?.updatedAt || doc?.updatedAt || null,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || 'Khong the tai ban nhap hanh trinh.' });
+  }
+});
+
+router.put('/draft', async (req, res) => {
+  try {
+    const userId = req.userId || 'default';
+    const data = sanitizeJourneyPayload(req.body);
+    const doc = await Journey.findOneAndUpdate(
+      { userId, key: 'main' },
+      {
+        $set: {
+          userId,
+          builderDraft: {
+            avatars: data.avatars,
+            items: data.items,
+            updatedAt: new Date(),
+          },
+        },
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    return res.json({
+      ok: true,
+      avatars: doc?.builderDraft?.avatars || data.avatars,
+      items: doc?.builderDraft?.items || data.items,
+      updatedAt: doc?.builderDraft?.updatedAt || doc?.updatedAt || null,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message || 'Khong the luu ban nhap hanh trinh.' });
   }
 });
 
