@@ -980,3 +980,24 @@ body.journey-love-page::before {
     overflow: hidden;
   }
 }
+@media (min-width: 981px) {
+  .journey-scroll {
+    overflow-x: scroll;
+    padding-bottom: 10px;
+  }
+
+  .journey-scroll::-webkit-scrollbar {
+    height: 12px;
+  }
+
+  .journey-scroll::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .journey-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255, 39, 82, 0.95), rgba(255, 132, 168, 0.9));
+    border: 2px solid rgba(255, 255, 255, 0.16);
+  }
+}
