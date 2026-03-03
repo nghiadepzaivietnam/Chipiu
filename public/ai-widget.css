@@ -82,6 +82,12 @@ body.period-page .ai-chat-widget {
   100% { box-shadow: 0 16px 32px rgba(64, 22, 33, 0.32), 0 0 0 4px rgba(255, 138, 181, 0.18); }
 }
 
+@keyframes aiPulseMobile {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+
 .ai-chat-panel {
   position: absolute;
   left: 0;
@@ -311,7 +317,7 @@ body.period-page .ai-chat-widget {
   .ai-chat-toggle {
     width: 60px;
     height: 60px;
-    animation: none;
+    animation: aiPulseMobile 2.8s ease-in-out infinite;
   }
   .ai-chat-toggle-icon {
     font-size: 29px;
