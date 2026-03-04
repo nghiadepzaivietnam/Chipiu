@@ -168,17 +168,6 @@
       </article>
     </main>
 
-    <script>
-      (() => {
-        const openedAtRaw = sessionStorage.getItem("periodBlogGateAt");
-        const openedAt = Number(openedAtRaw || "0");
-        const maxAgeMs = 5 * 60 * 1000;
-        if (!openedAt || Number.isNaN(openedAt) || Date.now() - openedAt > maxAgeMs) {
-          window.location.replace("/period.html");
-          return;
-        }
-        sessionStorage.setItem("periodBlogGateAt", String(Date.now()));
-      })();
-    </script>
+    <script src="/premium-blog-gate.js"></script>
   </body>
 </html>
