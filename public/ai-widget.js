@@ -467,24 +467,35 @@
     persistAll();
   });
 
-  toggleBtn.addEventListener("pointerdown", (event) => {
-    if (event.button !== 0) return;
+  function startDrag(pointerType, clientX, clientY, pointerId) {
     suppressToggleClick = false;
-    lastPointerX = event.clientX;
-    lastPointerY = event.clientY;
-    const holdDelay = event.pointerType === "touch" ? 420 : 260;
+    lastPointerX = clientX;
+    lastPointerY = clientY;
+    const holdDelay = pointerType === "touch" ? 420 : 260;
     dragTimer = setTimeout(() => {
       dragging = true;
       root.classList.add("dragging");
       const rect = toggleBtn.getBoundingClientRect();
       dragOffsetX = lastPointerX - rect.left;
       dragOffsetY = lastPointerY - rect.top;
-      try {
-        toggleBtn.setPointerCapture(event.pointerId);
-      } catch (_err) {
-        // ignore
+      if (pointerId != null) {
+        try {
+          toggleBtn.setPointerCapture(pointerId);
+        } catch (_err) {
+          // ignore
+        }
       }
     }, holdDelay);
+  }
+
+  toggleBtn.addEventListener("pointerdown", (event) => {
+    // Touch pointer may not consistently expose button=0 across browsers.
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (event.pointerType === "touch") {
+      event.preventDefault();
+      window.getSelection?.().removeAllRanges?.();
+    }
+    startDrag(event.pointerType || "mouse", event.clientX, event.clientY, event.pointerId);
   });
 
   toggleBtn.addEventListener("pointermove", (event) => {
@@ -520,6 +531,26 @@
 
   toggleBtn.addEventListener("pointerup", stopDrag);
   toggleBtn.addEventListener("pointercancel", stopDrag);
+
+  // Fallback for devices/browsers with flaky pointer events on touch.
+  toggleBtn.addEventListener("touchstart", (event) => {
+    const t = event.changedTouches?.[0];
+    if (!t) return;
+    event.preventDefault();
+    window.getSelection?.().removeAllRanges?.();
+    startDrag("touch", t.clientX, t.clientY, null);
+  }, { passive: false });
+  toggleBtn.addEventListener("touchmove", (event) => {
+    const t = event.changedTouches?.[0];
+    if (!t || !dragging) return;
+    lastPointerX = t.clientX;
+    lastPointerY = t.clientY;
+    const x = t.clientX - dragOffsetX;
+    const y = t.clientY - dragOffsetY;
+    applyWidgetPosition(x, y, false);
+  }, { passive: true });
+  toggleBtn.addEventListener("touchend", () => stopDrag({ pointerId: null }), { passive: true });
+  toggleBtn.addEventListener("touchcancel", () => stopDrag({ pointerId: null }), { passive: true });
   toggleBtn.addEventListener("click", (event) => {
     if (!suppressToggleClick) return;
     event.preventDefault();
