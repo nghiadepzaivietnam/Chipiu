@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ÄÄƒng nháº­p thÆ° viá»‡n blog</title>
+    <style>
+      :root {
+        --bg-start: #fff2f7;
+        --bg-end: #ffe6f0;
+        --card: #ffffff;
+        --text: #3d1f30;
+        --muted: #8b5f78;
+        --accent: #ff5fa4;
+        --accent-2: #ff86bb;
+        --border: rgba(255, 95, 164, 0.26);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Quicksand", sans-serif;
+        color: var(--text);
+        background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
+        display: grid;
+        place-items: center;
+        padding: 18px;
+      }
+      .card {
+        width: min(100%, 390px);
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 16px 36px rgba(90, 22, 58, 0.14);
+        padding: 20px;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font: 700 26px "Baloo 2", "Quicksand", sans-serif;
+      }
+      .note {
+        margin: 0 0 16px;
+        font-size: 14px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      form {
+        display: grid;
+        gap: 12px;
+      }
+      label {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      input {
+        width: 100%;
+        min-height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 9px 12px;
+        font: 700 15px "Quicksand", sans-serif;
+        color: var(--text);
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 4px;
+      }
+      .btn {
+        border: 0;
+        border-radius: 12px;
+        min-height: 42px;
+        padding: 10px 14px;
+        font: 700 14px "Quicksand", sans-serif;
+        cursor: pointer;
+      }
+      .btn-primary {
+        flex: 1;
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .btn-secondary {
+        text-decoration: none;
+        display: inline-grid;
+        place-items: center;
+        color: var(--accent);
+        background: #fff;
+        border: 1px solid var(--border);
+      }
+      .error {
+        min-height: 18px;
+        margin: 2px 0 0;
+        color: #cf2f71;
+        font-size: 13px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card" aria-label="ÄÄƒng nháº­p thÆ° viá»‡n blog riÃªng tÆ°">
+      <h1>ÄÄƒng nháº­p</h1>
+      <p class="note">Nháº­p tÃ i khoáº£n Ä‘á»ƒ má»Ÿ thÆ° viá»‡n blog riÃªng tÆ°.</p>
+
+      <form id="blog-login-form" novalidate>
+        <div>
+          <label for="username">TÃªn Ä‘Äƒng nháº­p</label>
+          <input id="username" name="username" type="text" autocomplete="username" required />
+        </div>
+
+        <div>
+          <label for="password">Máº­t kháº©u</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </div>
+
+        <p id="login-error" class="error" role="alert" aria-live="polite"></p>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Má»Ÿ thÆ° viá»‡n</button>
+          <a class="btn btn-secondary" href="/period.html">Quay láº¡i</a>
+        </div>
+      </form>
+    </main>
+
+    <script>
+      (function initLoginPage() {
+        const AUTH_KEY = "periodBlogAuthAt";
+        const AUTH_TTL_MS = 15 * 60 * 1000;
+        const USERNAME = "chipiu";
+        const PASSWORD = "chipiu";
+
+        const form = document.getElementById("blog-login-form");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const errorEl = document.getElementById("login-error");
+
+        const nextParam = new URLSearchParams(window.location.search).get("next");
+        const nextPath = nextParam && nextParam.startsWith("/") ? nextParam : "/period-blog.html";
+
+        const hasValidAuth = () => {
+          const authAtRaw = sessionStorage.getItem(AUTH_KEY);
+          const authAt = Number(authAtRaw || "0");
+          return Boolean(authAt && !Number.isNaN(authAt) && Date.now() - authAt <= AUTH_TTL_MS);
+        };
+
+        if (hasValidAuth()) {
+          window.location.replace(nextPath);
+          return;
+        }
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const username = usernameInput.value.trim();
+          const password = passwordInput.value;
+
+          if (username === USERNAME && password === PASSWORD) {
+            sessionStorage.setItem(AUTH_KEY, String(Date.now()));
+            window.location.assign(nextPath);
+            return;
+          }
+
+          errorEl.textContent = "Sai tÃªn Ä‘Äƒng nháº­p hoáº·c máº­t kháº©u.";
+          passwordInput.value = "";
+          passwordInput.focus();
+        });
+      })();
+    </script>
+  </body>
+</html>
+
