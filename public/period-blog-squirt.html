@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Squirt: Cởi bỏ ngại ngùng</title>
+    <style>
+      :root { --rose: #7f3659; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Quicksand", sans-serif;
+        color: #5f3450;
+        background:
+          radial-gradient(circle at 14% 10%, rgba(255, 151, 202, 0.26), transparent 34%),
+          radial-gradient(circle at 86% 0%, rgba(255, 196, 226, 0.25), transparent 36%),
+          #fff4fa;
+        padding: 14px;
+      }
+      .main { width: min(960px, 100%); margin: 0 auto; display: grid; gap: 12px; }
+      .card {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        box-shadow: 0 12px 24px rgba(214, 95, 153, 0.18);
+        padding: 14px;
+      }
+      .row { display: flex; flex-wrap: wrap; gap: 8px; }
+      .btn {
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 700;
+        border: 1px solid rgba(235, 134, 186, 0.45);
+        color: #e44c98;
+        background: #fff;
+      }
+      .tag {
+        display: inline-flex; width: fit-content; border-radius: 999px; padding: 4px 8px;
+        font-size: 11px; font-weight: 700; color: #ab3d74;
+        background: rgba(255, 147, 200, 0.18); border: 1px solid rgba(228, 123, 180, 0.28);
+      }
+      h1 {
+        margin: 8px 0 0; font-family: "Baloo 2", sans-serif;
+        font-size: clamp(28px, 7vw, 40px); line-height: 1.05; color: var(--rose);
+      }
+      h2 {
+        margin: 10px 0 0; font-family: "Baloo 2", sans-serif;
+        font-size: clamp(22px, 5vw, 30px); line-height: 1.1; color: #864361;
+      }
+      p, li { font-size: 15px; line-height: 1.65; font-weight: 700; color: #71435d; }
+      ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+      .visual {
+        border-radius: 14px; border: 1px dashed rgba(235, 130, 186, 0.5);
+        background: rgba(255, 255, 255, 0.76); padding: 8px;
+      }
+      .visual svg { display: block; width: 100%; height: auto; }
+      .note {
+        border-left: 4px solid #ff84bd; padding: 10px 12px; border-radius: 12px;
+        background: rgba(255, 180, 218, 0.14);
+      }
+      .panic-box {
+        border: 1px dashed rgba(230, 120, 178, 0.55);
+        border-radius: 12px;
+        background: rgba(255, 201, 226, 0.2);
+        padding: 10px 12px;
+      }
+      .panic-box h3 {
+        margin: 0 0 6px;
+        font-family: "Baloo 2", sans-serif;
+        font-size: 24px;
+        line-height: 1.1;
+        color: #843f60;
+      }
+      .panic-box ol {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 6px;
+      }
+      .panic-box li {
+        font-size: 15px;
+        line-height: 1.6;
+        font-weight: 700;
+        color: #71435d;
+      }
+      .soft-box {
+        border: 1px dashed rgba(235, 130, 186, 0.45); border-radius: 12px;
+        background: rgba(255, 186, 219, 0.12); padding: 10px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main">
+      <section class="card">
+        <div class="row">
+          <a class="btn" href="/period-blog.html">← Về thư viện blog</a>
+          <a class="btn" href="/period.html">← Về kỳ kinh</a>
+        </div>
+      </section>
+
+      <article class="card">
+        <span class="tag">💦 Gần gũi</span>
+        <h1>Squirt: Cởi bỏ ngại ngùng để cơ thể được thả lỏng</h1>
+
+        <h2>Checklist đọc nhanh (60 giây)</h2>
+        <ul>
+          <li>Mục tiêu hôm nay là thoải mái, không phải "phải đạt kết quả".</li>
+          <li>Không gian riêng tư đã sẵn sàng: khăn/tấm lót, nước uống, ánh sáng dịu.</li>
+          <li>Cơ thể đã thư giãn: thở chậm vài nhịp, vai và bụng không gồng.</li>
+          <li>Giao tiếp rõ ràng: biết nói "nhẹ hơn", "chậm hơn", "dừng lại".</li>
+          <li>Không đau, không rát, không ép bản thân đi quá giới hạn.</li>
+          <li>Dù có squirt hay không, trải nghiệm vẫn có giá trị như nhau.</li>
+        </ul>
+
+        <figure class="visual" aria-label="Minh họa thư giãn và giao tiếp">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="sg1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffd4e8" />
+                <stop offset="100%" stop-color="#ffe8f5" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#sg1)" />
+            <circle cx="120" cy="110" r="52" fill="#ff9ec9" opacity="0.8" />
+            <circle cx="250" cy="110" r="52" fill="#ffc7df" opacity="0.8" />
+            <path d="M350 90h250a16 16 0 0 1 16 16v8a16 16 0 0 1-16 16H350a16 16 0 0 1-16-16v-8a16 16 0 0 1 16-16z" fill="#fff" />
+            <circle cx="390" cy="110" r="8" fill="#ff79b6" />
+            <rect x="410" y="103" width="174" height="14" rx="7" fill="#ffc2df" />
+            <text x="355" y="168" fill="#8a4968" font-size="20" font-family="Quicksand" font-weight="700">Thư giãn - giao tiếp - không áp lực</text>
+          </svg>
+        </figure>
+
+        <p>
+          Squirt không phải "bài kiểm tra" của phụ nữ và càng không phải tiêu chuẩn để đánh giá một người có quyến rũ hay không. Đây là phản ứng sinh lý
+          có thể xuất hiện ở một số người, trong một số bối cảnh. Có người trải nghiệm thường xuyên, có người hiếm khi, và có người không bao giờ gặp - tất cả
+          đều bình thường.
+        </p>
+        <p>
+          Điều làm trải nghiệm trở nên dễ chịu thường không nằm ở áp lực thành tích, mà nằm ở cảm giác an toàn: được lắng nghe, được tôn trọng, và có quyền
+          dừng lại bất cứ lúc nào. Khi đầu óc thôi phải "diễn tốt", cơ thể mới có không gian để thật sự cảm nhận.
+        </p>
+
+        <h2>Vì sao nhiều người vẫn thấy ngại?</h2>
+        <ul>
+          <li>Lo bị đánh giá hoặc so sánh với hình ảnh trên mạng.</li>
+          <li>Lo bừa bộn và mất kiểm soát tình huống.</li>
+          <li>Lo đối phương thất vọng nếu cơ thể không phản ứng như kỳ vọng.</li>
+          <li>Lo bản thân "sai" vì chưa hiểu rõ phản ứng của cơ thể mình.</li>
+        </ul>
+        <p>
+          Các nỗi lo này rất phổ biến. Chỉ cần thừa nhận rằng mình đang lo, chuẩn bị trước vài thứ nhỏ, và nói chuyện thẳng thắn với nhau, mức căng thẳng đã
+          có thể giảm xuống rõ rệt.
+        </p>
+
+        <figure class="visual" aria-label="Minh họa trạng thái an toàn cảm xúc">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="sg2" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffe3f2" />
+                <stop offset="100%" stop-color="#fff1f9" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#sg2)" />
+            <rect x="58" y="46" width="604" height="128" rx="20" fill="#ffffff" />
+            <circle cx="122" cy="110" r="28" fill="#ffb4d7" />
+            <circle cx="204" cy="110" r="28" fill="#ffd1e7" />
+            <circle cx="286" cy="110" r="28" fill="#ffb4d7" />
+            <rect x="340" y="82" width="286" height="18" rx="9" fill="#ffc5e1" />
+            <rect x="340" y="110" width="236" height="16" rx="8" fill="#ffdced" />
+            <text x="78" y="196" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">An toàn cảm xúc giúp cơ thể mở ra tự nhiên</text>
+          </svg>
+        </figure>
+
+        <h2>Cách tạo trạng thái dễ thả lỏng</h2>
+        <ul>
+          <li>Thống nhất trước: không ai bị chấm điểm, không có mục tiêu "phải đạt".</li>
+          <li>Chuẩn bị khăn/tấm lót, nước uống và không gian riêng tư để giảm nỗi lo bừa bộn.</li>
+          <li>Đi nhịp chậm, lắng nghe phản hồi cơ thể thay vì tăng tốc vì tâm lý gấp.</li>
+          <li>Giao tiếp ngắn và rõ: "nhẹ hơn", "chậm hơn", "tiếp tục như vậy".</li>
+          <li>Khi cảm giác quá mạnh, tạm dừng ngắn để hạ căng thẳng rồi mới tiếp tục.</li>
+        </ul>
+
+        <div class="soft-box">
+          <p>
+            Câu nhắc rất có ích: "Em không cần chứng minh gì cả. Mình chỉ cần thoải mái và dịu dàng với nhau."
+          </p>
+        </div>
+
+        <h2>Lợi ích theo hướng lành mạnh</h2>
+        <ul>
+          <li>Hiểu rõ hơn tín hiệu hưng phấn và giới hạn của cơ thể.</li>
+          <li>Giảm xấu hổ với phản ứng sinh lý tự nhiên.</li>
+          <li>Tăng kết nối cảm xúc vì hai người lắng nghe nhau sâu hơn.</li>
+          <li>Tăng tự tin khi giao tiếp nhu cầu thân mật.</li>
+        </ul>
+        <p>
+          Lợi ích lớn nhất không nhất thiết nằm ở "kết quả cuối", mà nằm ở quá trình hai người tôn trọng nhau, và bạn cảm thấy mình được yêu thương đúng cách.
+        </p>
+
+        <h2>Nếu chưa từng squirt: làm quen theo lộ trình nhẹ nhàng</h2>
+        <p>
+          Người chưa từng squirt thường có một kỳ vọng âm thầm rằng "mình phải làm đúng ngay lần đầu". Kỳ vọng này dễ tạo căng thẳng, và chính căng thẳng lại
+          làm cơ thể khó thả lỏng hơn. Vì vậy, thay vì đặt mục tiêu theo kết quả, bạn có thể đặt mục tiêu theo cảm nhận: hôm nay mình hiểu cơ thể thêm một chút,
+          thấy an toàn thêm một chút, và bớt xấu hổ thêm một chút.
+        </p>
+        <p>
+          Một cách rất hiệu quả là chia quá trình thành nhiều buổi nhỏ, mỗi buổi chỉ tập trung vào một việc:
+        </p>
+        <ul>
+          <li>Buổi 1: chỉ để cơ thể thư giãn, không đặt bất kỳ mục tiêu nào.</li>
+          <li>Buổi 2: quan sát tín hiệu cơ thể khi thoải mái và khi căng thẳng.</li>
+          <li>Buổi 3: tập giao tiếp rõ nhu cầu với bản thân hoặc với người yêu.</li>
+          <li>Buổi 4: thực hành nhịp độ chậm, dừng nghỉ đúng lúc khi cảm giác quá mạnh.</li>
+        </ul>
+        <p>
+          Cách chia nhỏ này giúp não bộ cảm thấy "mình đang học", thay vì "mình đang bị kiểm tra". Khi tâm trí bớt bị phán xét, cơ thể cũng dễ mở ra tự nhiên hơn.
+        </p>
+
+        <h2>Cách làm quen cơ thể khi tự khám phá (không áp lực)</h2>
+        <p>
+          Nếu tự khám phá một mình, điểm mấu chốt là tạo một môi trường đủ an toàn và dễ chịu trước khi bắt đầu: phòng kín, nhiệt độ thoải mái, ánh sáng dịu,
+          có khăn và nước uống sẵn. Việc chuẩn bị này nghe nhỏ nhưng có tác dụng lớn vì nó giảm nỗi lo nền trong đầu.
+        </p>
+        <ul>
+          <li>Luôn bắt đầu bằng hơi thở chậm và sâu vài nhịp để hạ nhịp căng thẳng.</li>
+          <li>Giữ nhịp nhẹ và đều, ưu tiên cảm giác dễ chịu thay vì cố tăng nhanh.</li>
+          <li>Nếu thấy lo hoặc căng cơ, tạm dừng ngắn rồi quay lại khi thoải mái.</li>
+          <li>Không ép buộc bản thân phải đi tiếp khi cơ thể báo mệt hoặc khó chịu.</li>
+        </ul>
+        <p>
+          Nên nhớ: không có "mốc bắt buộc" nào cho việc tự khám phá. Có ngày cơ thể mở hơn, có ngày kín hơn - điều đó là bình thường và không nói lên giá trị của bạn.
+        </p>
+
+        <h2>Khung giao tiếp khi đi cùng người yêu</h2>
+        <p>
+          Với cặp đôi, một khung giao tiếp đơn giản có thể giảm ngại rất nhanh:
+        </p>
+        <ul>
+          <li>"Điều em thấy dễ chịu là..."</li>
+          <li>"Điều em muốn chậm lại là..."</li>
+          <li>"Nếu em im lặng quá, mình dừng 10-20 giây để check nhé."</li>
+          <li>"Mình ưu tiên cảm giác an toàn hơn mọi kết quả."</li>
+        </ul>
+        <p>
+          Khi hai người thống nhất trước những câu này, khoảnh khắc thân mật sẽ bớt "đoán ý" và bớt áp lực phải diễn hoàn hảo.
+        </p>
+
+        <div class="soft-box">
+          <p>
+            Gợi ý một câu trấn an rất hiệu quả: "Dù hôm nay cơ thể em phản ứng thế nào, em vẫn hoàn toàn đủ đầy và đáng yêu."
+          </p>
+        </div>
+
+        <h2>Những hiểu lầm thường gặp cần bỏ qua</h2>
+        <ul>
+          <li>"Không squirt nghĩa là không đủ hưng phấn" - Sai. Khoái cảm có nhiều dạng khác nhau.</li>
+          <li>"Phải có kỹ thuật đúng mới được" - Sai. Cơ địa và trạng thái cảm xúc ảnh hưởng rất lớn.</li>
+          <li>"Không thành công vài lần là không thể" - Sai. Nhiều người cần thời gian để cơ thể quen cảm giác.</li>
+          <li>"Mình bị kỳ lạ vì ngại chuyện này" - Sai. Ngại là phản ứng rất phổ biến và hoàn toàn dễ gỡ.</li>
+        </ul>
+        <p>
+          Mấu chốt là đối xử với cơ thể như một người bạn cần được lắng nghe, thay vì một cỗ máy cần phải hoạt động đúng theo yêu cầu.
+        </p>
+
+        <h2>Dấu hiệu thường gặp khi cơ thể sắp "release"</h2>
+        <p>
+          Mỗi người sẽ khác nhau, nhưng nhiều người mô tả một số tín hiệu khá giống nhau. Bạn có thể xem đây là dấu hiệu tham khảo, không phải tiêu chuẩn bắt buộc:
+        </p>
+        <ul>
+          <li>Cảm giác áp lực tăng dần ở vùng chậu, đi kèm nhịp hưng phấn lên xuống theo từng đợt.</li>
+          <li>Hơi thở tự nhiên nhanh hoặc sâu hơn, cơ bụng dưới và đùi có xu hướng căng rồi thả.</li>
+          <li>Cảm giác "muốn buông lỏng" hoặc "muốn thả ra" xuất hiện rõ hơn.</li>
+          <li>Tâm trí bớt phân tích, cơ thể chuyển sang trạng thái phản ứng tự nhiên hơn.</li>
+          <li>Một số người thấy cảm giác gần giống muốn đi tiểu; nếu đã chuẩn bị khăn/tấm lót thì dễ bình tĩnh hơn.</li>
+        </ul>
+        <p>
+          Nếu xuất hiện những tín hiệu này, điều quan trọng là không hoảng và không gồng giữ. Hãy thở chậm, giữ nhịp dễ chịu, cho phép cơ thể phản ứng theo cách tự nhiên của nó.
+          Không có phản ứng nào là "sai" cả, miễn bạn vẫn thấy an toàn và thoải mái.
+        </p>
+
+        <section class="panic-box" aria-label="Nút panic 30 giây">
+          <h3>Nút panic 30 giây khi thấy lo</h3>
+          <ol>
+            <li>Dừng mọi kích thích trong 10 giây, đặt tay lên ngực và bụng.</li>
+            <li>Hít vào bằng mũi 4 nhịp, thở ra bằng miệng 6 nhịp, lặp 3 vòng.</li>
+            <li>Thả lỏng hàm, vai và đùi; nhắc bản thân: "Mình an toàn, không cần cố".</li>
+            <li>Uống một ngụm nước nhỏ, chỉ tiếp tục khi cơ thể thấy ổn.</li>
+            <li>Nếu vẫn khó chịu hoặc đau, dừng hẳn và nghỉ ngơi.</li>
+          </ol>
+        </section>
+
+        <div class="note">
+          <p>
+            Khi nào nên tạm dừng và đi khám: đau kéo dài, nóng rát rõ, chảy máu bất thường, mùi khó chịu hoặc lo âu kéo dài sau quan hệ.
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <script>
+      (() => {
+        const openedAtRaw = sessionStorage.getItem("periodBlogGateAt");
+        const openedAt = Number(openedAtRaw || "0");
+        const maxAgeMs = 5 * 60 * 1000;
+        if (!openedAt || Number.isNaN(openedAt) || Date.now() - openedAt > maxAgeMs) {
+          window.location.replace("/period.html");
+          return;
+        }
+        sessionStorage.setItem("periodBlogGateAt", String(Date.now()));
+      })();
+    </script>
+  </body>
+</html>

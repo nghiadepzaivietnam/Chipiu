@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kinh nghiệm quan hệ cho người mới</title>
+    <style>
+      :root { --rose: #7f3659; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Quicksand", sans-serif;
+        color: #5f3450;
+        background:
+          radial-gradient(circle at 14% 10%, rgba(255, 151, 202, 0.26), transparent 34%),
+          radial-gradient(circle at 86% 0%, rgba(255, 196, 226, 0.25), transparent 36%),
+          #fff4fa;
+        padding: 14px;
+      }
+      .main { width: min(960px, 100%); margin: 0 auto; display: grid; gap: 12px; }
+      .card {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        box-shadow: 0 12px 24px rgba(214, 95, 153, 0.18);
+        padding: 14px;
+      }
+      .row { display: flex; flex-wrap: wrap; gap: 8px; }
+      .btn {
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 700;
+        border: 1px solid rgba(235, 134, 186, 0.45);
+        color: #e44c98;
+        background: #fff;
+      }
+      .tag {
+        display: inline-flex; width: fit-content; border-radius: 999px; padding: 4px 8px;
+        font-size: 11px; font-weight: 700; color: #ab3d74;
+        background: rgba(255, 147, 200, 0.18); border: 1px solid rgba(228, 123, 180, 0.28);
+      }
+      h1 {
+        margin: 8px 0 0; font-family: "Baloo 2", sans-serif;
+        font-size: clamp(28px, 7vw, 40px); line-height: 1.05; color: var(--rose);
+      }
+      h2 {
+        margin: 12px 0 0; font-family: "Baloo 2", sans-serif;
+        font-size: clamp(22px, 5vw, 30px); line-height: 1.1; color: #864361;
+      }
+      p, li { font-size: 15px; line-height: 1.65; font-weight: 700; color: #71435d; }
+      ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+      .visual {
+        border-radius: 14px; border: 1px dashed rgba(235, 130, 186, 0.5);
+        background: rgba(255, 255, 255, 0.76); padding: 8px;
+      }
+      .visual svg { display: block; width: 100%; height: auto; }
+      .box {
+        border: 1px dashed rgba(235, 130, 186, 0.5);
+        border-radius: 12px;
+        background: rgba(255, 186, 219, 0.12);
+        padding: 10px 12px;
+      }
+      .note {
+        border-left: 4px solid #ff84bd;
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: rgba(255, 180, 218, 0.14);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main">
+      <section class="card">
+        <div class="row">
+          <a class="btn" href="/period-blog.html">← Về thư viện blog</a>
+          <a class="btn" href="/period.html">← Về kỳ kinh</a>
+        </div>
+      </section>
+
+      <article class="card">
+        <span class="tag">🌱 Mới bắt đầu</span>
+        <h1>Kinh nghiệm quan hệ cho người mới bắt đầu</h1>
+
+        <h2>Checklist nhanh trước ngày đầu</h2>
+        <ul>
+          <li>Hai người đều đồng thuận rõ ràng và không ai bị ép.</li>
+          <li>Đã chuẩn bị bao cao su đúng kích cỡ và còn hạn.</li>
+          <li>Có bôi trơn dự phòng để giảm ma sát khi cần.</li>
+          <li>Không gian riêng tư, đủ thời gian, không bị vội.</li>
+          <li>Thống nhất tín hiệu dừng: chỉ cần nói "dừng" là dừng.</li>
+        </ul>
+
+        <figure class="visual" aria-label="Minh họa checklist an toàn">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="bg1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffe3f1" />
+                <stop offset="100%" stop-color="#fff5fb" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#bg1)" />
+            <rect x="70" y="42" width="580" height="136" rx="16" fill="#fff" />
+            <g fill="#ff7db7">
+              <circle cx="130" cy="82" r="10" />
+              <circle cx="130" cy="112" r="10" />
+              <circle cx="130" cy="142" r="10" />
+            </g>
+            <g fill="#ffc0de">
+              <rect x="154" y="75" width="420" height="14" rx="7" />
+              <rect x="154" y="105" width="360" height="14" rx="7" />
+              <rect x="154" y="135" width="390" height="14" rx="7" />
+            </g>
+            <text x="84" y="196" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Checklist: đồng thuận - an toàn - nhẹ nhàng</text>
+          </svg>
+        </figure>
+
+        <h2>Giai đoạn 1: Chuẩn bị tâm lý</h2>
+        <p>
+          Nỗi lo của người mới thường là "liệu mình có làm sai?" hoặc "nếu không như kỳ vọng thì sao?". Thực tế, lần đầu không cần hoàn hảo. Mục tiêu hợp lý là:
+          an toàn, thoải mái, và tôn trọng nhau. Nếu coi đây là một trải nghiệm học hỏi thay vì bài thi, áp lực sẽ giảm đáng kể.
+        </p>
+        <ul>
+          <li>Nói trước về ranh giới: điều nào ok, điều nào chưa sẵn sàng.</li>
+          <li>Thỏa thuận nhịp độ: đi chậm và luôn có quyền dừng.</li>
+          <li>Giữ kỳ vọng thực tế: lần đầu có thể vụng về, và điều đó bình thường.</li>
+        </ul>
+
+        <h2>Giai đoạn 2: Trong lúc gần gũi</h2>
+        <ul>
+          <li>Bắt đầu bằng dạo đầu để cơ thể và cảm xúc cùng vào nhịp.</li>
+          <li>Ưu tiên cảm giác dễ chịu; nếu đau rát thì giảm nhịp hoặc tạm dừng.</li>
+          <li>Giao tiếp câu ngắn: "ổn", "nhẹ hơn", "chậm lại", "dừng nhé".</li>
+          <li>Không so sánh với nội dung trên mạng; mỗi cơ thể phản ứng khác nhau.</li>
+        </ul>
+        <div class="box">
+          <p>
+            Nguyên tắc vàng cho người mới: "Nếu có đau hoặc lo mạnh lên, dừng lại trước; xử lý cảm giác sau."
+          </p>
+        </div>
+
+        <h2>Giai đoạn 3: Sau khi gần gũi</h2>
+        <ul>
+          <li>Dành vài phút ôm nhau, uống nước và thở lại nhịp bình thường.</li>
+          <li>Hỏi nhau 2 câu: "Điều em/anh thích nhất?" và "Điều cần chỉnh lần sau?"</li>
+          <li>Đi vệ sinh, vệ sinh nhẹ nhàng để giảm khó chịu sau quan hệ.</li>
+        </ul>
+        <p>
+          Phần sau quan hệ rất quan trọng vì nó giúp hai người cảm thấy được chăm sóc. Cảm giác an toàn sau đó sẽ khiến những lần sau dễ chịu hơn.
+        </p>
+
+        <h2>Lỗi thường gặp của người mới</h2>
+        <ul>
+          <li>Đi quá nhanh vì hồi hộp.</li>
+          <li>Ngại nói nên cố chịu khó chịu.</li>
+          <li>Bỏ qua bao cao su hoặc dùng sai cách.</li>
+          <li>Xem kết quả là mục tiêu thay vì cảm giác an toàn.</li>
+        </ul>
+
+        <h2>Khi nào cần dừng và tìm hỗ trợ y tế?</h2>
+        <div class="note">
+          <p>
+            Nên đi khám nếu có đau kéo dài, chảy máu bất thường, rát nhiều, khí hư mùi lạ hoặc lo âu kéo dài sau quan hệ. Đây là bước chăm sóc sức khỏe bình thường, không có gì đáng xấu hổ.
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <script>
+      (() => {
+        const openedAtRaw = sessionStorage.getItem("periodBlogGateAt");
+        const openedAt = Number(openedAtRaw || "0");
+        const maxAgeMs = 5 * 60 * 1000;
+        if (!openedAt || Number.isNaN(openedAt) || Date.now() - openedAt > maxAgeMs) {
+          window.location.replace("/period.html");
+          return;
+        }
+        sessionStorage.setItem("periodBlogGateAt", String(Date.now()));
+      })();
+    </script>
+  </body>
+</html>

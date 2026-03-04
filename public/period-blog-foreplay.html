@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dạo đầu quan trọng thế nào?</title>
+    <style>
+      :root { --rose: #7f3659; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Quicksand", sans-serif;
+        color: #5f3450;
+        background:
+          radial-gradient(circle at 14% 10%, rgba(255, 151, 202, 0.26), transparent 34%),
+          radial-gradient(circle at 86% 0%, rgba(255, 196, 226, 0.25), transparent 36%),
+          #fff4fa;
+        padding: 14px;
+      }
+      .main { width: min(960px, 100%); margin: 0 auto; display: grid; gap: 12px; }
+      .card {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        box-shadow: 0 12px 24px rgba(214, 95, 153, 0.18);
+        padding: 14px;
+      }
+      .row { display: flex; flex-wrap: wrap; gap: 8px; }
+      .btn {
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 700;
+        border: 1px solid rgba(235, 134, 186, 0.45);
+        color: #e44c98;
+        background: #fff;
+      }
+      .tag {
+        display: inline-flex; width: fit-content; border-radius: 999px; padding: 4px 8px;
+        font-size: 11px; font-weight: 700; color: #ab3d74;
+        background: rgba(255, 147, 200, 0.18); border: 1px solid rgba(228, 123, 180, 0.28);
+      }
+      h1 {
+        margin: 8px 0 0; font-family: "Baloo 2", sans-serif;
+        font-size: clamp(28px, 7vw, 40px); line-height: 1.05; color: var(--rose);
+      }
+      h2 {
+        margin: 12px 0 0; font-family: "Baloo 2", sans-serif;
+        font-size: clamp(22px, 5vw, 30px); line-height: 1.1; color: #864361;
+      }
+      p, li { font-size: 15px; line-height: 1.65; font-weight: 700; color: #71435d; }
+      ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+      .visual {
+        border-radius: 14px; border: 1px dashed rgba(235, 130, 186, 0.5);
+        background: rgba(255, 255, 255, 0.76); padding: 8px;
+      }
+      .visual svg { display: block; width: 100%; height: auto; }
+      .box {
+        border: 1px dashed rgba(235, 130, 186, 0.5);
+        border-radius: 12px;
+        background: rgba(255, 186, 219, 0.12);
+        padding: 10px 12px;
+      }
+      .note {
+        border-left: 4px solid #ff84bd;
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: rgba(255, 180, 218, 0.14);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main">
+      <section class="card">
+        <div class="row">
+          <a class="btn" href="/period-blog.html">← Về thư viện blog</a>
+          <a class="btn" href="/period.html">← Về kỳ kinh</a>
+        </div>
+      </section>
+
+      <article class="card">
+        <span class="tag">🤍 Kết nối</span>
+        <h1>Dạo đầu quan trọng như thế nào?</h1>
+
+        <h2>Checklist nhanh trước khi bắt đầu</h2>
+        <ul>
+          <li>Mỗi người đều đang thoải mái và đồng thuận rõ ràng.</li>
+          <li>Không gian đủ riêng tư, không bị vội hay sợ bị gián đoạn.</li>
+          <li>Có giao tiếp: biết nói điều dễ chịu, điều không thoải mái.</li>
+          <li>Không đặt áp lực "phải đi nhanh", ưu tiên nhịp chậm.</li>
+          <li>Có phương án an toàn (bao cao su, bôi trơn nếu cần).</li>
+        </ul>
+
+        <figure class="visual" aria-label="Minh họa nhịp dạo đầu tăng dần">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="fg1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffe0ef" />
+                <stop offset="100%" stop-color="#fff0f8" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#fg1)" />
+            <path d="M60 160 C180 140, 260 90, 360 110 C450 128, 530 80, 660 60" fill="none" stroke="#ff72b0" stroke-width="10" stroke-linecap="round" />
+            <circle cx="60" cy="160" r="10" fill="#ff72b0" />
+            <circle cx="360" cy="110" r="10" fill="#ff72b0" />
+            <circle cx="660" cy="60" r="10" fill="#ff72b0" />
+            <text x="64" y="194" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Bắt đầu chậm</text>
+            <text x="300" y="194" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Lắng nghe</text>
+            <text x="560" y="194" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Tăng dần</text>
+          </svg>
+        </figure>
+
+        <p>
+          Dạo đầu không phải phần phụ. Với nhiều cặp đôi, đây là phần quyết định trải nghiệm có êm, có an toàn và có kết nối hay không. Khi cơ thể có thời gian
+          vào nhịp, cảm xúc cũng theo đó mềm hơn: bớt căng, bớt phòng thủ, dễ bày tỏ nhu cầu thật hơn.
+        </p>
+        <p>
+          Từ góc nhìn cơ thể, dạo đầu giúp tăng hưng phấn dần dần, cải thiện bôi trơn tự nhiên và giảm ma sát. Điều này đặc biệt quan trọng với người dễ đau rát
+          hoặc dễ lo lắng. Từ góc nhìn cảm xúc, dạo đầu giúp hai người "đi cùng tốc độ", thay vì một người đã sẵn sàng còn người kia chưa kịp theo.
+        </p>
+
+        <h2>Vì sao bỏ qua dạo đầu thường dẫn tới trải nghiệm không tốt?</h2>
+        <ul>
+          <li>Cơ thể chưa đủ thư giãn nên dễ căng cơ, dễ đau và dễ hụt cảm xúc.</li>
+          <li>Tâm trí chưa vào nhịp, dễ bị phân tâm hoặc lo "mình có đang làm đúng không".</li>
+          <li>Thiếu giao tiếp ban đầu nên khó điều chỉnh nhịp độ về sau.</li>
+          <li>Cả hai dễ rơi vào trạng thái "làm cho xong" thay vì thật sự kết nối.</li>
+        </ul>
+
+        <h2>Dấu hiệu cho thấy dạo đầu đã đủ tốt</h2>
+        <ul>
+          <li>Hơi thở sâu hơn, cơ vai - bụng - đùi bớt gồng.</li>
+          <li>Cảm giác dễ chịu ổn định, không có đau rát hoặc căng ép.</li>
+          <li>Hai người giao tiếp tự nhiên, nói được nhu cầu mà không ngại.</li>
+          <li>Tâm trí bớt phân tích, tập trung nhiều hơn vào cảm giác hiện tại.</li>
+        </ul>
+
+        <h2>Khung giao tiếp đơn giản để dùng ngay</h2>
+        <div class="box">
+          <ul>
+            <li>"Như thế này em thấy ổn, giữ nhịp này nhé."</li>
+            <li>"Chậm hơn một chút giúp em dễ chịu hơn."</li>
+            <li>"Nếu em im lặng lâu, mình dừng vài giây để check nhé."</li>
+            <li>"Hôm nay ưu tiên nhẹ nhàng, không cần vội."</li>
+          </ul>
+        </div>
+
+        <h2>Lỗi thường gặp và cách chỉnh nhanh</h2>
+        <ul>
+          <li>Đi quá nhanh: quay lại nhịp chậm, thêm thời gian làm ấm.</li>
+          <li>Ngại nói: dùng câu ngắn, chỉ cần 3 từ như "nhẹ hơn", "chậm lại".</li>
+          <li>Tập trung vào kết quả: đổi mục tiêu thành "thoải mái và kết nối".</li>
+          <li>Không để ý tín hiệu cơ thể: cứ 1-2 phút check cảm giác một lần.</li>
+        </ul>
+
+        <h2>Sau dạo đầu: vì sao chăm sóc sau đó vẫn quan trọng?</h2>
+        <p>
+          Sự dịu dàng sau gần gũi giúp não bộ ghi nhận đây là một trải nghiệm an toàn. Một cái ôm, một câu hỏi "em ổn không?", một ngụm nước, vài phút nói chuyện
+          ngắn sẽ giúp lần sau dễ vào nhịp hơn rất nhiều.
+        </p>
+
+        <div class="note">
+          <p>
+            Nếu thường xuyên đau rát, khô kéo dài, chảy máu bất thường hoặc lo âu kéo dài sau quan hệ, nên trao đổi với bác sĩ sản phụ khoa để được hỗ trợ phù hợp.
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <script>
+      (() => {
+        const openedAtRaw = sessionStorage.getItem("periodBlogGateAt");
+        const openedAt = Number(openedAtRaw || "0");
+        const maxAgeMs = 5 * 60 * 1000;
+        if (!openedAt || Number.isNaN(openedAt) || Date.now() - openedAt > maxAgeMs) {
+          window.location.replace("/period.html");
+          return;
+        }
+        sessionStorage.setItem("periodBlogGateAt", String(Date.now()));
+      })();
+    </script>
+  </body>
+</html>
