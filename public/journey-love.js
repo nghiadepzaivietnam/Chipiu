@@ -9,6 +9,7 @@ const nextBtn = document.getElementById("journeyNext");
 const emptyEl = document.getElementById("journeyEmpty");
 const heroEl = document.querySelector(".journey-hero");
 const navEl = document.querySelector(".journey-nav");
+const finaleEl = document.getElementById("journeyFinale");
 
 const API_BASE = "/api/journey";
 
@@ -242,6 +243,27 @@ function bindNavSnap() {
   );
 }
 
+function bindFinaleReveal() {
+  if (!finaleEl) return;
+  const reveal = () => finaleEl.classList.add("is-visible");
+  if (!("IntersectionObserver" in window)) {
+    reveal();
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          reveal();
+          observer.disconnect();
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+  observer.observe(finaleEl);
+}
+
 prevBtn?.addEventListener("click", () => {
   scrollEl.scrollBy({ left: -340, behavior: "smooth" });
 });
@@ -270,4 +292,5 @@ window.addEventListener(
 
 bindHeroMotion();
 bindNavSnap();
+bindFinaleReveal();
 loadTimeline();
