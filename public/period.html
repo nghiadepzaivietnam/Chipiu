@@ -588,6 +588,25 @@
         .grid { grid-template-columns: 1fr; }
       }
       @media (max-width: 520px) {
+        .top-nav {
+          top: calc(8px + env(safe-area-inset-top, 0px));
+          left: 8px;
+          right: 8px;
+          gap: 7px;
+          padding: 8px;
+          border-radius: 16px;
+          background: rgba(255, 248, 252, 0.94);
+          box-shadow: 0 10px 24px rgba(211, 88, 145, 0.18);
+        }
+        .nav-link {
+          min-height: 38px;
+          padding: 8px 12px;
+          border-radius: 999px;
+          font-size: 12px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
         .today-widget {
           border-radius: 22px;
           padding: 14px;

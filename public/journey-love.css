@@ -768,13 +768,22 @@ body.journey-love-page::before {
     top: calc(6px + env(safe-area-inset-top, 0px));
     left: 8px;
     right: 8px;
-    padding: 6px;
-    border-radius: 12px;
+    gap: 7px;
+    padding: 8px;
+    border-radius: 16px;
+    background: rgba(28, 16, 22, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
   }
 
   .journey-nav-link {
+    min-height: 38px;
     font-size: 12px;
-    padding: 7px 10px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .journey-love-main {
