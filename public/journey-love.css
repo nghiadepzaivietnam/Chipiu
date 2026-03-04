@@ -760,7 +760,8 @@ body.journey-love-page::before {
   }
 
   body.journey-love-page {
-    padding-top: calc(78px + env(safe-area-inset-top, 0px));
+    /* Extra top clearance for in-app browsers (Messenger, etc.) */
+    padding-top: calc(108px + env(safe-area-inset-top, 0px));
     padding-bottom: 20px;
   }
 
@@ -789,6 +790,7 @@ body.journey-love-page::before {
   .journey-love-main {
     gap: 10px;
     padding: 0 8px;
+    margin-top: 2px;
   }
 
   .journey-hero {
@@ -959,6 +961,12 @@ body.journey-love-page::before {
 
   .journey-manage-name {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  body.journey-love-page {
+    padding-top: calc(116px + env(safe-area-inset-top, 0px));
   }
 }
 
