@@ -8,6 +8,7 @@ const prevBtn = document.getElementById("journeyPrev");
 const nextBtn = document.getElementById("journeyNext");
 const emptyEl = document.getElementById("journeyEmpty");
 const heroEl = document.querySelector(".journey-hero");
+const navEl = document.querySelector(".journey-nav");
 
 const API_BASE = "/api/journey";
 
@@ -200,6 +201,47 @@ function bindHeroMotion() {
   });
 }
 
+function bindNavSnap() {
+  if (!navEl) return;
+  const links = Array.from(navEl.querySelectorAll(".journey-nav-link"));
+  if (!links.length) return;
+
+  const leftInset = 8;
+  let snapTimer = 0;
+
+  const snapToNearest = (smooth) => {
+    const current = navEl.scrollLeft;
+    let bestLeft = 0;
+    let minDistance = Number.POSITIVE_INFINITY;
+    links.forEach((link) => {
+      const candidate = Math.max(0, link.offsetLeft - leftInset);
+      const distance = Math.abs(candidate - current);
+      if (distance < minDistance) {
+        minDistance = distance;
+        bestLeft = candidate;
+      }
+    });
+    navEl.scrollTo({ left: bestLeft, behavior: smooth ? "smooth" : "auto" });
+  };
+
+  const resetToStartOnMobile = () => {
+    if (!window.matchMedia("(max-width: 640px)").matches) return;
+    navEl.scrollTo({ left: 0, behavior: "auto" });
+  };
+
+  resetToStartOnMobile();
+  requestAnimationFrame(() => snapToNearest(false));
+
+  navEl.addEventListener(
+    "scroll",
+    () => {
+      clearTimeout(snapTimer);
+      snapTimer = window.setTimeout(() => snapToNearest(true), 120);
+    },
+    { passive: true }
+  );
+}
+
 prevBtn?.addEventListener("click", () => {
   scrollEl.scrollBy({ left: -340, behavior: "smooth" });
 });
@@ -227,4 +269,5 @@ window.addEventListener(
 );
 
 bindHeroMotion();
+bindNavSnap();
 loadTimeline();
