@@ -1,10 +1,19 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const AiChatHistory = require('../models/AiChatHistory');
+const Moment = require('../models/Moment');
+const Status = require('../models/Status');
+const CounterConfig = require('../models/CounterConfig');
+const CounterBackground = require('../models/CounterBackground');
+const PeriodTracker = require('../models/PeriodTracker');
+const Journey = require('../models/Journey');
 
 const router = express.Router();
 const HISTORY_KEY = 'global';
 const MAX_HISTORY_MESSAGES = 20;
 const MAX_CONVERSATIONS = 30;
+const OWNER_PROFILE_PATH = path.join(__dirname, '../../public/owner-profile.json');
 
 const SYSTEM_PROMPT = [
   'Ban la tro ly AI than thien tren website ca nhan.',
@@ -95,14 +104,31 @@ function normalizeConversations(conversations) {
   return out.slice(0, MAX_CONVERSATIONS);
 }
 
+function sanitizeValue(value, depth = 0) {
+  if (value == null) return value;
+  if (typeof value === 'string') return value.slice(0, 2000);
+  if (typeof value === 'number' || typeof value === 'boolean') return value;
+  if (depth >= 3) return JSON.stringify(value).slice(0, 2000);
+
+  if (Array.isArray(value)) {
+    return value.slice(0, 80).map((item) => sanitizeValue(item, depth + 1));
+  }
+
+  if (typeof value === 'object') {
+    const entries = Object.entries(value)
+      .slice(0, 80)
+      .map(([k, v]) => [k, sanitizeValue(v, depth + 1)]);
+    return Object.fromEntries(entries);
+  }
+
+  return String(value).slice(0, 2000);
+}
+
 function normalizeContext(context) {
   if (!context || typeof context !== 'object' || Array.isArray(context)) return {};
-  const entries = Object.entries(context).slice(0, 30).map(([k, v]) => {
-    if (typeof v === 'string') return [k, v.slice(0, 1000)];
-    if (typeof v === 'number' || typeof v === 'boolean' || v == null) return [k, v];
-    if (Array.isArray(v)) return [k, v.slice(0, 30)];
-    return [k, String(v).slice(0, 1000)];
-  });
+  const entries = Object.entries(context)
+    .slice(0, 80)
+    .map(([k, v]) => [k, sanitizeValue(v, 0)]);
   return Object.fromEntries(entries);
 }
 
@@ -110,6 +136,16 @@ function contextText(context) {
   const c = normalizeContext(context);
   if (!Object.keys(c).length) return '';
   return `\nDu lieu trang hien tai (JSON): ${JSON.stringify(c)}`;
+}
+
+function loadOwnerProfile() {
+  try {
+    const raw = fs.readFileSync(OWNER_PROFILE_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    return sanitizeValue(parsed, 0);
+  } catch (_err) {
+    return null;
+  }
 }
 
 async function callHuggingFaceChat({ history, page, context }) {
@@ -269,6 +305,78 @@ router.put('/history', async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({ error: err.message || 'Khong the luu lich su chat.' });
+  }
+});
+
+router.get('/app-data', async (req, res) => {
+  try {
+    const userId = req.userId || 'default';
+    const [
+      moments,
+      status,
+      counterConfig,
+      counterBackground,
+      periodTracker,
+      journey,
+    ] = await Promise.all([
+      Moment.find({ userId }).sort({ createdAt: -1 }).lean(),
+      Status.findOne({ userId }).sort({ updatedAt: -1 }).lean(),
+      CounterConfig.findOne({ userId, key: 'global' }).lean(),
+      CounterBackground.findOne({ userId }).sort({ updatedAt: -1 }).lean(),
+      PeriodTracker.findOne({ userId, key: 'global' }).lean(),
+      Journey.findOne({ userId, key: 'main' }).lean(),
+    ]);
+
+    const safeMoments = (moments || []).map((m) => ({
+      owner: m.owner || '',
+      caption: (m.caption || '').slice(0, 500),
+      mediaType: m.mediaType || 'none',
+      mediaUrl: m.mediaUrl || '',
+      allowCombined: Boolean(m.allowCombined),
+      createdAt: m.createdAt || null,
+    }));
+
+    const safePeriod = periodTracker
+      ? {
+          anchorDate: periodTracker.anchorDate || '',
+          periodLength: Number(periodTracker.periodLength) || 0,
+          cycleLength: Number(periodTracker.cycleLength) || 0,
+          loggedDates: Array.isArray(periodTracker.loggedDates) ? periodTracker.loggedDates : [],
+          symptomLogs: periodTracker.symptomLogs || {},
+          reminders: periodTracker.reminders || {},
+          updatedAt: periodTracker.updatedAt || null,
+        }
+      : null;
+
+    const safeJourney = journey
+      ? {
+          avatars: journey.avatars || {},
+          items: Array.isArray(journey.items) ? journey.items : [],
+          builderDraft: journey.builderDraft || null,
+          updatedAt: journey.updatedAt || null,
+        }
+      : null;
+
+    return res.json({
+      generatedAt: new Date().toISOString(),
+      userId,
+      ownerProfile: loadOwnerProfile(),
+      status: status || null,
+      counter: {
+        config: counterConfig || null,
+        background: counterBackground || null,
+      },
+      period: safePeriod,
+      journey: safeJourney,
+      moments: safeMoments,
+      counts: {
+        moments: safeMoments.length,
+        journeyItems: safeJourney?.items?.length || 0,
+        periodLoggedDates: safePeriod?.loggedDates?.length || 0,
+      },
+    });
+  } catch (_err) {
+    return res.status(500).json({ error: 'Khong the tai du lieu tong hop cho AI.' });
   }
 });
 

@@ -1,8 +1,10 @@
 (function initAiWidget() {
   const STORAGE_KEY = "hdha.ai.chat.v2";
   const HISTORY_ENDPOINT = "/api/ai-chat/history";
+  const APP_DATA_ENDPOINT = "/api/ai-chat/app-data";
   const MAX_MESSAGES = 20;
   const MAX_CONVERSATIONS = 30;
+  const APP_DATA_CACHE_MS = 30 * 1000;
 
   if (document.querySelector(".ai-chat-widget")) return;
 
@@ -47,6 +49,8 @@
 
   let state = loadLocalState();
   let historySaveTimer = null;
+  let appDataCache = null;
+  let appDataCacheAt = 0;
   let dragTimer = null;
   let dragging = false;
   let dragOffsetX = 0;
@@ -344,6 +348,39 @@
     };
   }
 
+  function sanitizeForAi(value, depth = 0) {
+    if (value == null) return value;
+    if (typeof value === "string") return value.slice(0, 2000);
+    if (typeof value === "number" || typeof value === "boolean") return value;
+    if (depth >= 3) return String(value).slice(0, 2000);
+    if (Array.isArray(value)) {
+      return value.slice(0, 80).map((item) => sanitizeForAi(item, depth + 1));
+    }
+    if (typeof value === "object") {
+      const entries = Object.entries(value).slice(0, 80).map(([k, v]) => [k, sanitizeForAi(v, depth + 1)]);
+      return Object.fromEntries(entries);
+    }
+    return String(value).slice(0, 2000);
+  }
+
+  async function getAppDataSnapshot() {
+    const now = Date.now();
+    if (appDataCache && now - appDataCacheAt < APP_DATA_CACHE_MS) {
+      return appDataCache;
+    }
+    try {
+      const res = await fetch(APP_DATA_ENDPOINT);
+      if (!res.ok) return appDataCache || null;
+      const data = await res.json().catch(() => null);
+      if (!data || typeof data !== "object") return appDataCache || null;
+      appDataCache = sanitizeForAi(data);
+      appDataCacheAt = now;
+      return appDataCache;
+    } catch (_err) {
+      return appDataCache || null;
+    }
+  }
+
   function normalizeText(text) {
     return (text || "").toLowerCase().trim();
   }
@@ -401,10 +438,15 @@
   }
 
   async function askAi(activeMessages) {
+    const appData = await getAppDataSnapshot();
+    const pageContext = collectPageContext();
     const payload = {
       page: location.pathname,
       messages: activeMessages.slice(-12),
-      context: collectPageContext(),
+      context: {
+        ...pageContext,
+        appData,
+      },
     };
 
     const res = await fetch("/api/ai-chat", {

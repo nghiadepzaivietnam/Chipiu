@@ -457,6 +457,15 @@ body.journey-love-page::before {
   padding: 6px 0 2px;
 }
 
+.page-love-footer {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 226, 239, 0.92);
+  padding: 4px 8px 6px;
+}
+
 .journey-builder-btn {
   text-decoration: none;
   border: 0;
@@ -1019,6 +1028,10 @@ body.journey-love-page::before {
   .journey-finale-subtext {
     margin-top: 14px;
     line-height: 1.6;
+  }
+
+  .page-love-footer {
+    font-size: 12px;
   }
 
   .journey-hero {

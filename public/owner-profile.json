@@ -1,0 +1,103 @@
+{
+  "profileVersion": "1.0.0",
+  "updatedAt": "2026-03-04",
+  "owner": {
+    "fullName": "Nguyen Trong Nghia",
+    "birthDate": "2003-08-05",
+    "hometownPaternal": "Phu Tho",
+    "hometownMaternal": "Cao Bang",
+    "currentCity": "Ha Noi",
+    "job": "Developer at HIPT",
+    "parents": {
+      "father": "Nguyen Trong Cong",
+      "mother": "Trieu Hong Thu"
+    },
+    "sibling": {
+      "youngerBrother": "Nguyen Trong Nhan"
+    }
+  },
+  "partner": {
+    "fullName": "Hoang Dinh Hai Anh",
+    "birthDate": "2004-08-07",
+    "currentCity": "Suwon",
+    "address": "Chi hoi Pho Moi, 129 Thi Tran Me, Gia Vien, Ninh Binh",
+    "school": "Ajou University, Korea",
+    "parents": {
+      "mother": "Dinh Nga"
+    },
+    "extendedFamily": {
+      "grandfather": "Khoi",
+      "aunt": "Huong",
+      "auntChildren": [
+        "Bon",
+        "Bop"
+      ]
+    },
+    "preferences": {
+      "favoriteColors": [
+        "pink",
+        "purple"
+      ],
+      "favoriteDrinks": [
+        "Highlands freeze tra xanh",
+        "Fristi",
+        "Smothiii xoai",
+        "Smothiii khoai mon"
+      ],
+      "favoriteFlowers": [
+        "baby flower"
+      ],
+      "favoriteSongs": [
+        "Noi nay co anh",
+        "Buc thu tinh dau tien",
+        "Danh cho em"
+      ],
+      "favoriteArtists": [
+        "Hoang Dung",
+        "Hoang Ton"
+      ],
+      "likes": [
+        "Vietnam",
+        "Vietnamese food",
+        "Trong Nghia"
+      ]
+    },
+    "friends": [
+      "Dang Thu Phuong (Dang Phuong)",
+      "Chi Phuong (Ha Long)",
+      "Em Tam (Hoai Duc)",
+      "Em Duc Lo",
+      "Em Subin",
+      "Em Hoang"
+    ]
+  },
+  "relationship": {
+    "isLongDistance": true,
+    "statusSummary": "Long-distance but emotionally close, loyal, and committed",
+    "metOn": {
+      "platform": "Facebook",
+      "friendRequestFrom": "Hoang Dinh Hai Anh",
+      "acceptedAt": "2022-06-17"
+    },
+    "timeline": [
+      {
+        "date": "2022-06-17",
+        "event": "Accepted Facebook friend request from Hai Anh"
+      },
+      {
+        "date": "2024-10-21",
+        "event": "Nghia messaged Hai Anh; she was cautious so conversation paused"
+      },
+      {
+        "date": "2025-06-01",
+        "event": "Nghia messaged again (during PSG UCL hype), conversation became open"
+      },
+      {
+        "date": "2025-06-01",
+        "event": "Official relationship date they choose to celebrate"
+      }
+    ],
+    "giftPurpose": "Website created by Nguyen Trong Nghia as a gift for Hoang Dinh Hai Anh on International Women's Day (March 8)"
+  },
+  "narrativeForAI": "Toi la Nguyen Trong Nghia, dev cua HIPT, code trang web nay de tang nguoi yeu la Hoang Dinh Hai Anh vao ngay 8/3. Chung toi yeu xa (Ha Noi - Suwon) nhung tinh cam rat gan, ton trong, chung thuy, va luon dong hanh. Moc quan trong: ket ban 17/06/2022, ket noi lai 01/06/2025 va lay ngay nay lam ngay yeu."
+}
