@@ -1030,8 +1030,55 @@
         const grantBlogAccess = () => {
           sessionStorage.setItem("periodBlogGateAt", String(Date.now()));
         };
+        const premiumHash = "0d1fe9e84fd88bf3798f050af9e2c2e0c1debacbdbc20242b4d6304da8f827bb";
+        const premiumUnlockKey = "periodBlogPremiumUnlockAt";
+        const premiumUnlockMs = 12 * 60 * 60 * 1000;
+
+        const isPremiumUnlocked = () => {
+          const unlockedAtRaw = sessionStorage.getItem(premiumUnlockKey);
+          const unlockedAt = Number(unlockedAtRaw || "0");
+          return Boolean(unlockedAt && !Number.isNaN(unlockedAt) && Date.now() - unlockedAt <= premiumUnlockMs);
+        };
+
+        const sha256Hex = async (text) => {
+          const enc = new TextEncoder().encode(text);
+          const hashBuffer = await crypto.subtle.digest("SHA-256", enc);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+        };
+
+        const askPremiumCode = async () => {
+          if (isPremiumUnlocked()) return true;
+          for (let attempt = 0; attempt < 3; attempt += 1) {
+            const code = window.prompt("Premium blog: nhập mã truy cập");
+            if (code == null) return false;
+            const trimmed = code.trim();
+            if (!trimmed) continue;
+            try {
+              const digest = await sha256Hex(trimmed);
+              if (digest === premiumHash) {
+                sessionStorage.setItem(premiumUnlockKey, String(Date.now()));
+                return true;
+              }
+            } catch (_err) {
+              if (trimmed === "chipiu-0803") {
+                sessionStorage.setItem(premiumUnlockKey, String(Date.now()));
+                return true;
+              }
+            }
+            window.alert("Sai mã Premium. Thử lại nhé.");
+          }
+          return false;
+        };
+
         document.querySelectorAll(".period-blog-access").forEach((link) => {
-          link.addEventListener("click", grantBlogAccess);
+          link.addEventListener("click", async (event) => {
+            event.preventDefault();
+            const ok = await askPremiumCode();
+            if (!ok) return;
+            grantBlogAccess();
+            window.location.href = link.getAttribute("href") || "/period-blog.html";
+          });
         });
       })();
     </script>
