@@ -6,16 +6,118 @@
     <title>Đếm ngày yêu</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/ai-widget.css" />
+    <style>
+      body.counter-page .counter-nav-wrap {
+        position: fixed;
+        top: calc(10px + env(safe-area-inset-top, 0px));
+        left: 12px;
+        right: 12px;
+        z-index: 95;
+        display: flex;
+        justify-content: center;
+      }
+
+      body.counter-page .counter-nav-toggle {
+        border: 0;
+        min-height: 44px;
+        border-radius: 999px;
+        padding: 10px 16px;
+        font: inherit;
+        font-weight: 700;
+        color: #fff;
+        cursor: pointer;
+        background: linear-gradient(135deg, #ff76b6, #ff9fcb);
+        box-shadow: 0 10px 24px rgba(255, 95, 141, 0.28);
+      }
+
+      body.counter-page .counter-nav-toggle span {
+        margin-left: 4px;
+      }
+
+      body.counter-page .counter-top-nav {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%) translateY(-6px) scale(0.98);
+        width: min(360px, calc(100vw - 24px));
+        max-height: min(72vh, 460px);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 8px;
+        border-radius: 18px;
+        background: rgba(255, 247, 252, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.68);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 12px 24px rgba(211, 88, 145, 0.18);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+      }
+
+      body.counter-page .counter-nav-wrap.open .counter-top-nav {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateX(-50%) translateY(0) scale(1);
+      }
+
+      body.counter-page .counter-top-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      body.counter-page .counter-top-nav .nav-link {
+        display: block;
+        width: 100%;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 520px) {
+        body.counter-page .counter-nav-wrap {
+          top: calc(8px + env(safe-area-inset-top, 0px));
+          left: 8px;
+          right: 8px;
+        }
+
+        body.counter-page .counter-nav-toggle {
+          min-height: 40px;
+          padding: 9px 14px;
+          font-size: 13px;
+        }
+
+        body.counter-page .counter-top-nav {
+          width: min(340px, calc(100vw - 16px));
+          border-radius: 16px;
+        }
+
+        body.counter-page .counter-top-nav .nav-link {
+          min-height: 38px;
+          padding: 8px 12px;
+          font-size: 12px;
+          border-radius: 999px;
+        }
+      }
+    </style>
   </head>
   <body class="counter-page">
-    <nav class="top-nav">
-      <a class="nav-link" href="/">Trang chủ</a>
-      <a class="nav-link" href="/journal.html">Nhật ký</a>
-      <a class="nav-link" href="/create.html">Tạo khoảnh khắc</a>
-      <a class="nav-link primary" href="/counter.html">Đếm ngày yêu</a>
-      <a class="nav-link" href="/period.html">Dự đoán kỳ kinh</a>
-      <a class="nav-link" href="/hanh-trinh-toi-2-dua.html">Hành trình</a>
-    </nav>
+    <header class="counter-nav-wrap" id="counterNavWrap">
+      <button class="counter-nav-toggle" id="counterNavToggle" type="button" aria-expanded="false" aria-controls="counterNavMenu">
+        🎀<span>Menu</span>
+      </button>
+      <nav class="top-nav counter-top-nav" id="counterNavMenu">
+        <a class="nav-link" href="/">Trang chủ</a>
+        <a class="nav-link" href="/journal.html">Nhật ký</a>
+        <a class="nav-link" href="/create.html">Tạo khoảnh khắc</a>
+        <a class="nav-link primary" href="/counter.html">Đếm ngày yêu</a>
+        <a class="nav-link" href="/period.html">Dự đoán kỳ kinh</a>
+        <a class="nav-link" href="/hanh-trinh-toi-2-dua.html">Hành trình</a>
+      </nav>
+    </header>
 
     <main class="counter-main">
       <header class="hero counter-hero">
@@ -82,5 +184,37 @@
     <script src="/user-context.js"></script>
     <script src="/counter.js"></script>
     <script src="/ai-widget.js"></script>
+    <script>
+      (() => {
+        const navWrap = document.getElementById("counterNavWrap");
+        const navToggle = document.getElementById("counterNavToggle");
+        const navMenu = document.getElementById("counterNavMenu");
+
+        const isMenuOpen = () => navWrap?.classList.contains("open");
+        const setMenuOpen = (open) => {
+          if (!navWrap || !navToggle) return;
+          navWrap.classList.toggle("open", open);
+          navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        };
+
+        navToggle?.addEventListener("click", () => {
+          setMenuOpen(!isMenuOpen());
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!isMenuOpen()) return;
+          if (navWrap?.contains(event.target)) return;
+          setMenuOpen(false);
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") setMenuOpen(false);
+        });
+
+        navMenu?.querySelectorAll(".nav-link").forEach((link) => {
+          link.addEventListener("click", () => setMenuOpen(false));
+        });
+      })();
+    </script>
   </body>
 </html>

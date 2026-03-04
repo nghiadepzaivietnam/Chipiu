@@ -8,6 +8,8 @@ const prevBtn = document.getElementById("journeyPrev");
 const nextBtn = document.getElementById("journeyNext");
 const emptyEl = document.getElementById("journeyEmpty");
 const heroEl = document.querySelector(".journey-hero");
+const navWrapEl = document.getElementById("journeyNavWrap");
+const navToggleEl = document.getElementById("journeyNavToggle");
 const navEl = document.querySelector(".journey-nav");
 const finaleEl = document.getElementById("journeyFinale");
 
@@ -202,45 +204,32 @@ function bindHeroMotion() {
   });
 }
 
-function bindNavSnap() {
-  if (!navEl) return;
-  const links = Array.from(navEl.querySelectorAll(".journey-nav-link"));
-  if (!links.length) return;
+function bindNavToggle() {
+  if (!navWrapEl || !navToggleEl || !navEl) return;
 
-  const leftInset = 8;
-  let snapTimer = 0;
-
-  const snapToNearest = (smooth) => {
-    const current = navEl.scrollLeft;
-    let bestLeft = 0;
-    let minDistance = Number.POSITIVE_INFINITY;
-    links.forEach((link) => {
-      const candidate = Math.max(0, link.offsetLeft - leftInset);
-      const distance = Math.abs(candidate - current);
-      if (distance < minDistance) {
-        minDistance = distance;
-        bestLeft = candidate;
-      }
-    });
-    navEl.scrollTo({ left: bestLeft, behavior: smooth ? "smooth" : "auto" });
+  const isOpen = () => navWrapEl.classList.contains("open");
+  const setOpen = (open) => {
+    navWrapEl.classList.toggle("open", open);
+    navToggleEl.setAttribute("aria-expanded", open ? "true" : "false");
   };
 
-  const resetToStartOnMobile = () => {
-    if (!window.matchMedia("(max-width: 640px)").matches) return;
-    navEl.scrollTo({ left: 0, behavior: "auto" });
-  };
+  navToggleEl.addEventListener("click", () => {
+    setOpen(!isOpen());
+  });
 
-  resetToStartOnMobile();
-  requestAnimationFrame(() => snapToNearest(false));
+  document.addEventListener("click", (event) => {
+    if (!isOpen()) return;
+    if (navWrapEl.contains(event.target)) return;
+    setOpen(false);
+  });
 
-  navEl.addEventListener(
-    "scroll",
-    () => {
-      clearTimeout(snapTimer);
-      snapTimer = window.setTimeout(() => snapToNearest(true), 120);
-    },
-    { passive: true }
-  );
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setOpen(false);
+  });
+
+  navEl.querySelectorAll(".journey-nav-link").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
 }
 
 function bindFinaleReveal() {
@@ -291,6 +280,6 @@ window.addEventListener(
 );
 
 bindHeroMotion();
-bindNavSnap();
+bindNavToggle();
 bindFinaleReveal();
 loadTimeline();
