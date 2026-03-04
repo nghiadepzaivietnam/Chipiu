@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog riêng tư - Sức khỏe thân mật</title>
+    <style>
+      :root {
+        --pink-1: #ff74b5;
+        --pink-2: #ff9dca;
+        --rose: #7f3659;
+        --ink: #562d47;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Quicksand", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 14% 10%, rgba(255, 151, 202, 0.26), transparent 34%),
+          radial-gradient(circle at 86% 0%, rgba(255, 196, 226, 0.25), transparent 36%),
+          #fff4fa;
+        padding: 14px;
+      }
+      .blog-main {
+        width: min(960px, 100%);
+        margin: 0 auto;
+        display: grid;
+        gap: 12px;
+      }
+      .card {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.86);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 12px 24px rgba(214, 95, 153, 0.18);
+        padding: 14px;
+      }
+      .top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .kicker {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #ac557f;
+      }
+      .title {
+        margin: 6px 0 0;
+        font-family: "Baloo 2", sans-serif;
+        font-size: clamp(28px, 7vw, 40px);
+        line-height: 1.05;
+        color: var(--rose);
+      }
+      .muted {
+        margin: 8px 0 0;
+        font-size: 14px;
+        font-weight: 700;
+        color: #8f5b75;
+      }
+      .back-link {
+        text-decoration: none;
+        border-radius: 999px;
+        border: 1px solid rgba(235, 134, 186, 0.45);
+        color: #e44c98;
+        background: #fff;
+        padding: 8px 12px;
+        font-weight: 700;
+      }
+      .article {
+        display: grid;
+        gap: 10px;
+      }
+      .tag {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 9px;
+        color: #a74476;
+        background: rgba(255, 164, 209, 0.2);
+        border: 1px solid rgba(227, 126, 181, 0.35);
+      }
+      .article h2 {
+        margin: 0;
+        font-family: "Baloo 2", sans-serif;
+        font-size: clamp(24px, 5vw, 33px);
+        line-height: 1.1;
+        color: var(--rose);
+      }
+      .article h3 {
+        margin: 2px 0 0;
+        font-family: "Baloo 2", sans-serif;
+        font-size: clamp(20px, 4vw, 27px);
+        line-height: 1.15;
+        color: #864361;
+      }
+      .article p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.6;
+        font-weight: 700;
+        color: #71435d;
+      }
+      .article-visual {
+        border-radius: 14px;
+        border: 1px dashed rgba(235, 130, 186, 0.5);
+        background: rgba(255, 255, 255, 0.76);
+        padding: 8px;
+      }
+      .article-visual svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .article ul {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 6px;
+      }
+      .article li {
+        font-size: 15px;
+        line-height: 1.55;
+        font-weight: 700;
+        color: #71435d;
+      }
+      .medical-note {
+        border-left: 4px solid #ff84bd;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(255, 180, 218, 0.14);
+      }
+      .soft-box {
+        border: 1px dashed rgba(235, 130, 186, 0.45);
+        border-radius: 12px;
+        background: rgba(255, 186, 219, 0.12);
+        padding: 10px 12px;
+      }
+      .sources {
+        display: grid;
+        gap: 6px;
+      }
+      .sources h3 {
+        margin: 0;
+        font-family: "Baloo 2", sans-serif;
+        font-size: 22px;
+        color: var(--rose);
+      }
+      .sources a {
+        color: #da4b93;
+        font-weight: 700;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+      }
+      .sources a:hover {
+        text-decoration: underline;
+      }
+      .illustration {
+        margin-top: 2px;
+        border: 1px dashed rgba(235, 130, 186, 0.5);
+        border-radius: 14px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.75);
+      }
+      .illustration p {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+        color: #8f5b75;
+      }
+      @media (max-width: 560px) {
+        body {
+          padding: 10px;
+        }
+        .card {
+          border-radius: 16px;
+          padding: 12px;
+        }
+        .article p,
+        .article li {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="blog-main">
+      <section class="card">
+        <div class="top-row">
+          <div>
+            <p class="kicker">Private Library</p>
+            <h1 class="title">Blog riêng tư từ trang kỳ kinh</h1>
+          </div>
+          <a class="back-link" href="/period.html">← Quay lại kỳ kinh</a>
+        </div>
+        <p class="muted">Nội dung theo hướng giáo dục sức khỏe tình dục an toàn cho người trưởng thành, không dùng ảnh nhạy cảm thực tế.</p>
+      </section>
+
+      <article class="card article" id="squirt">
+        <span class="tag">Bài 1</span>
+        <h2>Squirt: Cởi bỏ ngại ngùng để cơ thể được thả lỏng</h2>
+        <figure class="article-visual" aria-label="Minh họa thư giãn và giao tiếp">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffd4e8" />
+                <stop offset="100%" stop-color="#ffe8f5" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#g1)" />
+            <circle cx="120" cy="110" r="52" fill="#ff9ec9" opacity="0.8" />
+            <circle cx="250" cy="110" r="52" fill="#ffc7df" opacity="0.8" />
+            <path d="M350 90h250a16 16 0 0 1 16 16v8a16 16 0 0 1-16 16H350a16 16 0 0 1-16-16v-8a16 16 0 0 1 16-16z" fill="#fff" />
+            <circle cx="390" cy="110" r="8" fill="#ff79b6" />
+            <rect x="410" y="103" width="174" height="14" rx="7" fill="#ffc2df" />
+            <text x="355" y="168" fill="#8a4968" font-size="20" font-family="Quicksand" font-weight="700">Thư giãn - giao tiếp - không áp lực</text>
+          </svg>
+        </figure>
+        <p>
+          Điều quan trọng đầu tiên: squirt không phải "bài thi" của phụ nữ, cũng không phải tiêu chuẩn để đánh giá một mối quan hệ có đủ tốt hay không.
+          Đây chỉ là một phản ứng sinh lý có thể xảy ra ở một số người, trong một số thời điểm. Có người trải nghiệm thường xuyên, có người hiếm khi, có
+          người không bao giờ gặp và điều đó vẫn hoàn toàn bình thường.
+        </p>
+        <p>
+          Khi bỏ được áp lực "phải đạt", cơ thể thường mềm ra nhanh hơn. Thứ giúp trải nghiệm tích cực nhất không phải là kỹ thuật phức tạp, mà là cảm giác
+          được an toàn, được tôn trọng và được quyền chậm lại bất cứ lúc nào.
+        </p>
+
+        <h3>Vì sao nhiều người khó thả lỏng?</h3>
+        <ul>
+          <li>Lo bị đánh giá: sợ "mình làm sai", sợ "không đủ hấp dẫn".</li>
+          <li>Lo bừa bộn: ngại khăn ga, quần áo hoặc cảm giác mất kiểm soát.</li>
+          <li>Lo bị hiểu lầm: không rõ đây là phản ứng bình thường hay có vấn đề.</li>
+          <li>Lo làm đối phương thất vọng: tự đặt áp lực thành tích cho bản thân.</li>
+        </ul>
+        <p>
+          Những nỗi lo này rất thường gặp. Chỉ cần gọi đúng tên nỗi lo và chuẩn bị trước một chút, bạn đã giảm đáng kể căng thẳng nền của cơ thể.
+        </p>
+
+        <figure class="article-visual" aria-label="Minh họa trạng thái an toàn cảm xúc">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="g1b" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffe3f2" />
+                <stop offset="100%" stop-color="#fff1f9" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#g1b)" />
+            <rect x="58" y="46" width="604" height="128" rx="20" fill="#ffffff" />
+            <circle cx="122" cy="110" r="28" fill="#ffb4d7" />
+            <circle cx="204" cy="110" r="28" fill="#ffd1e7" />
+            <circle cx="286" cy="110" r="28" fill="#ffb4d7" />
+            <rect x="340" y="82" width="286" height="18" rx="9" fill="#ffc5e1" />
+            <rect x="340" y="110" width="236" height="16" rx="8" fill="#ffdced" />
+            <text x="78" y="196" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">An toàn cảm xúc giúp cơ thể mở ra tự nhiên</text>
+          </svg>
+        </figure>
+
+        <h3>Cách tạo trạng thái "dễ thả lòng"</h3>
+        <ul>
+          <li>Thống nhất trước với nhau rằng không có chỉ tiêu và không ai bị chấm điểm.</li>
+          <li>Chuẩn bị khăn/tấm lót, nước uống, ánh sáng dịu để bớt lo chuyện "bừa bộn".</li>
+          <li>Thở chậm vài nhịp khi bắt đầu để cơ thể chuyển từ căng thẳng sang thư giãn.</li>
+          <li>Giữ giao tiếp đơn giản: "nhẹ hơn", "chậm hơn", "tiếp tục như vậy".</li>
+          <li>Khi cảm giác quá mạnh, có thể tạm dừng ngắn rồi tiếp tục thay vì cố chịu.</li>
+        </ul>
+
+        <div class="soft-box">
+          <p>
+            Một câu nói rất hữu ích cho người dễ ngại: "Em không cần cố gắng chứng minh gì cả. Mình chỉ cần thoải mái và dịu dàng với nhau."
+          </p>
+        </div>
+
+        <h3>Lợi ích có thể có khi trải nghiệm theo cách lành mạnh</h3>
+        <ul>
+          <li>Tăng hiểu biết về cơ thể và tín hiệu hưng phấn của chính mình.</li>
+          <li>Giảm xấu hổ về phản ứng sinh lý tự nhiên.</li>
+          <li>Tăng kết nối cảm xúc vì hai người phải lắng nghe nhau kỹ hơn.</li>
+          <li>Tăng sự tự tin trong giao tiếp thân mật (biết nói nhu cầu và giới hạn).</li>
+        </ul>
+        <p>
+          Lợi ích lớn nhất thường không nằm ở "kết quả", mà nằm ở việc cảm thấy được đón nhận đúng như mình là: không bị ép, không bị so sánh, không bị đánh giá.
+        </p>
+
+        <div class="medical-note">
+          <p>
+            Khi nào nên tạm dừng và đi khám: đau kéo dài, nóng rát rõ, chảy máu bất thường, mùi khó chịu hoặc lo âu kéo dài sau quan hệ. Nếu có triệu chứng này,
+            nên gặp bác sĩ sản phụ khoa để được tư vấn cá nhân hóa.
+          </p>
+        </div>
+        <div class="illustration">
+          <p>Minh họa trên trang là đồ họa trung tính, không hiển thị hình ảnh nhạy cảm thực tế.</p>
+        </div>
+      </article>
+
+      <article class="card article" id="foreplay">
+        <span class="tag">Bài 2</span>
+        <h2>Dạo đầu quan trọng như thế nào?</h2>
+        <figure class="article-visual" aria-label="Minh họa nhịp dạo đầu tăng dần">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="g2" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffe0ef" />
+                <stop offset="100%" stop-color="#fff0f8" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#g2)" />
+            <path d="M60 160 C180 140, 260 90, 360 110 C450 128, 530 80, 660 60" fill="none" stroke="#ff72b0" stroke-width="10" stroke-linecap="round" />
+            <circle cx="60" cy="160" r="10" fill="#ff72b0" />
+            <circle cx="360" cy="110" r="10" fill="#ff72b0" />
+            <circle cx="660" cy="60" r="10" fill="#ff72b0" />
+            <text x="64" y="194" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Bắt đầu chậm</text>
+            <text x="300" y="194" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Lắng nghe</text>
+            <text x="560" y="194" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Tăng dần</text>
+          </svg>
+        </figure>
+        <p>
+          Dạo đầu không chỉ là "mở màn" mà là phần cốt lõi giúp cơ thể và cảm xúc cùng vào nhịp. Khi đủ kích thích, âm đạo tiết dịch tốt hơn, giảm ma sát,
+          giảm đau và tăng khả năng đạt khoái cảm.
+        </p>
+        <ul>
+          <li>Tăng an toàn cảm xúc: người trong cuộc cảm thấy được tôn trọng và lắng nghe.</li>
+          <li>Giảm đau khi quan hệ nhờ bôi trơn tự nhiên hoặc bôi trơn hỗ trợ.</li>
+          <li>Tăng sự hài lòng chung vì hai người cùng tập trung vào cảm nhận thay vì "đích đến".</li>
+          <li>Tạo không gian giao tiếp: có thể điều chỉnh nhịp độ, lực, vị trí ngay từ đầu.</li>
+        </ul>
+      </article>
+
+      <article class="card article" id="beginner">
+        <span class="tag">Bài 3</span>
+        <h2>Kinh nghiệm quan hệ cho người mới bắt đầu</h2>
+        <figure class="article-visual" aria-label="Minh họa checklist an toàn">
+          <svg viewBox="0 0 720 220" role="img">
+            <defs>
+              <linearGradient id="g3" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffe3f1" />
+                <stop offset="100%" stop-color="#fff5fb" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="720" height="220" rx="18" fill="url(#g3)" />
+            <rect x="70" y="42" width="580" height="136" rx="16" fill="#fff" />
+            <g fill="#ff7db7">
+              <circle cx="130" cy="82" r="10" />
+              <circle cx="130" cy="112" r="10" />
+              <circle cx="130" cy="142" r="10" />
+            </g>
+            <g fill="#ffc0de">
+              <rect x="154" y="75" width="420" height="14" rx="7" />
+              <rect x="154" y="105" width="360" height="14" rx="7" />
+              <rect x="154" y="135" width="390" height="14" rx="7" />
+            </g>
+            <text x="84" y="196" fill="#8a4968" font-size="18" font-family="Quicksand" font-weight="700">Checklist: đồng thuận - an toàn - nhẹ nhàng</text>
+          </svg>
+        </figure>
+        <ul>
+          <li>Đồng thuận rõ ràng và liên tục: "đồng ý" có thể rút lại bất kỳ lúc nào.</li>
+          <li>Đi chậm: dạo đầu trước, dùng bôi trơn, bắt đầu nhẹ để cơ thể thích nghi.</li>
+          <li>Dùng bao cao su đúng cách ngay từ đầu để giảm rủi ro STI và thai ngoài ý muốn.</li>
+          <li>Không cố chịu đau: đau là tín hiệu cần dừng, đổi nhịp hoặc đổi cách.</li>
+          <li>Sau quan hệ, dành vài phút ôm nhau và nói cảm nhận để tăng gắn kết.</li>
+        </ul>
+        <div class="medical-note">
+          <p>Dấu hiệu nên đi khám: đau kéo dài, chảy máu bất thường, ngứa/rát nhiều, khí hư mùi lạ, hoặc lo âu kéo dài sau quan hệ.</p>
+        </div>
+      </article>
+
+      <section class="card sources">
+        <h3>Dẫn chứng tham khảo</h3>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/21944903/" target="_blank" rel="noopener noreferrer">PubMed - Nature and origin of squirting in female sexuality</a>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/38380227/" target="_blank" rel="noopener noreferrer">PubMed - Female ejaculation and squirting: online survey study (Sweden)</a>
+        <a href="https://www.mayoclinic.org/diseases-conditions/painful-intercourse/symptoms-causes/syc-20375967" target="_blank" rel="noopener noreferrer">Mayo Clinic - Painful intercourse (dyspareunia)</a>
+        <a href="https://www.plannedparenthood.org/learn/birth-control/condom/how-effective-are-condoms" target="_blank" rel="noopener noreferrer">Planned Parenthood - Condom effectiveness</a>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const openedAtRaw = sessionStorage.getItem("periodBlogGateAt");
+        const openedAt = Number(openedAtRaw || "0");
+        const maxAgeMs = 5 * 60 * 1000;
+        if (!openedAt || Number.isNaN(openedAt) || Date.now() - openedAt > maxAgeMs) {
+          window.location.replace("/period.html");
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -268,6 +268,71 @@
         grid-template-columns: 300px minmax(0, 1fr);
         gap: 12px;
       }
+      .blog-section {
+        margin-top: 2px;
+      }
+      .blog-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .blog-note {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 700;
+        color: #9a6782;
+      }
+      .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .blog-card {
+        border-radius: 16px;
+        border: 1px solid rgba(233, 128, 184, 0.36);
+        background: rgba(255, 255, 255, 0.85);
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+      }
+      .blog-tag {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #ab3d74;
+        background: rgba(255, 147, 200, 0.18);
+        border: 1px solid rgba(228, 123, 180, 0.28);
+      }
+      .blog-title {
+        margin: 0;
+        font-family: "Baloo 2", sans-serif;
+        font-size: 23px;
+        line-height: 1.04;
+        color: #75345a;
+      }
+      .blog-desc {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+        color: #7f4564;
+      }
+      .blog-link {
+        width: fit-content;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        color: #ff5aa7;
+      }
+      .blog-link:hover {
+        color: #e94898;
+      }
       .section-title {
         margin: 0 0 10px;
         font-family: "Baloo 2", sans-serif;
@@ -624,6 +689,7 @@
 
       @media (max-width: 900px) {
         .grid { grid-template-columns: 1fr; }
+        .blog-grid { grid-template-columns: 1fr; }
       }
       @media (max-width: 520px) {
         body {
@@ -655,6 +721,12 @@
         }
         .quick-presets {
           grid-template-columns: 1fr;
+        }
+        .blog-title {
+          font-size: 20px;
+        }
+        .blog-desc {
+          font-size: 13px;
         }
         .calendar-head {
           padding-left: max(20px, env(safe-area-inset-left, 0px));
@@ -891,6 +963,42 @@
           </div>
         </section>
       </div>
+
+      <section class="card blog-section" aria-label="Blog chăm sóc chu kỳ">
+        <div class="blog-head">
+          <h2 class="section-title" style="margin:0;">Blog nhỏ cho em</h2>
+          <p class="blog-note">Chỉ mở từ trang kỳ kinh</p>
+        </div>
+        <div class="blog-grid">
+          <article class="blog-card">
+            <span class="blog-tag">💦 Gần gũi</span>
+            <h3 class="blog-title">Squirt: hiểu đúng để thoải mái hơn</h3>
+            <p class="blog-desc">Góc nhìn thực tế, không áp lực hiệu suất: cách chuẩn bị an toàn, điều chỉnh nhịp và lợi ích về kết nối cảm xúc.</p>
+            <a class="blog-link period-blog-access" href="/period-blog.html#squirt" aria-label="Đọc bài Squirt hiểu đúng để thoải mái hơn">Đọc nhanh →</a>
+          </article>
+          <article class="blog-card">
+            <span class="blog-tag">🤍 Kết nối</span>
+            <h3 class="blog-title">Dạo đầu quan trọng thế nào?</h3>
+            <p class="blog-desc">Vì sao dạo đầu giúp giảm đau, tăng an toàn cảm xúc và khiến trải nghiệm gần gũi trở nên dễ chịu hơn cho cả hai.</p>
+            <a class="blog-link period-blog-access" href="/period-blog.html#foreplay" aria-label="Đọc bài dạo đầu quan trọng thế nào">Đọc nhanh →</a>
+          </article>
+          <article class="blog-card">
+            <span class="blog-tag">🌱 Mới bắt đầu</span>
+            <h3 class="blog-title">Kinh nghiệm quan hệ cho người mới</h3>
+            <p class="blog-desc">Checklist thực tế cho người mới bắt đầu: đồng thuận, đi chậm, bôi trơn, dùng bao cao su và chăm sóc sau quan hệ.</p>
+            <a class="blog-link period-blog-access" href="/period-blog.html#beginner" aria-label="Đọc bài kinh nghiệm quan hệ cho người mới">Đọc nhanh →</a>
+          </article>
+          <article class="blog-card">
+            <span class="blog-tag">🩺 An toàn</span>
+            <h3 class="blog-title">Khi nào nên tạm dừng và đi khám?</h3>
+            <p class="blog-desc">Các dấu hiệu cần lưu ý như đau kéo dài, chảy máu bất thường, rát nhiều hoặc lo âu sau quan hệ.</p>
+            <a class="blog-link period-blog-access" href="/period-blog.html#beginner" aria-label="Đọc bài khi nào nên tạm dừng và đi khám">Đọc nhanh →</a>
+          </article>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <a class="btn soft period-blog-access" href="/period-blog.html">Mở thư viện blog riêng tư</a>
+        </div>
+      </section>
     </main>
 
     <script src="/user-context.js"></script>
@@ -925,6 +1033,13 @@
 
         navMenu?.querySelectorAll(".nav-link").forEach((link) => {
           link.addEventListener("click", () => setMenuOpen(false));
+        });
+
+        const grantBlogAccess = () => {
+          sessionStorage.setItem("periodBlogGateAt", String(Date.now()));
+        };
+        document.querySelectorAll(".period-blog-access").forEach((link) => {
+          link.addEventListener("click", grantBlogAccess);
         });
       })();
     </script>
