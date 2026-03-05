@@ -410,7 +410,9 @@
         opacity: 1;
         transform: translateY(0) scale(1);
         pointer-events: auto;
-        max-height: 320px;
+        max-height: calc(100vh - 130px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
       .nav-link {
         min-height: 40px;
