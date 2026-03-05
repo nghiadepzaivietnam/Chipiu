@@ -14,9 +14,7 @@
         --accent-2: #f48b53;
         --line: #f1d8e0;
       }
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
       body {
         margin: 0;
         min-height: 100vh;
@@ -41,11 +39,7 @@
         box-shadow: 0 12px 30px rgba(50, 18, 30, 0.07);
         padding: 14px;
       }
-      .top-row {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
+      .top-row { display: flex; gap: 8px; flex-wrap: wrap; }
       .btn {
         text-decoration: none;
         border: 1px solid #e6d7de;
@@ -75,20 +69,14 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
       }
-      .field {
-        display: grid;
-        gap: 6px;
-      }
-      .field.full {
-        grid-column: 1 / -1;
-      }
+      .field { display: grid; gap: 6px; }
+      .field.full { grid-column: 1 / -1; }
       label {
         font-size: 12px;
         font-weight: 700;
         color: #5c3b47;
       }
       input,
-      select,
       textarea {
         width: 100%;
         min-height: 40px;
@@ -103,11 +91,33 @@
         min-height: 86px;
         resize: vertical;
       }
-      .actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
+      .mood-slider-wrap {
+        border: 1px solid #ecd4dc;
+        border-radius: 12px;
+        padding: 10px 10px 12px;
+        background: #fff;
       }
+      .mood-current {
+        margin: 0 0 8px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #5a3345;
+      }
+      input[type="range"] {
+        min-height: auto;
+        border: 0;
+        padding: 0;
+        accent-color: #ff6e9d;
+      }
+      .mood-scale {
+        margin: 6px 0 0;
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #8a6876;
+        font-weight: 700;
+      }
+      .actions { display: flex; gap: 8px; flex-wrap: wrap; }
       button {
         border: 0;
         border-radius: 12px;
@@ -116,14 +126,8 @@
         font: 700 13px "Space Grotesk", sans-serif;
         cursor: pointer;
       }
-      .primary {
-        color: #fff;
-        background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      }
-      .secondary {
-        color: #4f3640;
-        background: #f9edf2;
-      }
+      .primary { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+      .secondary { color: #4f3640; background: #f9edf2; }
       .status {
         min-height: 18px;
         margin: 0;
@@ -131,20 +135,14 @@
         font-weight: 700;
         color: #8b4f65;
       }
-      .list {
-        display: grid;
-        gap: 8px;
-      }
+      .list { display: grid; gap: 8px; }
       .item {
         border: 1px solid #f0dce3;
         border-radius: 12px;
         padding: 10px;
         background: #fffdfd;
       }
-      .item h3 {
-        margin: 0 0 5px;
-        font-size: 15px;
-      }
+      .item h3 { margin: 0 0 5px; font-size: 15px; }
       .meta {
         margin: 0;
         font-size: 13px;
@@ -152,9 +150,7 @@
         line-height: 1.5;
       }
       @media (max-width: 720px) {
-        .form-grid {
-          grid-template-columns: 1fr;
-        }
+        .form-grid { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -166,9 +162,7 @@
           <a class="btn" href="/journal.html">Nhật ký</a>
         </div>
         <h1>Bản đồ cảm xúc 2 đứa</h1>
-        <p class="sub">
-          Ghi mood mỗi ngày cho cả hai để nhìn xu hướng cảm xúc. Lý do là tùy chọn, có thể để trống.
-        </p>
+        <p class="sub">Ghi mood mỗi ngày cho cả hai để nhìn xu hướng cảm xúc. Lý do là tùy chọn, có thể để trống.</p>
       </section>
 
       <section class="card">
@@ -177,26 +171,40 @@
             <label for="dateInput">Ngày</label>
             <input id="dateInput" type="date" required />
           </div>
+
           <div class="field">
-            <label for="mineMood">Mood của bạn</label>
-            <select id="mineMood" required></select>
+            <label for="mineMoodRange">Mood của bạn</label>
+            <div class="mood-slider-wrap">
+              <p class="mood-current">Hiện tại: <span id="mineMoodLabel">Bình thường</span></p>
+              <input id="mineMoodRange" type="range" min="0" max="12" step="1" value="4" />
+              <div class="mood-scale"><span>Rất tốt</span><span>Trung tính</span><span>Rất thấp</span></div>
+            </div>
           </div>
+
           <div class="field">
-            <label for="partnerMood">Mood của cô ấy</label>
-            <select id="partnerMood" required></select>
+            <label for="partnerMoodRange">Mood của cô ấy</label>
+            <div class="mood-slider-wrap">
+              <p class="mood-current">Hiện tại: <span id="partnerMoodLabel">Bình thường</span></p>
+              <input id="partnerMoodRange" type="range" min="0" max="12" step="1" value="4" />
+              <div class="mood-scale"><span>Rất tốt</span><span>Trung tính</span><span>Rất thấp</span></div>
+            </div>
           </div>
+
           <div class="field">
             <label for="mineReason">Lý do mood của bạn (tùy chọn)</label>
             <input id="mineReason" type="text" maxlength="160" placeholder="Ví dụ: áp lực công việc, ngủ thiếu..." />
           </div>
+
           <div class="field">
             <label for="partnerReason">Lý do mood của cô ấy (tùy chọn)</label>
             <input id="partnerReason" type="text" maxlength="160" placeholder="Ví dụ: mệt, đến kỳ, nhớ nhà..." />
           </div>
+
           <div class="field full">
             <label for="note">Ghi chú thêm (tùy chọn)</label>
             <textarea id="note" maxlength="500" placeholder="Điều gì hai đứa cần lưu ý trong hôm nay..."></textarea>
           </div>
+
           <div class="field full">
             <div class="actions">
               <button class="primary" type="submit">Lưu mood</button>
@@ -216,4 +224,3 @@
     <script src="/mood-map.js"></script>
   </body>
 </html>
-

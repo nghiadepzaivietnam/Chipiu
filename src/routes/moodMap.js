@@ -4,7 +4,24 @@ const MoodMap = require("../models/MoodMap");
 const router = express.Router();
 const GLOBAL_KEY = "main";
 
-const ALLOWED_MOODS = new Set(["great", "good", "okay", "tired", "sad", "stressed", "angry"]);
+const ALLOWED_MOODS = new Set([
+  "ecstatic",
+  "loved",
+  "happy",
+  "calm",
+  "okay",
+  "sensitive",
+  "tired",
+  "overthinking",
+  "stressed",
+  "sad",
+  "angry",
+  "lonely",
+  "numb",
+  // backward compatibility with old set
+  "great",
+  "good",
+]);
 
 function isIsoDate(value) {
   return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
@@ -117,4 +134,3 @@ router.delete("/:date", async (req, res) => {
 });
 
 module.exports = router;
-

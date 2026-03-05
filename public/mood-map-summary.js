@@ -7,13 +7,21 @@
   const metaEl = document.getElementById("moodQuickMeta");
 
   const moodLabel = {
-    great: "Tuyệt vời",
-    good: "Ổn và vui",
+    ecstatic: "Phấn khích",
+    loved: "Được yêu thương",
+    happy: "Vui vẻ",
+    calm: "Bình yên",
     okay: "Bình thường",
-    tired: "Hơi mệt",
-    sad: "Buồn",
+    sensitive: "Nhạy cảm",
+    tired: "Mệt mỏi",
+    overthinking: "Suy nghĩ nhiều",
     stressed: "Căng thẳng",
+    sad: "Buồn",
     angry: "Khó chịu",
+    lonely: "Cô đơn",
+    numb: "Trống rỗng",
+    great: "Tuyệt vời",
+    good: "Ổn và vui"
   };
 
   function toLabel(value) {
@@ -30,14 +38,13 @@
         metaEl.textContent = "Hôm nay chưa ghi mood. Bấm để cập nhật.";
         return;
       }
+
       mineEl.textContent = `Bạn: ${toLabel(latest.mineMood)}`;
       partnerEl.textContent = `Cô ấy: ${toLabel(latest.partnerMood)}`;
       const reasonBits = [];
       if (latest.mineReason) reasonBits.push(`Bạn: ${latest.mineReason}`);
       if (latest.partnerReason) reasonBits.push(`Cô ấy: ${latest.partnerReason}`);
-      metaEl.textContent = reasonBits.length
-        ? `Lý do: ${reasonBits.join(" | ")}`
-        : `Ngày gần nhất: ${latest.date}`;
+      metaEl.textContent = reasonBits.length ? `Lý do: ${reasonBits.join(" | ")}` : `Ngày gần nhất: ${latest.date}`;
     })
     .catch(() => {
       mineEl.textContent = "Bạn: --";
@@ -45,4 +52,3 @@
       metaEl.textContent = "Không tải được dữ liệu mood map.";
     });
 })();
-
