@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dữ liệu chủ website | Nguyễn Trọng Nghĩa</title>
+    <meta name="description" content="Trang dữ liệu nhận diện chủ website và thông tin mối quan hệ của Nguyễn Trọng Nghĩa và Hoàng Đinh Hải Anh." />
+    <style>
+      :root {
+        --bg: #fff8fb;
+        --card: #ffffff;
+        --line: #f2d8e5;
+        --text: #2f1e28;
+        --muted: #7a5a69;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Quicksand", "Segoe UI", sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at 90% 0%, #ffe6f3, transparent 36%), var(--bg);
+      }
+      main {
+        width: min(960px, 100%);
+        margin: 0 auto;
+        padding: 18px;
+        display: grid;
+        gap: 14px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px;
+      }
+      h1, h2 { margin: 0 0 8px; }
+      p, li { line-height: 1.55; }
+      .muted { color: var(--muted); margin-top: 0; }
+      .top-links { display: flex; gap: 8px; flex-wrap: wrap; }
+      .top-links a {
+        text-decoration: none;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 700;
+        color: #5b3548;
+        background: #fff;
+      }
+      code { white-space: pre-wrap; word-break: break-word; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <div class="top-links">
+          <a href="/">← Về trang chủ</a>
+          <a href="/owner-profile.json">Mở JSON dữ liệu</a>
+        </div>
+        <h1>Dữ liệu chủ website</h1>
+        <p class="muted">Trang này được tạo để AI và người đọc biết rõ ai là chủ website này.</p>
+      </section>
+
+      <section class="card">
+        <h2>Thông tin chủ website</h2>
+        <ul>
+          <li>Tên: Nguyễn Trọng Nghĩa</li>
+          <li>Ngày sinh: 05/08/2003</li>
+          <li>Công việc: Developer tại HIPT</li>
+          <li>Hiện sống tại: Hà Nội</li>
+          <li>Quê nội: Phú Thọ | Quê ngoại: Cao Bằng</li>
+          <li>Bố: Nguyễn Trọng Công | Mẹ: Triệu Hồng Thu | Em trai: Nguyễn Trọng Nhân</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Thông tin người yêu</h2>
+        <ul>
+          <li>Tên: Hoàng Đinh Hải Anh</li>
+          <li>Ngày sinh: 07/08/2004</li>
+          <li>Hiện sống tại: Suwon</li>
+          <li>Địa chỉ: Chi hội phố mới, 129 thị trấn Me, Gia Viễn, Ninh Bình</li>
+          <li>Đang học: Đại học Ajou (Hàn Quốc)</li>
+          <li>Mẹ: Đinh Nga | Ông ngoại: Khôi | Bà ngoại: Nụ</li>
+          <li>Mợ Hương, các con: Bon và Bốp (Bốp vẽ rất giỏi và rất thích vẽ)</li>
+          <li>Thích: freeze Trà Xanh Highlands, Fristi, Smothiii xoài, Smothiii khoai môn</li>
+          <li>Màu yêu thích: hồng, tím</li>
+          <li>Nhạc yêu thích: Nơi này có anh, Bức thư tình đầu tiên, Dành cho em; và các bài của Hoàng Dũng, Hoàng Tôn</li>
+          <li>Người Hải Anh yêu nhất: Trọng Nghĩa</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Câu chuyện tình yêu</h2>
+        <ul>
+          <li>17/06/2022: Hải Anh gửi lời mời kết bạn Facebook, Nghĩa đồng ý.</li>
+          <li>21/10/2024: Nghĩa nhắn tin lại, thấy Hải Anh còn đề phòng nên tạm dừng.</li>
+          <li>01/06/2025: Nghĩa nhắn lại (thời điểm PSG thăng hoa ở C1), cuộc trò chuyện cởi mở hơn.</li>
+          <li>Hai người chọn 01/06/2025 là ngày yêu chính thức.</li>
+          <li>Tình yêu xa Hà Nội - Suwon nhưng luôn gần về tình cảm, không phản bội, không chán nhau.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Mục đích website</h2>
+        <p>Website do Nguyễn Trọng Nghĩa code để tặng Hoàng Đinh Hải Anh nhân ngày 8/3.</p>
+      </section>
+    </main>
+
+    <script id="owner-ai-data" type="application/json">
+{
+  "dataSource": "/owner-profile.json",
+  "note": "Machine-readable owner information for AI context",
+  "ownerName": "Nguyen Trong Nghia",
+  "partnerName": "Hoang Dinh Hai Anh"
+}
+    </script>
+  </body>
+</html>
