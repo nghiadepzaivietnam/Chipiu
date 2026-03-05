@@ -3,7 +3,7 @@
   --bg-2: #f7fbff;
   --line: #ff785e;
   --line-glow: #ffc46f;
-  --map: #7db4e8;
+  --map: #7aaedd;
   --start: #3f7cf4;
   --end: #1bb978;
   --card: rgba(255, 255, 255, 0.62);
@@ -29,10 +29,46 @@ body {
     radial-gradient(circle at 15% 20%, rgba(180, 220, 255, 0.55) 0 20%, transparent 22%),
     radial-gradient(circle at 85% 70%, rgba(170, 205, 255, 0.45) 0 20%, transparent 22%),
     linear-gradient(160deg, var(--bg-1), var(--bg-2));
+  padding-bottom: 76px;
+}
+
+.top-header {
+  margin: 0 auto;
+  width: min(1400px, 100%);
+  padding: 12px 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  text-decoration: none;
+  font-family: "Baloo 2", "Quicksand", sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a4f79;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-nav a {
+  text-decoration: none;
+  color: #16527e;
+  font-weight: 700;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 8px 12px;
+  border-radius: 999px;
 }
 
 .page {
-  min-height: 100vh;
+  min-height: calc(100vh - 66px);
   display: grid;
   grid-template-columns: 1.25fr minmax(290px, 460px);
   gap: 18px;
@@ -54,9 +90,11 @@ body {
   display: block;
 }
 
-.continent {
+#worldLayer path {
   fill: var(--map);
-  opacity: 0.95;
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 0.8;
+  opacity: 0.97;
 }
 
 .flight-path {
@@ -83,6 +121,10 @@ body {
   stroke-width: 3;
 }
 
+.location {
+  transform: translate(var(--x), var(--y));
+}
+
 .location.start circle {
   fill: var(--start);
 }
@@ -93,8 +135,9 @@ body {
 
 .location text {
   fill: #104267;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
+  transform: translate(12px, -12px);
 }
 
 .plane {
@@ -104,11 +147,8 @@ body {
   font-size: 34px;
   color: #2386e4;
   filter: drop-shadow(0 4px 8px rgba(20, 89, 145, 0.24));
-  offset-path: path("M 868 257 Q 820 236 770 248 Q 700 267 668 300");
-  offset-distance: 0%;
-  offset-rotate: auto;
+  z-index: 3;
   transform: translate(-50%, -50%);
-  animation: planeFly 6.8s ease-in-out infinite;
 }
 
 .info-panel {
@@ -214,14 +254,38 @@ h1 {
   box-shadow: 0 8px 18px rgba(37, 147, 239, 0.25);
 }
 
-@keyframes planeFly {
-  0%,
-  100% {
-    offset-distance: 0%;
-  }
-  50% {
-    offset-distance: 100%;
-  }
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 8px;
+  transform: translateX(-50%);
+  width: min(100% - 16px, 720px);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
+  padding: 6px;
+  box-shadow: 0 10px 20px rgba(20, 74, 114, 0.18);
+  z-index: 20;
+}
+
+.bottom-nav a {
+  text-decoration: none;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #16527e;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  padding: 9px 6px;
+}
+
+.bottom-nav a.active {
+  color: #ffffff;
+  background: linear-gradient(140deg, #2593ef, #2fc4c4);
 }
 
 @keyframes dashMove {
@@ -259,6 +323,21 @@ h1 {
   .map-stage {
     min-height: 56vh;
   }
+
+  .top-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 10px;
+  }
+
+  .top-nav {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .top-nav a {
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 640px) {
@@ -272,7 +351,7 @@ h1 {
   }
 
   .location text {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .plane {
