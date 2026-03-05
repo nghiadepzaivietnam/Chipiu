@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hành Trình Suwon -> Nội Bài</title>
+    <link rel="stylesheet" href="/flight-suwon-noibai.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="map-stage" aria-label="Bản đồ đường bay">
+        <svg class="world-map" viewBox="0 0 1200 620" role="img" aria-label="Bản đồ thế giới cách điệu">
+          <defs>
+            <linearGradient id="mapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#a6d1ff" />
+              <stop offset="100%" stop-color="#79b8f8" />
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="1200" height="620" fill="transparent" />
+          <path
+            class="continent"
+            d="M45 290 C95 235 165 220 250 245 C320 265 365 310 380 360 C340 385 275 400 215 390 C155 380 95 350 45 290 Z"
+          />
+          <path
+            class="continent"
+            d="M300 395 C330 420 345 470 330 535 C300 565 270 560 245 525 C240 480 255 435 300 395 Z"
+          />
+          <path
+            class="continent"
+            d="M480 250 C560 205 690 205 760 240 C810 265 845 315 850 365 C815 385 765 400 705 400 C610 400 530 370 490 320 C470 295 468 270 480 250 Z"
+          />
+          <path
+            class="continent"
+            d="M600 380 C650 410 680 480 660 555 C620 585 570 565 540 500 C538 450 560 410 600 380 Z"
+          />
+          <path
+            class="continent"
+            d="M840 260 C900 230 995 235 1075 270 C1135 300 1168 338 1162 372 C1120 392 1060 400 985 392 C930 385 880 365 845 335 C826 316 824 280 840 260 Z"
+          />
+          <path
+            class="continent"
+            d="M940 415 C990 432 1045 470 1043 520 C998 550 940 548 898 522 C880 485 890 442 940 415 Z"
+          />
+          <path
+            class="continent"
+            d="M1070 470 C1095 478 1110 492 1103 513 C1080 528 1058 528 1038 510 C1038 492 1048 476 1070 470 Z"
+          />
+
+          <path id="flightPath" class="flight-path" d="M 868 257 Q 820 236 770 248 Q 700 267 668 300" />
+          <path class="flight-path-glow" d="M 868 257 Q 820 236 770 248 Q 700 267 668 300" />
+
+          <g class="location start">
+            <circle cx="868" cy="257" r="8" />
+            <text x="885" y="254">Suwon, Korea</text>
+          </g>
+          <g class="location end">
+            <circle cx="668" cy="300" r="8" />
+            <text x="678" y="324">Nội Bài (HAN), Vietnam</text>
+          </g>
+        </svg>
+
+        <div class="plane" aria-hidden="true">✈</div>
+      </section>
+
+      <section class="info-panel">
+        <p class="eyebrow">Flight Story</p>
+        <h1>Suwon -> Nội Bài</h1>
+        <p class="meta">Điểm đến: <strong>HAN</strong> | Múi giờ đích: Asia/Ho_Chi_Minh</p>
+
+        <div class="time-grid">
+          <div class="time-card">
+            <p class="label">Giờ Seoul</p>
+            <p class="value" id="seoulTime">--:--:--</p>
+          </div>
+          <div class="time-card">
+            <p class="label">Giờ Việt Nam</p>
+            <p class="value" id="vnTime">--:--:--</p>
+          </div>
+        </div>
+
+        <div class="countdown-wrap">
+          <p class="label">Mốc thời gian: 30/07/2025</p>
+          <div class="count-grid" id="countGrid">
+            <div class="count-box">
+              <span id="days">0</span>
+              <small>Ngày</small>
+            </div>
+            <div class="count-box">
+              <span id="hours">0</span>
+              <small>Giờ</small>
+            </div>
+            <div class="count-box">
+              <span id="minutes">0</span>
+              <small>Phút</small>
+            </div>
+            <div class="count-box">
+              <span id="seconds">0</span>
+              <small>Giây</small>
+            </div>
+          </div>
+          <p class="status" id="countdownStatus">Đang tính thời gian...</p>
+        </div>
+
+        <a class="home-link" href="/index.html">Quay về trang chủ</a>
+      </section>
+    </main>
+
+    <script src="/flight-suwon-noibai.js"></script>
+  </body>
+</html>
