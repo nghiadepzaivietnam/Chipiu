@@ -149,6 +149,25 @@
       border: 2px solid rgba(255,255,255,0.9);
     }
     .card p { margin: 6px 0; line-height: 1.5; }
+    .mood-quick {
+      display: grid;
+      gap: 8px;
+    }
+    .mood-quick h3 {
+      margin: 0;
+    }
+    .mood-quick-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-weight: 700;
+    }
+    .mood-quick-meta {
+      margin: 0;
+      font-size: 14px;
+      opacity: 0.82;
+      line-height: 1.5;
+    }
     .pill-row {
       display: flex;
       flex-wrap: wrap;
@@ -462,6 +481,7 @@
       <a class="nav-link" href="/create.html">✍️ Tạo khoảng khắc</a>
       <a class="nav-link" href="/counter.html">🌸 Đếm ngày yêu</a>
       <a class="nav-link" href="/period.html">🩸 Dự đoán kỳ kinh</a>
+      <a class="nav-link" href="/mood-map.html">💗 Bản đồ cảm xúc</a>
       <a class="nav-link" href="/hanh-trinh-toi-2-dua.html">&#x1F9ED; H&#224;nh tr&#236;nh</a>
     </nav>
   </header>
@@ -495,6 +515,18 @@
         <a class="cta" href="journal.html">📚 Xem kho kỷ niệm</a>
         <a class="cta secondary" href="create.html">✍️ Tạo khoảng khắc</a>
         <a class="cta secondary" href="counter.html">🌸 Đếm ngày yêu</a>
+      </div>
+    </section>
+
+    <section class="card mood-quick" id="moodQuickCard">
+      <h3>Bản đồ cảm xúc 2 đứa</h3>
+      <div class="mood-quick-row">
+        <span id="moodQuickMine">Bạn: Chưa có</span>
+        <span id="moodQuickPartner">Cô ấy: Chưa có</span>
+      </div>
+      <p class="mood-quick-meta" id="moodQuickMeta">Đang tải dữ liệu mood...</p>
+      <div class="cta-row" style="margin-top:4px;">
+        <a class="cta secondary" href="/mood-map.html">Mở bản đồ cảm xúc</a>
       </div>
     </section>
 
@@ -722,6 +754,7 @@
     });
 
   </script>
+  <script src="/mood-map-summary.js"></script>
   <script src="/user-context.js"></script>
   <script src="/ai-widget.js"></script>
 </body>

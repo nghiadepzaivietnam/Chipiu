@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bản đồ cảm xúc 2 đứa</title>
+    <style>
+      :root {
+        --bg: #fff8f6;
+        --card: #ffffff;
+        --text: #2d1f24;
+        --muted: #7d646c;
+        --accent: #ff6e9d;
+        --accent-2: #f48b53;
+        --line: #f1d8e0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", "Quicksand", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 14% 10%, rgba(255, 110, 157, 0.16), transparent 34%),
+          radial-gradient(circle at 86% 0%, rgba(244, 139, 83, 0.14), transparent 36%),
+          var(--bg);
+        padding: 16px;
+      }
+      .wrap {
+        width: min(920px, 100%);
+        margin: 0 auto;
+        display: grid;
+        gap: 12px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 12px 30px rgba(50, 18, 30, 0.07);
+        padding: 14px;
+      }
+      .top-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        text-decoration: none;
+        border: 1px solid #e6d7de;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #40313a;
+        background: #fff;
+      }
+      h1 {
+        margin: 4px 0 0;
+        font-size: clamp(28px, 6vw, 40px);
+        line-height: 1.06;
+        color: #5d2f40;
+        font-family: "Playfair Display", "Space Grotesk", sans-serif;
+      }
+      .sub {
+        margin: 8px 0 0;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      .field.full {
+        grid-column: 1 / -1;
+      }
+      label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #5c3b47;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        min-height: 40px;
+        border: 1px solid #ecd4dc;
+        border-radius: 11px;
+        padding: 9px 10px;
+        font: 600 14px "Space Grotesk", sans-serif;
+        color: #3a2530;
+        background: #fff;
+      }
+      textarea {
+        min-height: 86px;
+        resize: vertical;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      button {
+        border: 0;
+        border-radius: 12px;
+        min-height: 40px;
+        padding: 10px 13px;
+        font: 700 13px "Space Grotesk", sans-serif;
+        cursor: pointer;
+      }
+      .primary {
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .secondary {
+        color: #4f3640;
+        background: #f9edf2;
+      }
+      .status {
+        min-height: 18px;
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+        color: #8b4f65;
+      }
+      .list {
+        display: grid;
+        gap: 8px;
+      }
+      .item {
+        border: 1px solid #f0dce3;
+        border-radius: 12px;
+        padding: 10px;
+        background: #fffdfd;
+      }
+      .item h3 {
+        margin: 0 0 5px;
+        font-size: 15px;
+      }
+      .meta {
+        margin: 0;
+        font-size: 13px;
+        color: #6d5560;
+        line-height: 1.5;
+      }
+      @media (max-width: 720px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="card">
+        <div class="top-row">
+          <a class="btn" href="/">← Về trang chủ</a>
+          <a class="btn" href="/journal.html">Nhật ký</a>
+        </div>
+        <h1>Bản đồ cảm xúc 2 đứa</h1>
+        <p class="sub">
+          Ghi mood mỗi ngày cho cả hai để nhìn xu hướng cảm xúc. Lý do là tùy chọn, có thể để trống.
+        </p>
+      </section>
+
+      <section class="card">
+        <form id="moodForm" class="form-grid" novalidate>
+          <div class="field">
+            <label for="dateInput">Ngày</label>
+            <input id="dateInput" type="date" required />
+          </div>
+          <div class="field">
+            <label for="mineMood">Mood của bạn</label>
+            <select id="mineMood" required></select>
+          </div>
+          <div class="field">
+            <label for="partnerMood">Mood của cô ấy</label>
+            <select id="partnerMood" required></select>
+          </div>
+          <div class="field">
+            <label for="mineReason">Lý do mood của bạn (tùy chọn)</label>
+            <input id="mineReason" type="text" maxlength="160" placeholder="Ví dụ: áp lực công việc, ngủ thiếu..." />
+          </div>
+          <div class="field">
+            <label for="partnerReason">Lý do mood của cô ấy (tùy chọn)</label>
+            <input id="partnerReason" type="text" maxlength="160" placeholder="Ví dụ: mệt, đến kỳ, nhớ nhà..." />
+          </div>
+          <div class="field full">
+            <label for="note">Ghi chú thêm (tùy chọn)</label>
+            <textarea id="note" maxlength="500" placeholder="Điều gì hai đứa cần lưu ý trong hôm nay..."></textarea>
+          </div>
+          <div class="field full">
+            <div class="actions">
+              <button class="primary" type="submit">Lưu mood</button>
+              <button class="secondary" id="deleteBtn" type="button">Xóa ngày này</button>
+            </div>
+          </div>
+        </form>
+        <p id="statusText" class="status"></p>
+      </section>
+
+      <section class="card">
+        <h2 style="margin:0 0 8px;font-size:20px;">Lịch sử gần đây</h2>
+        <div id="historyList" class="list"></div>
+      </section>
+    </main>
+
+    <script src="/mood-map.js"></script>
+  </body>
+</html>
+

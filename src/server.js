@@ -9,6 +9,7 @@ const AiChatHistory = require("./models/AiChatHistory");
 const CounterConfig = require("./models/CounterConfig");
 const Journey = require("./models/Journey");
 const PeriodTracker = require("./models/PeriodTracker");
+const MoodMap = require("./models/MoodMap");
 const { userContext } = require("./middleware/userContext");
 const { migrateToSharedUser, SHARED_USER_ID } = require("./lib/migrateSharedUserData");
 
@@ -28,6 +29,7 @@ mongoose
       CounterConfig.syncIndexes(),
       Journey.syncIndexes(),
       PeriodTracker.syncIndexes(),
+      MoodMap.syncIndexes(),
     ]).catch((err) => {
       console.error("Index sync warning:", err.message || err);
     });
@@ -65,6 +67,7 @@ app.use("/api/period", require("./routes/period"));
 app.use("/api/period-ai", require("./routes/periodAi"));
 app.use("/api/ai-chat", require("./routes/aiChat"));
 app.use("/api/journey", require("./routes/journey"));
+app.use("/api/mood-map", require("./routes/moodMap"));
 
 app.get(/^\/(?!api|uploads).*/, (_req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
