@@ -1,4 +1,4 @@
-(function initFlightSuwonNoiBaiPage() {
+﻿(function initFlightSuwonNoiBaiPage() {
   const TARGET_DATE = new Date("2026-07-30T00:00:00+07:00");
   const GEOJSON_URL = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
   const SVG_WIDTH = 1200;
@@ -12,6 +12,7 @@
   const minutesEl = document.getElementById("minutes");
   const secondsEl = document.getElementById("seconds");
   const statusEl = document.getElementById("countdownStatus");
+  const headerFlightStatusEl = document.getElementById("headerFlightStatus");
   const seoulTimeEl = document.getElementById("seoulTime");
   const vnTimeEl = document.getElementById("vnTime");
 
@@ -157,9 +158,15 @@
     secondsEl.textContent = pad2(parts.seconds);
 
     if (isFuture) {
-      statusEl.textContent = `Còn ${parts.days} ngày ${parts.hours} giờ ${parts.minutes} phút ${parts.seconds} giây tới 30/07/2026.`;
+      statusEl.textContent = `Con ${parts.days} ngay ${parts.hours} gio ${parts.minutes} phut ${parts.seconds} giay toi 30/07/2026.`;
+      if (headerFlightStatusEl) {
+        headerFlightStatusEl.textContent = `ETA 30/07/2026 | T-${parts.days}d ${pad2(parts.hours)}h ${pad2(parts.minutes)}m`;
+      }
     } else {
-      statusEl.textContent = "Finally Together ❤️";
+      statusEl.textContent = "Finally Together <3";
+      if (headerFlightStatusEl) {
+        headerFlightStatusEl.textContent = "Flight completed | Arrived at HAN";
+      }
     }
 
     seoulTimeEl.textContent = toClock("Asia/Seoul");
@@ -179,7 +186,10 @@
       buildFlightPath();
       startPlaneAnimation();
     } catch (err) {
-      statusEl.textContent = "Không tải được world map.";
+      statusEl.textContent = "Khong tai duoc world map.";
+      if (headerFlightStatusEl) {
+        headerFlightStatusEl.textContent = "Map load failed";
+      }
     }
     render();
     setInterval(render, 1000);

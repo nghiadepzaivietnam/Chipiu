@@ -42,12 +42,34 @@ body {
   gap: 12px;
 }
 
+.header-flight {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .brand {
   text-decoration: none;
   font-family: "Baloo 2", "Quicksand", sans-serif;
   font-size: 28px;
   font-weight: 800;
   color: #1a4f79;
+}
+
+.header-flight-route {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: #2f73ae;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.header-flight-status {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1b5f92;
 }
 
 .top-nav {
@@ -65,6 +87,17 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.9);
   padding: 8px 12px;
   border-radius: 999px;
+}
+
+.nav-flight-chip {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  background: linear-gradient(140deg, #2593ef, #2fc4c4);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 8px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
 .page {
@@ -335,7 +368,8 @@ h1 {
     padding-bottom: 4px;
   }
 
-  .top-nav a {
+  .top-nav a,
+  .nav-flight-chip {
     white-space: nowrap;
   }
 }
