@@ -7,25 +7,33 @@
   const metaEl = document.getElementById("moodQuickMeta");
 
   const moodLabel = {
-    ecstatic: "Phấn khích",
-    loved: "Được yêu thương",
-    happy: "Vui vẻ",
-    calm: "Bình yên",
-    okay: "Bình thường",
-    sensitive: "Nhạy cảm",
-    tired: "Mệt mỏi",
-    overthinking: "Suy nghĩ nhiều",
-    stressed: "Căng thẳng",
-    sad: "Buồn",
-    angry: "Khó chịu",
-    lonely: "Cô đơn",
-    numb: "Trống rỗng",
-    great: "Tuyệt vời",
-    good: "Ổn và vui"
+    ecstatic: "🤩 Phấn khích",
+    loved: "🥰 Được yêu thương",
+    happy: "😄 Vui vẻ",
+    calm: "😌 Bình yên",
+    grateful: "🙏 Biết ơn",
+    hopeful: "🌤️ Hy vọng",
+    playful: "😜 Tươi nghịch",
+    okay: "🙂 Bình thường",
+    sensitive: "🥺 Nhạy cảm",
+    hormonal: "🌸 Hormone thất thường",
+    anxious: "😟 Lo âu",
+    insecure: "🫤 Bất an",
+    overthinking: "🧠 Suy nghĩ nhiều",
+    overwhelmed: "😵‍💫 Quá tải",
+    stressed: "😣 Căng thẳng",
+    tired: "😪 Mệt mỏi",
+    drained: "🫠 Kiệt sức",
+    sad: "😢 Buồn",
+    lonely: "🥹 Cô đơn",
+    angry: "😠 Khó chịu",
+    numb: "😶 Trống rỗng",
+    great: "🤩 Tuyệt vời",
+    good: "😄 Ổn và vui"
   };
 
   function toLabel(value) {
-    return moodLabel[String(value || "").toLowerCase()] || "Chưa có";
+    return moodLabel[String(value || "").toLowerCase()] || "🙂 Chưa có";
   }
 
   fetch("/api/mood-map")
@@ -33,8 +41,8 @@
     .then((data) => {
       const latest = data?.todayEntry || data?.latestEntry || null;
       if (!latest) {
-        mineEl.textContent = "Bạn: Chưa có";
-        partnerEl.textContent = "Cô ấy: Chưa có";
+        mineEl.textContent = "Bạn: 🙂 Chưa có";
+        partnerEl.textContent = "Cô ấy: 🙂 Chưa có";
         metaEl.textContent = "Hôm nay chưa ghi mood. Bấm để cập nhật.";
         return;
       }

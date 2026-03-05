@@ -1,22 +1,30 @@
 (function initMoodMapPage() {
   const API = "/api/mood-map";
   const MOODS = [
-    { value: "ecstatic", label: "Phấn khích" },
-    { value: "loved", label: "Được yêu thương" },
-    { value: "happy", label: "Vui vẻ" },
-    { value: "calm", label: "Bình yên" },
-    { value: "okay", label: "Bình thường" },
-    { value: "sensitive", label: "Nhạy cảm" },
-    { value: "tired", label: "Mệt mỏi" },
-    { value: "overthinking", label: "Suy nghĩ nhiều" },
-    { value: "stressed", label: "Căng thẳng" },
-    { value: "sad", label: "Buồn" },
-    { value: "angry", label: "Khó chịu" },
-    { value: "lonely", label: "Cô đơn" },
-    { value: "numb", label: "Trống rỗng" }
+    { value: "ecstatic", label: "Phấn khích", icon: "🤩" },
+    { value: "loved", label: "Được yêu thương", icon: "🥰" },
+    { value: "happy", label: "Vui vẻ", icon: "😄" },
+    { value: "calm", label: "Bình yên", icon: "😌" },
+    { value: "grateful", label: "Biết ơn", icon: "🙏" },
+    { value: "hopeful", label: "Hy vọng", icon: "🌤️" },
+    { value: "playful", label: "Tươi nghịch", icon: "😜" },
+    { value: "okay", label: "Bình thường", icon: "🙂" },
+    { value: "sensitive", label: "Nhạy cảm", icon: "🥺" },
+    { value: "hormonal", label: "Hormone thất thường", icon: "🌸" },
+    { value: "anxious", label: "Lo âu", icon: "😟" },
+    { value: "insecure", label: "Bất an", icon: "🫤" },
+    { value: "overthinking", label: "Suy nghĩ nhiều", icon: "🧠" },
+    { value: "overwhelmed", label: "Quá tải", icon: "😵‍💫" },
+    { value: "stressed", label: "Căng thẳng", icon: "😣" },
+    { value: "tired", label: "Mệt mỏi", icon: "😪" },
+    { value: "drained", label: "Kiệt sức", icon: "🫠" },
+    { value: "sad", label: "Buồn", icon: "😢" },
+    { value: "lonely", label: "Cô đơn", icon: "🥹" },
+    { value: "angry", label: "Khó chịu", icon: "😠" },
+    { value: "numb", label: "Trống rỗng", icon: "😶" }
   ];
 
-  const MOOD_LABEL = Object.fromEntries(MOODS.map((m) => [m.value, m.label]));
+  const MOOD_MAP = Object.fromEntries(MOODS.map((m) => [m.value, m]));
   const DEFAULT_MOOD = "okay";
 
   const form = document.getElementById("moodForm");
@@ -34,6 +42,29 @@
 
   let entries = [];
 
+  function mountMoodLegend() {
+    const historyCard = historyList?.closest(".card");
+    if (!historyCard) return;
+    if (historyCard.querySelector("[data-mood-legend='true']")) return;
+
+    const legend = document.createElement("article");
+    legend.className = "item";
+    legend.setAttribute("data-mood-legend", "true");
+
+    const cells = MOODS.map((m) => {
+      return `<span style="display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #f0dce3;border-radius:999px;background:#fff;">
+        <span>${m.icon}</span><span>${m.label}</span>
+      </span>`;
+    }).join("");
+
+    legend.innerHTML = `
+      <h3 style="margin-bottom:8px;">Bảng mood kèm icon</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">${cells}</div>
+    `;
+
+    historyCard.insertBefore(legend, historyList);
+  }
+
   function setStatus(msg) {
     if (statusText) statusText.textContent = msg || "";
   }
@@ -44,19 +75,24 @@
 
   function moodAt(indexLike) {
     const i = Number(indexLike);
-    if (!Number.isFinite(i)) return MOODS[4];
+    if (!Number.isFinite(i)) return MOODS[7];
     const safe = Math.min(MOODS.length - 1, Math.max(0, Math.round(i)));
     return MOODS[safe];
   }
 
   function moodIndexByValue(value) {
     const idx = MOODS.findIndex((m) => m.value === value);
-    return idx >= 0 ? idx : 4;
+    return idx >= 0 ? idx : 7;
+  }
+
+  function moodDisplay(value) {
+    const m = MOOD_MAP[value] || MOOD_MAP[DEFAULT_MOOD];
+    return `${m.icon} ${m.label}`;
   }
 
   function refreshSliderLabels() {
-    mineMoodLabel.textContent = moodAt(mineMoodRange.value).label;
-    partnerMoodLabel.textContent = moodAt(partnerMoodRange.value).label;
+    mineMoodLabel.textContent = moodDisplay(moodAt(mineMoodRange.value).value);
+    partnerMoodLabel.textContent = moodDisplay(moodAt(partnerMoodRange.value).value);
   }
 
   function fillForm(entry) {
@@ -91,8 +127,8 @@
     entries.slice(0, 20).forEach((entry) => {
       const item = document.createElement("article");
       item.className = "item";
-      const mine = MOOD_LABEL[entry.mineMood] || entry.mineMood || "Bình thường";
-      const partner = MOOD_LABEL[entry.partnerMood] || entry.partnerMood || "Bình thường";
+      const mine = moodDisplay(entry.mineMood);
+      const partner = moodDisplay(entry.partnerMood);
       const mineReasonText = entry.mineReason ? ` | Lý do bạn: ${entry.mineReason}` : "";
       const partnerReasonText = entry.partnerReason ? ` | Lý do cô ấy: ${entry.partnerReason}` : "";
       const noteText = entry.note ? ` | Ghi chú: ${entry.note}` : "";
@@ -193,6 +229,7 @@
     else fillForm({ date: dateInput.value, mineMood: DEFAULT_MOOD, partnerMood: DEFAULT_MOOD });
   });
 
+  mountMoodLegend();
   refreshSliderLabels();
   loadData();
 })();
