@@ -1,27 +1,27 @@
-(function initMoodMapPage() {
+﻿(function initMoodMapPage() {
   const API = "/api/mood-map";
   const MOODS = [
-    { value: "ecstatic", label: "Phấn khích", icon: "🤩" },
-    { value: "loved", label: "Được yêu thương", icon: "🥰" },
-    { value: "happy", label: "Vui vẻ", icon: "😄" },
-    { value: "calm", label: "Bình yên", icon: "😌" },
-    { value: "grateful", label: "Biết ơn", icon: "🙏" },
-    { value: "hopeful", label: "Hy vọng", icon: "🌤️" },
-    { value: "playful", label: "Tươi nghịch", icon: "😜" },
-    { value: "okay", label: "Bình thường", icon: "🙂" },
-    { value: "sensitive", label: "Nhạy cảm", icon: "🥺" },
-    { value: "hormonal", label: "Hormone thất thường", icon: "🌸" },
-    { value: "anxious", label: "Lo âu", icon: "😟" },
-    { value: "insecure", label: "Bất an", icon: "🫤" },
-    { value: "overthinking", label: "Suy nghĩ nhiều", icon: "🧠" },
-    { value: "overwhelmed", label: "Quá tải", icon: "😵‍💫" },
-    { value: "stressed", label: "Căng thẳng", icon: "😣" },
-    { value: "tired", label: "Mệt mỏi", icon: "😪" },
-    { value: "drained", label: "Kiệt sức", icon: "🫠" },
-    { value: "sad", label: "Buồn", icon: "😢" },
-    { value: "lonely", label: "Cô đơn", icon: "🥹" },
-    { value: "angry", label: "Khó chịu", icon: "😠" },
-    { value: "numb", label: "Trống rỗng", icon: "😶" }
+    { value: "ecstatic", label: "PhÃƒÂ¡Ã‚ÂºÃ‚Â¥n khÃƒÆ’Ã‚Â­ch", icon: "ÃƒÂ°Ã…Â¸Ã‚Â¤Ã‚Â©" },
+    { value: "loved", label: "Ãƒâ€žÃ‚ÂÃƒâ€ Ã‚Â°ÃƒÂ¡Ã‚Â»Ã‚Â£c yÃƒÆ’Ã‚Âªu thÃƒâ€ Ã‚Â°Ãƒâ€ Ã‚Â¡ng", icon: "ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â°" },
+    { value: "happy", label: "Vui vÃƒÂ¡Ã‚ÂºÃ‚Â»", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã¢â‚¬Å¾" },
+    { value: "calm", label: "BÃƒÆ’Ã‚Â¬nh yÃƒÆ’Ã‚Âªn", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã…â€™" },
+    { value: "grateful", label: "BiÃƒÂ¡Ã‚ÂºÃ‚Â¿t Ãƒâ€ Ã‚Â¡n", icon: "ÃƒÂ°Ã…Â¸Ã¢â€žÂ¢Ã‚Â" },
+    { value: "hopeful", label: "Hy vÃƒÂ¡Ã‚Â»Ã‚Âng", icon: "ÃƒÂ°Ã…Â¸Ã…â€™Ã‚Â¤ÃƒÂ¯Ã‚Â¸Ã‚Â" },
+    { value: "playful", label: "TÃƒâ€ Ã‚Â°Ãƒâ€ Ã‚Â¡i nghÃƒÂ¡Ã‚Â»Ã¢â‚¬Â¹ch", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã…â€œ" },
+    { value: "okay", label: "BÃƒÆ’Ã‚Â¬nh thÃƒâ€ Ã‚Â°ÃƒÂ¡Ã‚Â»Ã‚Âng", icon: "ÃƒÂ°Ã…Â¸Ã¢â€žÂ¢Ã¢â‚¬Å¡" },
+    { value: "sensitive", label: "NhÃƒÂ¡Ã‚ÂºÃ‚Â¡y cÃƒÂ¡Ã‚ÂºÃ‚Â£m", icon: "ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Âº" },
+    { value: "hormonal", label: "Hormone thÃƒÂ¡Ã‚ÂºÃ‚Â¥t thÃƒâ€ Ã‚Â°ÃƒÂ¡Ã‚Â»Ã‚Âng", icon: "ÃƒÂ°Ã…Â¸Ã…â€™Ã‚Â¸" },
+    { value: "anxious", label: "Lo ÃƒÆ’Ã‚Â¢u", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã…Â¸" },
+    { value: "insecure", label: "BÃƒÂ¡Ã‚ÂºÃ‚Â¥t an", icon: "ÃƒÂ°Ã…Â¸Ã‚Â«Ã‚Â¤" },
+    { value: "overthinking", label: "Suy nghÃƒâ€žÃ‚Â© nhiÃƒÂ¡Ã‚Â»Ã‚Âu", icon: "ÃƒÂ°Ã…Â¸Ã‚Â§Ã‚Â " },
+    { value: "overwhelmed", label: "QuÃƒÆ’Ã‚Â¡ tÃƒÂ¡Ã‚ÂºÃ‚Â£i", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã‚ÂµÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â«" },
+    { value: "stressed", label: "CÃƒâ€žÃ†â€™ng thÃƒÂ¡Ã‚ÂºÃ‚Â³ng", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã‚Â£" },
+    { value: "tired", label: "MÃƒÂ¡Ã‚Â»Ã¢â‚¬Â¡t mÃƒÂ¡Ã‚Â»Ã‚Âi", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã‚Âª" },
+    { value: "drained", label: "KiÃƒÂ¡Ã‚Â»Ã¢â‚¬Â¡t sÃƒÂ¡Ã‚Â»Ã‚Â©c", icon: "ÃƒÂ°Ã…Â¸Ã‚Â«Ã‚Â " },
+    { value: "sad", label: "BuÃƒÂ¡Ã‚Â»Ã¢â‚¬Å“n", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã‚Â¢" },
+    { value: "lonely", label: "CÃƒÆ’Ã‚Â´ Ãƒâ€žÃ¢â‚¬ËœÃƒâ€ Ã‚Â¡n", icon: "ÃƒÂ°Ã…Â¸Ã‚Â¥Ã‚Â¹" },
+    { value: "angry", label: "KhÃƒÆ’Ã‚Â³ chÃƒÂ¡Ã‚Â»Ã¢â‚¬Â¹u", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã‚Â " },
+    { value: "numb", label: "TrÃƒÂ¡Ã‚Â»Ã¢â‚¬Ëœng rÃƒÂ¡Ã‚Â»Ã¢â‚¬â€ng", icon: "ÃƒÂ°Ã…Â¸Ã‹Å“Ã‚Â¶" }
   ];
 
   const MOOD_MAP = Object.fromEntries(MOODS.map((m) => [m.value, m]));
@@ -58,7 +58,7 @@
     }).join("");
 
     legend.innerHTML = `
-      <h3 style="margin-bottom:8px;">Bảng mood kèm icon</h3>
+      <h3 style="margin-bottom:8px;">BÃƒÂ¡Ã‚ÂºÃ‚Â£ng mood kÃƒÆ’Ã‚Â¨m icon</h3>
       <div style="display:flex;flex-wrap:wrap;gap:8px;">${cells}</div>
     `;
 
@@ -69,6 +69,20 @@
     if (statusText) statusText.textContent = msg || "";
   }
 
+  
+  function buildFunMoodResponse(partnerMood) {
+    const mood = String(partnerMood || "").trim().toLowerCase();
+    const sadSet = new Set(["sad", "lonely", "numb"]);
+    const happySet = new Set(["happy", "ecstatic", "loved", "playful", "grateful", "hopeful"]);
+
+    if (sadSet.has(mood)) {
+      return "CÃ¡ÂºÂ£nh bÃƒÂ¡o: HÃ¡ÂºÂ£i Anh buÃ¡Â»â€œn. NguyÃ¡Â»â€¦n TrÃ¡Â»Âng NghÃ„Â©a cÃ¡ÂºÂ§n bÃ¡ÂºÂ­t chÃ¡ÂºÂ¿ Ã„â€˜Ã¡Â»â„¢ siÃƒÂªu yÃƒÂªu.";
+    }
+    if (happySet.has(mood)) {
+      return "HÃ¡ÂºÂ£i Anh Ã„â€˜ang hÃ¡ÂºÂ¡nh phÃƒÂºc. CÃƒÂ³ thÃ¡Â»Æ’ do NghÃ„Â©a Ã„â€˜Ã¡ÂºÂ¹p trai.";
+    }
+    return "";
+  }
   function toIsoToday() {
     return new Date().toISOString().slice(0, 10);
   }
@@ -119,7 +133,7 @@
     if (!entries.length) {
       const empty = document.createElement("p");
       empty.className = "meta";
-      empty.textContent = "Chưa có dữ liệu mood. Bắt đầu lưu ngày đầu tiên nhé.";
+      empty.textContent = "ChÃƒâ€ Ã‚Â°a cÃƒÆ’Ã‚Â³ dÃƒÂ¡Ã‚Â»Ã‚Â¯ liÃƒÂ¡Ã‚Â»Ã¢â‚¬Â¡u mood. BÃƒÂ¡Ã‚ÂºÃ‚Â¯t Ãƒâ€žÃ¢â‚¬ËœÃƒÂ¡Ã‚ÂºÃ‚Â§u lÃƒâ€ Ã‚Â°u ngÃƒÆ’Ã‚Â y Ãƒâ€žÃ¢â‚¬ËœÃƒÂ¡Ã‚ÂºÃ‚Â§u tiÃƒÆ’Ã‚Âªn nhÃƒÆ’Ã‚Â©.";
       historyList.appendChild(empty);
       return;
     }
@@ -129,13 +143,13 @@
       item.className = "item";
       const mine = moodDisplay(entry.mineMood);
       const partner = moodDisplay(entry.partnerMood);
-      const mineReasonText = entry.mineReason ? ` | Lý do bạn: ${entry.mineReason}` : "";
-      const partnerReasonText = entry.partnerReason ? ` | Lý do cô ấy: ${entry.partnerReason}` : "";
-      const noteText = entry.note ? ` | Ghi chú: ${entry.note}` : "";
+      const mineReasonText = entry.mineReason ? ` | LÃƒÆ’Ã‚Â½ do bÃƒÂ¡Ã‚ÂºÃ‚Â¡n: ${entry.mineReason}` : "";
+      const partnerReasonText = entry.partnerReason ? ` | LÃƒÆ’Ã‚Â½ do cÃƒÆ’Ã‚Â´ ÃƒÂ¡Ã‚ÂºÃ‚Â¥y: ${entry.partnerReason}` : "";
+      const noteText = entry.note ? ` | Ghi chÃƒÆ’Ã‚Âº: ${entry.note}` : "";
 
       item.innerHTML = `
         <h3>${entry.date}</h3>
-        <p class="meta">Bạn: <strong>${mine}</strong> | Cô ấy: <strong>${partner}</strong>${mineReasonText}${partnerReasonText}${noteText}</p>
+        <p class="meta">BÃƒÂ¡Ã‚ÂºÃ‚Â¡n: <strong>${mine}</strong> | CÃƒÆ’Ã‚Â´ ÃƒÂ¡Ã‚ÂºÃ‚Â¥y: <strong>${partner}</strong>${mineReasonText}${partnerReasonText}${noteText}</p>
       `;
 
       item.addEventListener("click", () => fillForm(entry));
@@ -144,17 +158,17 @@
   }
 
   async function loadData() {
-    setStatus("Đang tải dữ liệu mood...");
+    setStatus("Ãƒâ€žÃ‚Âang tÃƒÂ¡Ã‚ÂºÃ‚Â£i dÃƒÂ¡Ã‚Â»Ã‚Â¯ liÃƒÂ¡Ã‚Â»Ã¢â‚¬Â¡u mood...");
     try {
       const res = await fetch(API);
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Không thể tải mood map.");
+      if (!res.ok) throw new Error(data.error || "KhÃƒÆ’Ã‚Â´ng thÃƒÂ¡Ã‚Â»Ã†â€™ tÃƒÂ¡Ã‚ÂºÃ‚Â£i mood map.");
       entries = Array.isArray(data.entries) ? data.entries : [];
       fillForm(data.todayEntry || { date: data.today || toIsoToday(), mineMood: DEFAULT_MOOD, partnerMood: DEFAULT_MOOD });
       renderHistory();
       setStatus("");
     } catch (err) {
-      setStatus(`Lỗi: ${err.message}`);
+      setStatus(`LÃƒÂ¡Ã‚Â»Ã¢â‚¬â€i: ${err.message}`);
     }
   }
 
@@ -170,11 +184,11 @@
     };
 
     if (!payload.date) {
-      setStatus("Bạn cần chọn ngày.");
+      setStatus("BÃƒÂ¡Ã‚ÂºÃ‚Â¡n cÃƒÂ¡Ã‚ÂºÃ‚Â§n chÃƒÂ¡Ã‚Â»Ã‚Ân ngÃƒÆ’Ã‚Â y.");
       return;
     }
 
-    setStatus("Đang lưu mood...");
+    setStatus("Ãƒâ€žÃ‚Âang lÃƒâ€ Ã‚Â°u mood...");
     try {
       const res = await fetch(API, {
         method: "PUT",
@@ -182,36 +196,37 @@
         body: JSON.stringify(payload)
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Lưu mood thất bại.");
+      if (!res.ok) throw new Error(data.error || "LÃƒâ€ Ã‚Â°u mood thÃƒÂ¡Ã‚ÂºÃ‚Â¥t bÃƒÂ¡Ã‚ÂºÃ‚Â¡i.");
       entries = Array.isArray(data.entries) ? data.entries : entries;
       renderHistory();
-      setStatus("Đã lưu mood vào database.");
+      const funReply = buildFunMoodResponse(payload.partnerMood);
+      setStatus(funReply ? `Đã lưu mood. ${funReply}` : "Đã lưu mood vào database.");
     } catch (err) {
-      setStatus(`Lỗi: ${err.message}`);
+      setStatus(`LÃƒÂ¡Ã‚Â»Ã¢â‚¬â€i: ${err.message}`);
     }
   }
 
   async function deleteData() {
     const date = String(dateInput.value || "").trim();
     if (!date) {
-      setStatus("Chọn ngày cần xóa trước.");
+      setStatus("ChÃƒÂ¡Ã‚Â»Ã‚Ân ngÃƒÆ’Ã‚Â y cÃƒÂ¡Ã‚ÂºÃ‚Â§n xÃƒÆ’Ã‚Â³a trÃƒâ€ Ã‚Â°ÃƒÂ¡Ã‚Â»Ã¢â‚¬Âºc.");
       return;
     }
 
-    const ok = window.confirm(`Xóa mood của ngày ${date}?`);
+    const ok = window.confirm(`XÃƒÆ’Ã‚Â³a mood cÃƒÂ¡Ã‚Â»Ã‚Â§a ngÃƒÆ’Ã‚Â y ${date}?`);
     if (!ok) return;
 
-    setStatus("Đang xóa mood...");
+    setStatus("Ãƒâ€žÃ‚Âang xÃƒÆ’Ã‚Â³a mood...");
     try {
       const res = await fetch(`${API}/${encodeURIComponent(date)}`, { method: "DELETE" });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || "Xóa mood thất bại.");
+      if (!res.ok) throw new Error(data.error || "XÃƒÆ’Ã‚Â³a mood thÃƒÂ¡Ã‚ÂºÃ‚Â¥t bÃƒÂ¡Ã‚ÂºÃ‚Â¡i.");
       entries = Array.isArray(data.entries) ? data.entries : entries;
       fillForm({ date, mineMood: DEFAULT_MOOD, partnerMood: DEFAULT_MOOD });
       renderHistory();
-      setStatus("Đã xóa mood ngày đã chọn.");
+      setStatus("Ãƒâ€žÃ‚ÂÃƒÆ’Ã‚Â£ xÃƒÆ’Ã‚Â³a mood ngÃƒÆ’Ã‚Â y Ãƒâ€žÃ¢â‚¬ËœÃƒÆ’Ã‚Â£ chÃƒÂ¡Ã‚Â»Ã‚Ân.");
     } catch (err) {
-      setStatus(`Lỗi: ${err.message}`);
+      setStatus(`LÃƒÂ¡Ã‚Â»Ã¢â‚¬â€i: ${err.message}`);
     }
   }
 
@@ -233,3 +248,4 @@
   refreshSliderLabels();
   loadData();
 })();
+
