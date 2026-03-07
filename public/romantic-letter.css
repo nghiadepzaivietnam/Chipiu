@@ -213,7 +213,7 @@ body {
   left: 50%;
   bottom: 10%;
   width: 88%;
-  height: 134%;
+  height: min(134%, 760px);
   transform: translateX(-50%) translateY(22%) scaleY(0.72) rotateX(4deg);
   opacity: 0;
   z-index: 2;
@@ -342,11 +342,12 @@ body.focus-letter .atmosphere {
 }
 
 .scene.opened .letter {
-  transform: translateX(-50%) translateY(-16%) scaleY(1) rotateX(0deg);
+  transform: translateX(-50%) translateY(-8%) scaleY(1) rotateX(0deg);
   opacity: 1;
   z-index: 10;
   overflow: auto;
   touch-action: pan-y;
+  max-height: calc(100vh - 120px);
 }
 
 .scene.opened .hint {
@@ -419,5 +420,12 @@ body.focus-letter .atmosphere {
     width: 40px;
     height: 40px;
     font-size: 18px;
+  }
+}
+
+@media (max-height: 760px) {
+  .scene.opened .letter {
+    transform: translateX(-50%) translateY(0) scaleY(1) rotateX(0deg);
+    max-height: calc(100vh - 96px);
   }
 }
