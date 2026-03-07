@@ -325,7 +325,7 @@
       z-index: 90;
     }
     .nav-toggle {
-      display: none;
+      display: inline-flex;
       width: 100%;
       min-height: 46px;
       align-items: center;
@@ -341,8 +341,12 @@
       cursor: pointer;
     }
     .top-nav {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       align-items: stretch;
       gap: 8px;
       padding: 8px;
@@ -351,6 +355,21 @@
       background: rgba(255, 248, 246, 0.88);
       backdrop-filter: blur(14px);
       box-shadow: 0 14px 34px rgba(38, 13, 18, 0.14);
+      opacity: 0;
+      transform: translateY(-6px) scale(0.99);
+      transform-origin: top center;
+      pointer-events: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 160ms ease, transform 160ms ease, max-height 160ms ease;
+    }
+    .top-nav-wrap.open .top-nav {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      max-height: calc(100vh - 130px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .nav-link {
       width: 100%;
@@ -386,34 +405,9 @@
         width: calc(100vw - 16px);
         top: calc(8px + env(safe-area-inset-top, 0px));
       }
-      .nav-toggle {
-        display: inline-flex;
-      }
       .top-nav {
-        position: absolute;
-        top: calc(100% + 8px);
-        left: 0;
-        right: 0;
-        display: grid;
         grid-template-columns: 1fr;
-        gap: 8px;
-        padding: 8px;
         border-radius: 16px;
-        opacity: 0;
-        transform: translateY(-6px) scale(0.99);
-        transform-origin: top center;
-        pointer-events: none;
-        max-height: 0;
-        overflow: hidden;
-        transition: opacity 160ms ease, transform 160ms ease, max-height 160ms ease;
-      }
-      .top-nav-wrap.open .top-nav {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        pointer-events: auto;
-        max-height: calc(100vh - 130px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
       }
       .nav-link {
         min-height: 40px;
@@ -628,7 +622,6 @@
   <script>
     const navWrap = document.getElementById("topNavWrap");
     const navToggle = document.getElementById("navToggle");
-    const isMobileNav = () => window.matchMedia("(max-width: 720px)").matches;
     const setNavOpen = (open) => {
       if (!navWrap || !navToggle) return;
       navWrap.classList.toggle("open", open);
@@ -641,7 +634,7 @@
     });
 
     document.addEventListener("click", (event) => {
-      if (!isMobileNav() || !navWrap || !navWrap.classList.contains("open")) return;
+      if (!navWrap || !navWrap.classList.contains("open")) return;
       if (navWrap.contains(event.target)) return;
       setNavOpen(false);
     });
@@ -650,14 +643,8 @@
       if (event.key === "Escape") setNavOpen(false);
     });
 
-    window.addEventListener("resize", () => {
-      if (!isMobileNav()) setNavOpen(false);
-    });
-
     document.querySelectorAll("#topNavMenu .nav-link").forEach((link) => {
-      link.addEventListener("click", () => {
-        if (isMobileNav()) setNavOpen(false);
-      });
+      link.addEventListener("click", () => setNavOpen(false));
     });
 
     const scFrame = document.getElementById("scPlayer");
