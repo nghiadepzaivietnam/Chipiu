@@ -28,26 +28,66 @@ body.period-page .ai-chat-widget {
   color: #fff;
   font-weight: 800;
   letter-spacing: 0.02em;
-  background: linear-gradient(140deg, #ff6fa8, #f38c4b);
-  box-shadow: 0 10px 22px rgba(64, 22, 33, 0.3);
+  background:
+    radial-gradient(circle at 26% 22%, rgba(255, 255, 255, 0.34), transparent 38%),
+    linear-gradient(145deg, #ff5ea2, #ff7b88 46%, #f3a146 100%);
+  box-shadow:
+    0 14px 28px rgba(64, 22, 33, 0.32),
+    0 0 0 2px rgba(255, 255, 255, 0.44),
+    0 0 22px rgba(255, 106, 170, 0.36);
   position: relative;
-  transition: transform 140ms ease, box-shadow 140ms ease;
+  overflow: hidden;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   user-select: none;
   will-change: transform;
+  animation: aiFloat 3.2s ease-in-out infinite;
 }
 
 .ai-chat-toggle:hover {
-  transform: scale(1.04);
-  box-shadow: 0 14px 24px rgba(64, 22, 33, 0.34);
+  transform: scale(1.05);
+  box-shadow:
+    0 18px 30px rgba(64, 22, 33, 0.35),
+    0 0 0 2px rgba(255, 255, 255, 0.52),
+    0 0 26px rgba(255, 106, 170, 0.44);
+  filter: saturate(1.08);
+}
+
+.ai-chat-toggle::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  pointer-events: none;
+}
+
+.ai-chat-toggle::after {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  left: -55%;
+  top: -55%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0));
+  transform: rotate(22deg);
+  animation: aiShine 3.6s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .ai-chat-widget.dragging .ai-chat-toggle {
   cursor: grabbing;
   transform: scale(1.03);
   transition: none;
+  animation: none;
+  filter: none;
+}
+
+.ai-chat-widget.dragging .ai-chat-toggle::after {
+  animation: none;
 }
 
 .ai-chat-widget.snapping {
@@ -57,6 +97,27 @@ body.period-page .ai-chat-widget {
 .ai-chat-toggle-icon {
   font-size: 22px;
   line-height: 1;
+  text-shadow: 0 1px 6px rgba(57, 18, 28, 0.35);
+  z-index: 1;
+}
+
+@keyframes aiFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes aiShine {
+  0% { transform: translate(-8px, -8px) rotate(22deg); opacity: 0.1; }
+  45% { opacity: 0.34; }
+  100% { transform: translate(44px, 44px) rotate(22deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-chat-toggle,
+  .ai-chat-toggle::after {
+    animation: none;
+  }
 }
 
 .ai-chat-panel {

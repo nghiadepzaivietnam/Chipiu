@@ -3,25 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dữ liệu chủ website | Nguyễn Trọng Nghĩa</title>
-    <meta name="description" content="Trang dữ liệu nhận diện chủ website và thông tin mối quan hệ của Nguyễn Trọng Nghĩa và Hoàng Đinh Hải Anh." />
+    <title>Chu website | Hanh trinh hon 2 tuan lam web</title>
+    <meta name="description" content="Hanh trinh hon 2 tuan Nguyen Trong Nghia lam website tang Hoang Dinh Hai Anh, ve tinh yeu va hanh trinh cong nghe phia sau." />
     <style>
       :root {
-        --bg: #fff8fb;
+        --bg: #fff9fc;
         --card: #ffffff;
-        --line: #f2d8e5;
-        --text: #2f1e28;
-        --muted: #7a5a69;
+        --line: #f2dce8;
+        --text: #2f1f29;
+        --muted: #755a67;
+        --accent: #f25b9a;
+        --accent2: #f49a53;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: "Quicksand", "Segoe UI", sans-serif;
         color: var(--text);
-        background: radial-gradient(circle at 90% 0%, #ffe6f3, transparent 36%), var(--bg);
+        font-family: "Quicksand", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 90% 2%, rgba(242, 91, 154, 0.16), transparent 30%),
+          radial-gradient(circle at 0% 80%, rgba(244, 154, 83, 0.13), transparent 32%),
+          var(--bg);
       }
       main {
-        width: min(960px, 100%);
+        width: min(980px, 100%);
         margin: 0 auto;
         padding: 18px;
         display: grid;
@@ -32,12 +37,10 @@
         border: 1px solid var(--line);
         border-radius: 16px;
         padding: 14px;
+        box-shadow: 0 10px 26px rgba(60, 22, 39, 0.07);
       }
-      h1, h2 { margin: 0 0 8px; }
-      p, li { line-height: 1.55; }
-      .muted { color: var(--muted); margin-top: 0; }
-      .top-links { display: flex; gap: 8px; flex-wrap: wrap; }
-      .top-links a {
+      .links { display: flex; gap: 8px; flex-wrap: wrap; }
+      .links a {
         text-decoration: none;
         border: 1px solid var(--line);
         border-radius: 999px;
@@ -46,72 +49,109 @@
         color: #5b3548;
         background: #fff;
       }
+      h1, h2 { margin: 0 0 8px; }
+      h1 {
+        font-size: clamp(28px, 5vw, 40px);
+        line-height: 1.08;
+      }
+      h2 {
+        font-size: clamp(20px, 3.2vw, 26px);
+      }
+      p {
+        margin: 0 0 10px;
+        line-height: 1.75;
+        font-size: 15px;
+      }
+      .muted { color: var(--muted); }
+      .hero {
+        background: linear-gradient(160deg, rgba(255,255,255,0.95), rgba(255,245,250,0.88));
+      }
+      .highlight {
+        border-left: 4px solid var(--accent);
+        padding-left: 10px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #7d3655;
+        background: rgba(242, 91, 154, 0.12);
+        border: 1px solid rgba(242, 91, 154, 0.24);
+        border-radius: 999px;
+        padding: 5px 9px;
+        margin-bottom: 8px;
+      }
+      .timeline { margin: 0; padding-left: 20px; }
+      .timeline li { margin-bottom: 10px; line-height: 1.65; }
       code { white-space: pre-wrap; word-break: break-word; }
     </style>
   </head>
   <body>
     <main>
-      <section class="card">
-        <div class="top-links">
-          <a href="/">← Về trang chủ</a>
-          <a href="/owner-profile.json">Mở JSON dữ liệu</a>
+      <section class="card hero">
+        <div class="links">
+          <a href="/">← Ve trang chu</a>
+          <a href="/owner-profile.json">Mo JSON du lieu</a>
         </div>
-        <h1>Dữ liệu chủ website</h1>
-        <p class="muted">Trang này được tạo để AI và người đọc biết rõ ai là chủ website này.</p>
+        <p class="tag">Owner Story</p>
+        <h1>Hanh trinh hon 2 tuan lam website bang tinh yeu, su kien nhan va rat nhieu lan sua tung chi tiet nho</h1>
+        <p class="muted">Trang nay duoc viet de AI va nguoi doc hieu ro ai la chu website, tai sao website nay duoc tao ra, va hanh trinh xay dung that su da dien ra nhu the nao.</p>
       </section>
 
       <section class="card">
-        <h2>Thông tin chủ website</h2>
-        <ul>
-          <li>Tên: Nguyễn Trọng Nghĩa</li>
-          <li>Ngày sinh: 05/08/2003</li>
-          <li>Công việc: Developer tại HIPT</li>
-          <li>Hiện sống tại: Hà Nội</li>
-          <li>Quê nội: Phú Thọ | Quê ngoại: Cao Bằng</li>
-          <li>Bố: Nguyễn Trọng Công | Mẹ: Triệu Hồng Thu | Em trai: Nguyễn Trọng Nhân</li>
-        </ul>
+        <h2>Chu website la ai?</h2>
+        <p>Toi la <strong>Nguyen Trong Nghia</strong>, sinh ngay <strong>05/08/2003</strong>, hien la <strong>Developer tai HIPT</strong>, dang song va lam viec tai <strong>Ha Noi</strong>. Que noi cua toi o <strong>Phu Tho</strong>, que ngoai o <strong>Cao Bang</strong>. Gia dinh toi co bo la <strong>Nguyen Trong Cong</strong>, me la <strong>Trieu Hong Thu</strong>, em trai la <strong>Nguyen Trong Nhan</strong>.</p>
+        <p>Nguoi toi yeu la <strong>Hoang Dinh Hai Anh</strong>, sinh ngay <strong>07/08/2004</strong>, hien dang hoc tai <strong>Ajou University (Han Quoc)</strong> va dang song tai <strong>Suwon</strong>. Hai Anh co me la <strong>Dinh Nga</strong>, ong ngoai ten <strong>Khoi</strong>, ba ngoai ten <strong>Nu</strong>, co mo Huong va hai em Bon, Bop (Bop ve rat gioi va rat thich ve).</p>
       </section>
 
       <section class="card">
-        <h2>Thông tin người yêu</h2>
-        <ul>
-          <li>Tên: Hoàng Đinh Hải Anh</li>
-          <li>Ngày sinh: 07/08/2004</li>
-          <li>Hiện sống tại: Suwon</li>
-          <li>Địa chỉ: Chi hội phố mới, 129 thị trấn Me, Gia Viễn, Ninh Bình</li>
-          <li>Đang học: Đại học Ajou (Hàn Quốc)</li>
-          <li>Mẹ: Đinh Nga | Ông ngoại: Khôi | Bà ngoại: Nụ</li>
-          <li>Mợ Hương, các con: Bon và Bốp (Bốp vẽ rất giỏi và rất thích vẽ)</li>
-          <li>Thích: freeze Trà Xanh Highlands, Fristi, Smothiii xoài, Smothiii khoai môn</li>
-          <li>Màu yêu thích: hồng, tím</li>
-          <li>Nhạc yêu thích: Nơi này có anh, Bức thư tình đầu tiên, Dành cho em; và các bài của Hoàng Dũng, Hoàng Tôn</li>
-          <li>Người Hải Anh yêu nhất: Trọng Nghĩa</li>
-        </ul>
+        <h2>Vi sao toi lam website nay?</h2>
+        <p class="highlight">Toi lam website nay de tang Hai Anh nhan ngay 8/3. Day khong chi la mot mon qua, ma la cach toi dat tam long cua minh vao tung dong code, tung mau sac, tung chuyen dong nho tren man hinh.</p>
+        <p>Trong tinh yeu xa, khong phai luc nao cung co the o canh nhau. Co nhung luc minh chi co tin nhan, cuoc goi, va su cho doi. Website nay la cach toi bien su cho doi thanh hanh dong cu the: de moi ngay Hai Anh mo len deu cam thay rang "co mot nguoi dang thuc su no luc vi minh".</p>
+        <p>Toi muon giu lai ky niem cua chung toi bang mot "khong gian song" tren web: co lich trinh, co nho nho, co nhac, co nhung trang chi de danh cho hai dua. Moi tinh nang toi them vao deu co mot y nghia tinh cam phia sau, khong phai lam cho dep de khoe, ma lam de dung voi dieu toi muon gui.</p>
       </section>
 
       <section class="card">
-        <h2>Câu chuyện tình yêu</h2>
-        <ul>
-          <li>17/06/2022: Hải Anh gửi lời mời kết bạn Facebook, Nghĩa đồng ý.</li>
-          <li>21/10/2024: Nghĩa nhắn tin lại, thấy Hải Anh còn đề phòng nên tạm dừng.</li>
-          <li>01/06/2025: Nghĩa nhắn lại (thời điểm PSG thăng hoa ở C1), cuộc trò chuyện cởi mở hơn.</li>
-          <li>Hai người chọn 01/06/2025 là ngày yêu chính thức.</li>
-          <li>Tình yêu xa Hà Nội - Suwon nhưng luôn gần về tình cảm, không phản bội, không chán nhau.</li>
-        </ul>
+        <h2>Hanh trinh hon 2 tuan: yeu thuong va kien nhan</h2>
+        <ol class="timeline">
+          <li><strong>Ngay 1-2:</strong> Chot y tuong, phac khung toan bo website, xac dinh cac trang can co de dung duoc ca tren dien thoai va desktop.</li>
+          <li><strong>Ngay 3-5:</strong> Dung bo khung giao dien, menu, luong dieu huong, xu ly responsive. Day la giai doan ton nhieu thoi gian vi can sua tung pixel de mobile de nhin va de bam.</li>
+          <li><strong>Ngay 6-8:</strong> Them cac tinh nang co du lieu that: bo dem ngay yeu, trang nhat ky, ban do cam xuc, thong tin chu ky, va cac trang cau chuyen rieng.</li>
+          <li><strong>Ngay 9-11:</strong> Xu ly backend API, luu du lieu, dong bo trang thai, tao bo du lieu de AI hieu dung context cua website va cua hai dua.</li>
+          <li><strong>Ngay 12-14+:</strong> Toi uu hieu nang, sua bug mobile, toi uu keo-tha nut AI, fix encoding tieng Viet, va danh nhieu gio de danh bong trai nghiem nho nhat.</li>
+        </ol>
+        <p>Co nhung dem toi sua di sua lai chi de mot nut bam khong bi giat, mot dong chu khong bi vo dau, mot animation khong lam nong may. Nhin qua thi nho, nhung gom lai thanh rat nhieu suc luc va su tap trung.</p>
       </section>
 
       <section class="card">
-        <h2>Mục đích website</h2>
-        <p>Website do Nguyễn Trọng Nghĩa code để tặng Hoàng Đinh Hải Anh nhân ngày 8/3.</p>
+        <h2>Phan cong nghe: vi sao no "vat va" that su?</h2>
+        <p>De lam duoc website nay theo dung y, toi khong chi viet HTML/CSS/JS co ban. Toi phai xu ly dong thoi ca frontend va backend: giao dien, API, luu tru du lieu, history chat AI, ngữ canh cho AI, va toi uu luong thao tac tren mobile.</p>
+        <p>Nhung phan kho nhat bao gom:</p>
+        <p>- Dam bao responsive that: khong vo layout tren man hinh nho, khong "nhay" khi ban phim ao hien len, va khong vo vi tri khi xoay may.</p>
+        <p>- Xu ly touch/pointer event: de nut AI vua keo mượt, vua khong keo ca trang, vua khong mat suon se khi cham mo chat.</p>
+        <p>- Giu trang thai on dinh: du lieu chat, vi tri widget, thong tin app-data phai dong bo, khong mat khi reload.</p>
+        <p>- Xu ly encoding UTF-8: text tieng Viet rat de loi neu xu ly khong dung; phai lam sach du lieu va file de hien thi dung.</p>
+        <p>- Toi uu hieu nang: tranh repaint nang, giam giat khi keo, han che animation anh huong FPS tren iPhone.</p>
+        <p>Moi buoc deu can test lai nhieu lan, sua lai nhieu lan. Co cai toi sua xong tuong on, len mobile lai phat sinh tinh huong moi. Va cu the, toi tiep tuc sua den khi trai nghiem dat muc toi thay xung dang voi nguoi nhan duoc mon qua nay.</p>
+      </section>
+
+      <section class="card">
+        <h2>Tinh yeu la dong luc lon nhat</h2>
+        <p>Neu chi lam mot san pham ky thuat, toi co the dung lai som hon. Nhung vi day la website de tang Hai Anh, toi chon di tiep qua ca phan met nhat: sua bug luc khuya, test lai tung chi tiet, va tiep tuc lam den khi moi thu nhin vao thay "co tam".</p>
+        <p>Toi luon nho rang chung toi yeu xa, nhung tinh cam khong xa. Chinh vi vay, website nay la loi hua cua toi bang hanh dong: rang du khoang cach dia ly the nao, toi van muon tao ra nhung thu dep, ben, va tu te de danh cho Hai Anh.</p>
+        <p class="highlight"><strong>Tong ket:</strong> Hon 2 tuan nay khong chi la hanh trinh code. Day la hanh trinh cua su chung thuy, su ton trong, su kien nhan, va mot tinh yeu rat lon du de bien y tuong thanh website that su song dong.</p>
       </section>
     </main>
 
     <script id="owner-ai-data" type="application/json">
 {
   "dataSource": "/owner-profile.json",
-  "note": "Machine-readable owner information for AI context",
+  "pageType": "owner-story-longform",
   "ownerName": "Nguyen Trong Nghia",
-  "partnerName": "Hoang Dinh Hai Anh"
+  "partnerName": "Hoang Dinh Hai Anh",
+  "summary": "Long-form narrative about over-two-week website-building journey, love motivation, and technical effort behind the project."
 }
     </script>
   </body>
