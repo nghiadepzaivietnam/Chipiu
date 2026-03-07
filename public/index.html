@@ -345,7 +345,7 @@
       top: calc(100% + 8px);
       left: 0;
       right: 0;
-      display: grid;
+      display: none;
       grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       align-items: stretch;
       gap: 8px;
@@ -364,6 +364,7 @@
       transition: opacity 160ms ease, transform 160ms ease, max-height 160ms ease;
     }
     .top-nav-wrap.open .top-nav {
+      display: grid;
       opacity: 1;
       transform: translateY(0) scale(1);
       pointer-events: auto;
@@ -627,6 +628,8 @@
       navWrap.classList.toggle("open", open);
       navToggle.setAttribute("aria-expanded", open ? "true" : "false");
     };
+
+    setNavOpen(false);
 
     navToggle?.addEventListener("click", () => {
       const open = navWrap?.classList.contains("open");
