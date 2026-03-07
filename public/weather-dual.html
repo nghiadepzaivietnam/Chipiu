@@ -6,7 +6,7 @@
     <title>Thời tiết Hà Nội và Suwon</title>
     <meta
       name="description"
-      content="Trang thời tiết riêng hiển thị thời tiết và giờ hiện tại của Hà Nội và Suwon."
+      content="Trang thời tiết hiển thị thời tiết và giờ hiện tại của Hà Nội và Suwon, có thể bấm xem chi tiết."
     />
     <style>
       :root {
@@ -32,7 +32,7 @@
       }
 
       main {
-        width: min(980px, 100%);
+        width: min(1020px, 100%);
         margin: 0 auto;
         padding: 18px;
         display: grid;
@@ -80,6 +80,10 @@
         padding: 14px;
         backdrop-filter: blur(6px);
         box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+      }
+
+      .city-main {
+        cursor: pointer;
       }
 
       .city-title {
@@ -162,6 +166,119 @@
         font-size: 12px;
       }
 
+      .expand-hint {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .detail {
+        margin-top: 10px;
+        display: none;
+        gap: 10px;
+      }
+
+      .city-card.open .detail {
+        display: grid;
+      }
+
+      .detail-title {
+        margin: 0;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .detail-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .hourly-track {
+        margin-top: 8px;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(90px, 1fr);
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+
+      .hour-chip {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 8px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .hour-time {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .hour-temp {
+        margin: 4px 0 0;
+        font-size: 21px;
+        font-weight: 700;
+      }
+
+      .hour-desc {
+        margin: 3px 0 0;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .daily-list {
+        margin-top: 8px;
+        display: grid;
+        gap: 6px;
+      }
+
+      .daily-row {
+        display: grid;
+        grid-template-columns: 1.1fr auto auto;
+        gap: 8px;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 6px;
+      }
+
+      .daily-row:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .daily-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .daily-desc {
+        margin: 1px 0 0;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .daily-rain {
+        font-size: 12px;
+        color: #98deff;
+        font-weight: 700;
+      }
+
+      .daily-range {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
       @media (max-width: 760px) {
         main { padding: 12px; }
         .grid { grid-template-columns: 1fr; }
@@ -175,55 +292,83 @@
       </nav>
 
       <h1>Thời tiết</h1>
-      <p class="muted">Cập nhật thời tiết và giờ hiện tại của Hà Nội và Suwon.</p>
+      <p class="muted">Cập nhật thời tiết và giờ hiện tại của Hà Nội và Suwon. Chạm vào từng thẻ để xem chi tiết.</p>
 
       <section class="grid">
-        <article class="city-card">
-          <h2 class="city-title">Hà Nội</h2>
-          <p class="city-time" id="hanoiTime">--:--:--</p>
-          <p class="city-date" id="hanoiDate">--</p>
+        <article class="city-card" id="hanoiCard">
+          <div class="city-main" data-toggle="hanoiCard" role="button" tabindex="0" aria-expanded="false">
+            <h2 class="city-title">Hà Nội</h2>
+            <p class="city-time" id="hanoiTime">--:--:--</p>
+            <p class="city-date" id="hanoiDate">--</p>
 
-          <div class="hero-row">
-            <p class="temp" id="hanoiTemp">--°</p>
-            <p class="highlow" id="hanoiRange">C:--° T:--°</p>
-          </div>
-          <p class="desc" id="hanoiDesc">Đang tải thời tiết...</p>
+            <div class="hero-row">
+              <p class="temp" id="hanoiTemp">--°</p>
+              <p class="highlow" id="hanoiRange">C:--° T:--°</p>
+            </div>
+            <p class="desc" id="hanoiDesc">Đang tải thời tiết...</p>
 
-          <div class="sub-grid">
-            <div class="mini">
-              <p class="mini-label">Độ ẩm</p>
-              <p class="mini-value" id="hanoiHumidity">--%</p>
+            <div class="sub-grid">
+              <div class="mini">
+                <p class="mini-label">Độ ẩm</p>
+                <p class="mini-value" id="hanoiHumidity">--%</p>
+              </div>
+              <div class="mini">
+                <p class="mini-label">Gió</p>
+                <p class="mini-value" id="hanoiWind">-- km/h</p>
+              </div>
             </div>
-            <div class="mini">
-              <p class="mini-label">Gió</p>
-              <p class="mini-value" id="hanoiWind">-- km/h</p>
-            </div>
+            <p class="updated" id="hanoiUpdated">Cập nhật: --</p>
+            <p class="expand-hint">Nhấn để xem chi tiết</p>
           </div>
-          <p class="updated" id="hanoiUpdated">Cập nhật: --</p>
+
+          <div class="detail" id="hanoiDetail">
+            <section class="detail-card">
+              <p class="detail-title">Theo giờ</p>
+              <div class="hourly-track" id="hanoiHourly"></div>
+            </section>
+            <section class="detail-card">
+              <p class="detail-title">5 ngày tới</p>
+              <div class="daily-list" id="hanoiDaily"></div>
+            </section>
+          </div>
         </article>
 
-        <article class="city-card">
-          <h2 class="city-title">Suwon</h2>
-          <p class="city-time" id="suwonTime">--:--:--</p>
-          <p class="city-date" id="suwonDate">--</p>
+        <article class="city-card" id="suwonCard">
+          <div class="city-main" data-toggle="suwonCard" role="button" tabindex="0" aria-expanded="false">
+            <h2 class="city-title">Suwon</h2>
+            <p class="city-time" id="suwonTime">--:--:--</p>
+            <p class="city-date" id="suwonDate">--</p>
 
-          <div class="hero-row">
-            <p class="temp" id="suwonTemp">--°</p>
-            <p class="highlow" id="suwonRange">C:--° T:--°</p>
-          </div>
-          <p class="desc" id="suwonDesc">Đang tải thời tiết...</p>
+            <div class="hero-row">
+              <p class="temp" id="suwonTemp">--°</p>
+              <p class="highlow" id="suwonRange">C:--° T:--°</p>
+            </div>
+            <p class="desc" id="suwonDesc">Đang tải thời tiết...</p>
 
-          <div class="sub-grid">
-            <div class="mini">
-              <p class="mini-label">Độ ẩm</p>
-              <p class="mini-value" id="suwonHumidity">--%</p>
+            <div class="sub-grid">
+              <div class="mini">
+                <p class="mini-label">Độ ẩm</p>
+                <p class="mini-value" id="suwonHumidity">--%</p>
+              </div>
+              <div class="mini">
+                <p class="mini-label">Gió</p>
+                <p class="mini-value" id="suwonWind">-- km/h</p>
+              </div>
             </div>
-            <div class="mini">
-              <p class="mini-label">Gió</p>
-              <p class="mini-value" id="suwonWind">-- km/h</p>
-            </div>
+            <p class="updated" id="suwonUpdated">Cập nhật: --</p>
+            <p class="expand-hint">Nhấn để xem chi tiết</p>
           </div>
-          <p class="updated" id="suwonUpdated">Cập nhật: --</p>
+
+          <div class="detail" id="suwonDetail">
+            <section class="detail-card">
+              <p class="detail-title">Theo giờ</p>
+              <div class="hourly-track" id="suwonHourly"></div>
+            </section>
+            <section class="detail-card">
+              <p class="detail-title">5 ngày tới</p>
+              <div class="daily-list" id="suwonDaily"></div>
+            </section>
+          </div>
         </article>
       </section>
     </main>
@@ -309,12 +454,63 @@
           );
         }
 
+        function renderHourly(cityKey, hourly) {
+          const track = byId(`${cityKey}Hourly`);
+          if (!track || !Array.isArray(hourly?.time)) return;
+
+          const start = hourly.time.findIndex((t) => new Date(t).getTime() >= Date.now() - 30 * 60 * 1000);
+          const from = start >= 0 ? start : 0;
+          const to = Math.min(from + 8, hourly.time.length);
+
+          track.innerHTML = "";
+          for (let i = from; i < to; i += 1) {
+            const chip = document.createElement("article");
+            chip.className = "hour-chip";
+            const code = Number(hourly.weather_code?.[i]);
+            chip.innerHTML = `
+              <p class="hour-time">${new Date(hourly.time[i]).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false })}</p>
+              <p class="hour-temp">${Math.round(hourly.temperature_2m?.[i] ?? 0)}°</p>
+              <p class="hour-desc">${weatherMap[code] || "--"}</p>
+            `;
+            track.appendChild(chip);
+          }
+        }
+
+        function renderDaily(cityKey, daily) {
+          const list = byId(`${cityKey}Daily`);
+          if (!list || !Array.isArray(daily?.time)) return;
+
+          list.innerHTML = "";
+          const max = Math.min(5, daily.time.length);
+          for (let i = 0; i < max; i += 1) {
+            const d = new Date(daily.time[i]);
+            const dayLabel = i === 0 ? "Hôm nay" : d.toLocaleDateString("vi-VN", { weekday: "short" });
+            const code = Number(daily.weather_code?.[i]);
+            const rain = Math.round(daily.precipitation_probability_max?.[i] ?? 0);
+            const minT = Math.round(daily.temperature_2m_min?.[i] ?? 0);
+            const maxT = Math.round(daily.temperature_2m_max?.[i] ?? 0);
+
+            const row = document.createElement("article");
+            row.className = "daily-row";
+            row.innerHTML = `
+              <div>
+                <p class="daily-name">${dayLabel}</p>
+                <p class="daily-desc">${weatherMap[code] || "--"}</p>
+              </div>
+              <div class="daily-rain">${rain}%</div>
+              <div class="daily-range">${minT}° / ${maxT}°</div>
+            `;
+            list.appendChild(row);
+          }
+        }
+
         async function loadWeather(city) {
           const url =
             "https://api.open-meteo.com/v1/forecast"
             + `?latitude=${city.lat}&longitude=${city.lon}`
             + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m"
-            + "&daily=temperature_2m_max,temperature_2m_min"
+            + "&hourly=temperature_2m,weather_code"
+            + "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max"
             + `&timezone=${encodeURIComponent(city.timezone)}`;
 
           try {
@@ -333,6 +529,9 @@
             setText(`${city.key}Humidity`, `${Math.round(current.relative_humidity_2m ?? 0)}%`);
             setText(`${city.key}Wind`, `${Math.round(current.wind_speed_10m ?? 0)} km/h`);
             setText(`${city.key}Updated`, `Cập nhật: ${new Date().toLocaleTimeString("vi-VN")}`);
+
+            renderHourly(city.key, data.hourly || {});
+            renderDaily(city.key, daily);
           } catch (_err) {
             setText(`${city.key}Desc`, "Không tải được thời tiết.");
           }
@@ -346,6 +545,33 @@
           await Promise.all(cities.map(loadWeather));
         }
 
+        function bindExpand() {
+          const toggles = document.querySelectorAll("[data-toggle]");
+          toggles.forEach((toggle) => {
+            const cardId = toggle.getAttribute("data-toggle");
+            const card = byId(cardId);
+            if (!card) return;
+
+            const setOpen = (open) => {
+              card.classList.toggle("open", open);
+              toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            };
+
+            toggle.addEventListener("click", () => {
+              const isOpen = card.classList.contains("open");
+              setOpen(!isOpen);
+            });
+
+            toggle.addEventListener("keydown", (event) => {
+              if (event.key !== "Enter" && event.key !== " ") return;
+              event.preventDefault();
+              const isOpen = card.classList.contains("open");
+              setOpen(!isOpen);
+            });
+          });
+        }
+
+        bindExpand();
         tickClockAll();
         loadWeatherAll();
         setInterval(tickClockAll, 1000);
