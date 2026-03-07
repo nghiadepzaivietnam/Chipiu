@@ -64,6 +64,7 @@
   let pendingDragY = 0;
   let dragRafId = 0;
   let dragBounds = null;
+  let dragMoved = false;
   const supportsPointerEvents = typeof window !== "undefined" && "PointerEvent" in window;
 
   function makeAssistantGreeting() {
@@ -290,6 +291,7 @@
   function queueDragMove(x, y) {
     pendingDragX = x;
     pendingDragY = y;
+    dragMoved = true;
     if (dragRafId) return;
     dragRafId = window.requestAnimationFrame(applyDragFrame);
   }
@@ -577,11 +579,16 @@
 
   function startDrag(pointerType, clientX, clientY, pointerId) {
     suppressToggleClick = false;
+    dragMoved = false;
     lastPointerX = clientX;
     lastPointerY = clientY;
     dragStartX = clientX;
     dragStartY = clientY;
-    const holdDelay = pointerType === "touch" ? 240 : 160;
+    const holdDelay = pointerType === "touch" ? 0 : 120;
+    if (holdDelay <= 0) {
+      activateDrag(pointerId);
+      return;
+    }
     dragTimer = setTimeout(() => {
       activateDrag(pointerId);
     }, holdDelay);
@@ -603,7 +610,7 @@
       if (!dragTimer) return;
       const dx = event.clientX - dragStartX;
       const dy = event.clientY - dragStartY;
-      if ((dx * dx + dy * dy) < 36) return;
+      if ((dx * dx + dy * dy) < 16) return;
       activateDrag(event.pointerId);
     }
     event.preventDefault();
@@ -625,9 +632,11 @@
       window.cancelAnimationFrame(dragRafId);
       dragRafId = 0;
     }
-    suppressToggleClick = true;
-    const rect = toggleBtn.getBoundingClientRect();
-    applyWidgetPosition(rect.left, rect.top, true);
+    if (dragMoved) {
+      suppressToggleClick = true;
+      const rect = toggleBtn.getBoundingClientRect();
+      applyWidgetPosition(rect.left, rect.top, true);
+    }
     try {
       toggleBtn.releasePointerCapture(event.pointerId);
     } catch (_err) {
@@ -659,7 +668,7 @@
         if (!dragTimer) return;
         const dx = t.clientX - dragStartX;
         const dy = t.clientY - dragStartY;
-        if ((dx * dx + dy * dy) < 36) return;
+        if ((dx * dx + dy * dy) < 16) return;
         activateDrag(null);
       }
       const x = t.clientX - dragOffsetX;

@@ -170,6 +170,14 @@ body.period-page .ai-chat-widget {
 .ai-chat-widget.dragging .ai-chat-toggle {
   cursor: grabbing;
   animation: none;
+  transition: none;
+  box-shadow: 0 8px 16px rgba(64, 22, 33, 0.22);
+  filter: none;
+}
+
+.ai-chat-widget.dragging .ai-chat-toggle::before,
+.ai-chat-widget.dragging .ai-chat-toggle::after {
+  opacity: 0;
 }
 .ai-chat-head-top {
   display: flex;
