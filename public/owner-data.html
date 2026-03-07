@@ -7,12 +7,19 @@
     <meta name="description" content="Bối cảnh và ý tưởng về câu chuyện tình yêu của Nguyễn Trọng Nghĩa và Hoàng Đinh Hải Anh." />
     <style>
       :root {
-        --bg: #fff9fc;
-        --card: #ffffff;
-        --line: #f0d9e6;
-        --text: #2f1f29;
-        --muted: #705763;
-        --accent: #f25b9a;
+        --bg: #0f1a2b;
+        --bg2: #1f2b40;
+        --card: rgba(80, 96, 118, 0.46);
+        --card-line: rgba(255, 255, 255, 0.14);
+        --text: #f4f8ff;
+        --muted: #b8c3d6;
+        --soft: #d9e2f4;
+        --love-bg: #fff9fc;
+        --love-card: #ffffff;
+        --love-line: #f0d9e6;
+        --love-text: #2f1f29;
+        --love-muted: #705763;
+        --love-accent: #f25b9a;
       }
       * { box-sizing: border-box; }
       body {
@@ -20,23 +27,215 @@
         color: var(--text);
         font-family: "Quicksand", "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at 90% 2%, rgba(242, 91, 154, 0.16), transparent 30%),
-          radial-gradient(circle at 0% 80%, rgba(244, 154, 83, 0.13), transparent 32%),
-          var(--bg);
+          radial-gradient(circle at 20% 8%, rgba(178, 191, 221, 0.2), transparent 35%),
+          radial-gradient(circle at 88% 90%, rgba(120, 142, 187, 0.2), transparent 32%),
+          linear-gradient(180deg, var(--bg), var(--bg2));
+        min-height: 100vh;
       }
       main {
-        width: min(940px, 100%);
+        width: min(980px, 100%);
         margin: 0 auto;
         padding: 18px;
         display: grid;
         gap: 14px;
       }
-      .card {
+
+      .weather-shell {
+        border-radius: 28px;
+        padding: 14px;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01)),
+          radial-gradient(circle at 50% 0%, rgba(255,255,255,0.12), transparent 45%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+      }
+      .weather-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .weather-title {
+        margin: 0;
+        font-size: clamp(34px, 6vw, 52px);
+        line-height: 1;
+        letter-spacing: -0.02em;
+      }
+      .weather-dots {
+        width: 54px;
+        height: 54px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        display: grid;
+        place-items: center;
+        font-size: 30px;
+        color: var(--soft);
+      }
+
+      .hero-weather {
+        border: 1px solid var(--card-line);
+        border-radius: 24px;
         background: var(--card);
-        border: 1px solid var(--line);
+        padding: 16px;
+        display: grid;
+        gap: 6px;
+        backdrop-filter: blur(6px);
+      }
+      .hero-city {
+        margin: 0;
+        font-size: clamp(44px, 10vw, 74px);
+        font-weight: 700;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+      }
+      .hero-meta {
+        margin: 0;
+        font-size: clamp(20px, 5vw, 34px);
+        color: var(--soft);
+        font-weight: 600;
+      }
+      .hero-desc {
+        margin: 0;
+        font-size: 22px;
+        color: var(--soft);
+      }
+      .hero-highlow {
+        margin: 2px 0 0;
+        font-size: 36px;
+        font-weight: 700;
+      }
+
+      .weather-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .metric-card {
+        border: 1px solid var(--card-line);
+        border-radius: 18px;
+        background: var(--card);
+        padding: 12px;
+        backdrop-filter: blur(6px);
+      }
+      .metric-label {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 700;
+      }
+      .metric-value {
+        margin: 5px 0 0;
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .metric-sub {
+        margin: 6px 0 0;
+        font-size: 14px;
+        color: var(--soft);
+      }
+
+      .hourly-card, .daily-card {
+        margin-top: 10px;
+        border: 1px solid var(--card-line);
+        border-radius: 18px;
+        background: var(--card);
+        padding: 12px;
+        backdrop-filter: blur(6px);
+      }
+      .section-label {
+        margin: 0 0 8px;
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 700;
+      }
+      .hourly-track {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(88px, 1fr);
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .hour-chip {
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.05);
+        text-align: center;
+        padding: 8px;
+      }
+      .hour-time {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .hour-temp {
+        margin: 6px 0 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .hour-code {
+        margin: 4px 0 0;
+        font-size: 12px;
+        color: var(--soft);
+      }
+
+      .daily-list {
+        display: grid;
+        gap: 7px;
+      }
+      .daily-row {
+        display: grid;
+        grid-template-columns: 1.1fr auto auto;
+        gap: 10px;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.09);
+        padding-bottom: 7px;
+      }
+      .daily-row:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+      .daily-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .daily-desc {
+        margin: 2px 0 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .daily-rain {
+        font-size: 13px;
+        color: #8fd7ff;
+        font-weight: 700;
+      }
+      .daily-temp {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .love-section {
+        background: var(--love-bg);
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.24);
+        padding: 12px;
+      }
+      .love-card {
+        background: var(--love-card);
+        border: 1px solid var(--love-line);
         border-radius: 16px;
         padding: 14px;
         box-shadow: 0 10px 26px rgba(60, 22, 39, 0.07);
+        color: var(--love-text);
       }
       .links {
         display: flex;
@@ -45,70 +244,136 @@
       }
       .links a {
         text-decoration: none;
-        border: 1px solid var(--line);
+        border: 1px solid var(--love-line);
         border-radius: 999px;
         padding: 8px 12px;
         font-weight: 700;
         color: #5b3548;
         background: #fff;
       }
-      h1, h2 { margin: 0 0 8px; }
-      h1 {
+      .love-card h1, .love-card h2 { margin: 0 0 8px; }
+      .love-card h1 {
         font-size: clamp(28px, 5vw, 40px);
         line-height: 1.08;
       }
-      h2 {
+      .love-card h2 {
         font-size: clamp(20px, 3.1vw, 26px);
       }
-      p {
+      .love-card p {
         margin: 0 0 10px;
         line-height: 1.75;
         font-size: 15px;
       }
-      .muted { color: var(--muted); }
+      .muted-love { color: var(--love-muted); }
       .highlight {
-        border-left: 4px solid var(--accent);
+        border-left: 4px solid var(--love-accent);
         padding-left: 10px;
       }
       .timeline { margin: 0; padding-left: 20px; }
       .timeline li { margin-bottom: 10px; line-height: 1.65; }
+
+      @media (max-width: 720px) {
+        main { padding: 12px; }
+        .weather-grid { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body>
     <main>
-      <section class="card">
-        <div class="links">
-          <a href="/">← Về trang chủ</a>
-          <a href="/owner-profile.json">Mở JSON dữ liệu</a>
+      <section class="weather-shell" aria-label="Thời tiết Suwon">
+        <div class="weather-head">
+          <h1 class="weather-title">Thời tiết</h1>
+          <div class="weather-dots">…</div>
         </div>
-        <h1>Bối cảnh và ý tưởng</h1>
-        <p class="muted">Trang này chỉ nói về chuyện tình yêu của Nguyễn Trọng Nghĩa và Hoàng Đinh Hải Anh.</p>
+
+        <article class="hero-weather">
+          <p class="metric-label">Bên Hải Anh lúc này</p>
+          <h2 class="hero-city" id="cityName">Suwon</h2>
+          <p class="hero-meta" id="liveClock">--:--:--</p>
+          <p class="hero-desc" id="currentDesc">Đang tải...</p>
+          <p class="hero-highlow" id="currentTemp">--°</p>
+          <p class="metric-sub" id="tempRange">C: --° T: --°</p>
+        </article>
+
+        <div class="weather-grid">
+          <article class="metric-card">
+            <p class="metric-label">Cảm nhận</p>
+            <p class="metric-value" id="feelsLike">--°</p>
+            <p class="metric-sub">Nhiệt độ cảm nhận hiện tại.</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Độ ẩm</p>
+            <p class="metric-value" id="humidity">--%</p>
+            <p class="metric-sub">Độ ẩm không khí tại Suwon.</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Mặt trời lặn</p>
+            <p class="metric-value" id="sunset">--:--</p>
+            <p class="metric-sub" id="sunriseSub">Mặt trời mọc: --:--</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Gió</p>
+            <p class="metric-value" id="wind">-- km/h</p>
+            <p class="metric-sub" id="windDir">Hướng gió: --°</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Tầm nhìn</p>
+            <p class="metric-value" id="visibility">-- km</p>
+            <p class="metric-sub">Độ xa có thể quan sát.</p>
+          </article>
+          <article class="metric-card">
+            <p class="metric-label">Chỉ số UV</p>
+            <p class="metric-value" id="uv">--</p>
+            <p class="metric-sub">Mức tia UV hôm nay.</p>
+          </article>
+        </div>
+
+        <article class="hourly-card">
+          <p class="section-label">Dự báo theo giờ</p>
+          <div class="hourly-track" id="hourlyTrack"></div>
+        </article>
+
+        <article class="daily-card">
+          <p class="section-label">Dự báo 5 ngày</p>
+          <div class="daily-list" id="dailyList"></div>
+        </article>
       </section>
 
-      <section class="card">
-        <h2>Bối cảnh</h2>
-        <p>Tôi là Nguyễn Trọng Nghĩa. Người tôi yêu là Hoàng Đinh Hải Anh. Chúng tôi bắt đầu từ một kết nối giản dị trên Facebook, rồi đi qua những khoảng lặng, những lần chưa đủ hiểu nhau, và những lần quay lại với nhau bằng sự chân thành nhiều hơn.</p>
-        <p>Ngày 17/06/2022 là cột mốc chúng tôi kết bạn. Đến 21/10/2024, tôi nhắn tin lại nhưng vẫn cảm nhận được sự dè chừng nên tạm dừng. Sau đó, vào 01/06/2025, tôi nhắn lại lần nữa và lần này mọi thứ mở ra theo một cách dịu dàng hơn. Chúng tôi chọn 01/06/2025 là ngày yêu của mình.</p>
-        <p>Dù yêu xa, tôi ở Hà Nội và Hải Anh ở Suwon, tình cảm của chúng tôi không xa. Chúng tôi yêu nhau theo cách cùng giữ lời, cùng tôn trọng, cùng cố gắng mỗi ngày để mối quan hệ này bền và ấm.</p>
-      </section>
+      <section class="love-section">
+        <div class="love-card">
+          <div class="links">
+            <a href="/">← Về trang chủ</a>
+            <a href="/owner-profile.json">Mở JSON dữ liệu</a>
+          </div>
+          <h1>Bối cảnh và ý tưởng</h1>
+          <p class="muted-love">Trang này chỉ nói về chuyện tình yêu của Nguyễn Trọng Nghĩa và Hoàng Đinh Hải Anh.</p>
+        </div>
 
-      <section class="card">
-        <h2>Ý tưởng</h2>
-        <p class="highlight">Ý tưởng của trang web này rất đơn giản: biến tình yêu thành một nơi có thể nhìn thấy, chạm vào và ở lại thật lâu.</p>
-        <p>Tôi làm trang này để dành tặng Hải Anh như một lời nói rõ ràng rằng: tôi yêu em nghiêm túc, yêu em kiên nhẫn, và luôn muốn đi đường dài cùng em. Mỗi chi tiết trong trang đều mang ý nghĩa "chúng ta": lưu lại kỷ niệm, nhắc nhau về những ngày đặc biệt, và giữ cảm giác gần nhau ngay cả khi ở hai thành phố khác nhau.</p>
-        <p>Tôi không làm trang này để nói về điều gì lớn lao ngoài tình yêu của chúng tôi. Tôi chỉ muốn khi Hải Anh mở trang lên, em sẽ cảm nhận được một điều duy nhất: em luôn được yêu thương, được trân trọng, và được đặt ở vị trí quan trọng nhất trong trái tim tôi.</p>
-      </section>
+        <div class="love-card" style="margin-top: 12px;">
+          <h2>Bối cảnh</h2>
+          <p>Tôi là Nguyễn Trọng Nghĩa. Người tôi yêu là Hoàng Đinh Hải Anh. Chúng tôi bắt đầu từ một kết nối giản dị trên Facebook, rồi đi qua những khoảng lặng, những lần chưa đủ hiểu nhau, và những lần quay lại với nhau bằng sự chân thành nhiều hơn.</p>
+          <p>Ngày 17/06/2022 là cột mốc chúng tôi kết bạn. Đến 21/10/2024, tôi nhắn tin lại nhưng vẫn cảm nhận được sự dè chừng nên tạm dừng. Sau đó, vào 01/06/2025, tôi nhắn lại lần nữa và lần này mọi thứ mở ra theo một cách dịu dàng hơn. Chúng tôi chọn 01/06/2025 là ngày yêu của mình.</p>
+          <p>Dù yêu xa, tôi ở Hà Nội và Hải Anh ở Suwon, tình cảm của chúng tôi không xa. Chúng tôi yêu nhau theo cách cùng giữ lời, cùng tôn trọng, cùng cố gắng mỗi ngày để mối quan hệ này bền và ấm.</p>
+        </div>
 
-      <section class="card">
-        <h2>Chúng tôi yêu nhau như thế nào</h2>
-        <ol class="timeline">
-          <li>Yêu bằng sự rõ ràng: đã yêu là nghiêm túc, không nửa vời.</li>
-          <li>Yêu bằng sự tin tưởng: không phản bội, không chọn cách làm nhau bất an.</li>
-          <li>Yêu bằng sự kiên nhẫn: có lúc khó, có lúc mệt, nhưng vẫn chọn nắm tay nhau đi tiếp.</li>
-          <li>Yêu bằng hành động: không chỉ nói thương, mà luôn cố gắng làm điều tốt nhất cho nhau.</li>
-          <li>Yêu bằng lòng biết ơn: biết ơn vì đã gặp được nhau, đúng người, đúng thời điểm.</li>
-        </ol>
-        <p>Tôi yêu Hải Anh thật nhiều. Hải Anh cũng yêu tôi theo cách dịu dàng mà mạnh mẽ. Và với chúng tôi, tình yêu này không phải một cảm xúc nhất thời, mà là một lựa chọn lâu dài mỗi ngày.</p>
+        <div class="love-card" style="margin-top: 12px;">
+          <h2>Ý tưởng</h2>
+          <p class="highlight">Ý tưởng của trang web này rất đơn giản: biến tình yêu thành một nơi có thể nhìn thấy, chạm vào và ở lại thật lâu.</p>
+          <p>Tôi làm trang này để dành tặng Hải Anh như một lời nói rõ ràng rằng: tôi yêu em nghiêm túc, yêu em kiên nhẫn, và luôn muốn đi đường dài cùng em. Mỗi chi tiết trong trang đều mang ý nghĩa "chúng ta": lưu lại kỷ niệm, nhắc nhau về những ngày đặc biệt, và giữ cảm giác gần nhau ngay cả khi ở hai thành phố khác nhau.</p>
+          <p>Tôi không làm trang này để nói về điều gì lớn lao ngoài tình yêu của chúng tôi. Tôi chỉ muốn khi Hải Anh mở trang lên, em sẽ cảm nhận được một điều duy nhất: em luôn được yêu thương, được trân trọng, và được đặt ở vị trí quan trọng nhất trong trái tim tôi.</p>
+        </div>
+
+        <div class="love-card" style="margin-top: 12px;">
+          <h2>Chúng tôi yêu nhau như thế nào</h2>
+          <ol class="timeline">
+            <li>Yêu bằng sự rõ ràng: đã yêu là nghiêm túc, không nửa vời.</li>
+            <li>Yêu bằng sự tin tưởng: không phản bội, không chọn cách làm nhau bất an.</li>
+            <li>Yêu bằng sự kiên nhẫn: có lúc khó, có lúc mệt, nhưng vẫn chọn nắm tay nhau đi tiếp.</li>
+            <li>Yêu bằng hành động: không chỉ nói thương, mà luôn cố gắng làm điều tốt nhất cho nhau.</li>
+            <li>Yêu bằng lòng biết ơn: biết ơn vì đã gặp được nhau, đúng người, đúng thời điểm.</li>
+          </ol>
+          <p>Tôi yêu Hải Anh thật nhiều. Hải Anh cũng yêu tôi theo cách dịu dàng mà mạnh mẽ. Và với chúng tôi, tình yêu này không phải một cảm xúc nhất thời, mà là một lựa chọn lâu dài mỗi ngày.</p>
+        </div>
       </section>
     </main>
 
@@ -120,6 +385,165 @@
   "partnerName": "Hoang Dinh Hai Anh",
   "focus": "Only about their love story"
 }
+    </script>
+
+    <script>
+      (function initSuwonWeatherLikeIOS() {
+        const nowEl = document.getElementById("liveClock");
+        const cityEl = document.getElementById("cityName");
+        const descEl = document.getElementById("currentDesc");
+        const tempEl = document.getElementById("currentTemp");
+        const rangeEl = document.getElementById("tempRange");
+        const feelsEl = document.getElementById("feelsLike");
+        const humidityEl = document.getElementById("humidity");
+        const sunsetEl = document.getElementById("sunset");
+        const sunriseEl = document.getElementById("sunriseSub");
+        const windEl = document.getElementById("wind");
+        const windDirEl = document.getElementById("windDir");
+        const visEl = document.getElementById("visibility");
+        const uvEl = document.getElementById("uv");
+        const hourlyTrackEl = document.getElementById("hourlyTrack");
+        const dailyListEl = document.getElementById("dailyList");
+
+        const lat = 37.2636;
+        const lon = 127.0286;
+        const tz = "Asia/Seoul";
+
+        const weatherMap = {
+          0: "Trời quang",
+          1: "Ít mây",
+          2: "Mây rải rác",
+          3: "Nhiều mây",
+          45: "Sương mù",
+          48: "Sương mù đóng băng",
+          51: "Mưa phùn nhẹ",
+          53: "Mưa phùn vừa",
+          55: "Mưa phùn dày",
+          56: "Mưa phùn lạnh nhẹ",
+          57: "Mưa phùn lạnh mạnh",
+          61: "Mưa nhẹ",
+          63: "Mưa vừa",
+          65: "Mưa to",
+          66: "Mưa lạnh nhẹ",
+          67: "Mưa lạnh to",
+          71: "Tuyết nhẹ",
+          73: "Tuyết vừa",
+          75: "Tuyết dày",
+          77: "Mưa tuyết",
+          80: "Mưa rào nhẹ",
+          81: "Mưa rào vừa",
+          82: "Mưa rào mạnh",
+          85: "Tuyết rào nhẹ",
+          86: "Tuyết rào mạnh",
+          95: "Dông",
+          96: "Dông kèm mưa đá nhẹ",
+          99: "Dông kèm mưa đá mạnh"
+        };
+
+        function formatHour(iso) {
+          return new Date(iso).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false });
+        }
+
+        function renderClock() {
+          const now = new Date();
+          if (cityEl) cityEl.textContent = "Suwon";
+          if (!nowEl) return;
+          nowEl.textContent = new Intl.DateTimeFormat("vi-VN", {
+            timeZone: tz,
+            weekday: "short",
+            day: "2-digit",
+            month: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+          }).format(now);
+        }
+
+        function renderHourly(hourly) {
+          if (!hourlyTrackEl || !hourly?.time?.length) return;
+          const start = hourly.time.findIndex((t) => new Date(t).getTime() >= Date.now() - 30 * 60 * 1000);
+          const from = start >= 0 ? start : 0;
+          const to = Math.min(from + 8, hourly.time.length);
+          hourlyTrackEl.innerHTML = "";
+          for (let i = from; i < to; i += 1) {
+            const chip = document.createElement("article");
+            chip.className = "hour-chip";
+            const code = hourly.weathercode?.[i];
+            chip.innerHTML = `
+              <p class="hour-time">${formatHour(hourly.time[i])}</p>
+              <p class="hour-temp">${Math.round(hourly.temperature_2m?.[i] ?? 0)}°</p>
+              <p class="hour-code">${weatherMap[code] || "--"}</p>
+            `;
+            hourlyTrackEl.appendChild(chip);
+          }
+        }
+
+        function renderDaily(daily) {
+          if (!dailyListEl || !daily?.time?.length) return;
+          dailyListEl.innerHTML = "";
+          const count = Math.min(5, daily.time.length);
+          for (let i = 0; i < count; i += 1) {
+            const d = new Date(daily.time[i]);
+            const name = i === 0 ? "Hôm nay" : d.toLocaleDateString("vi-VN", { weekday: "short" });
+            const row = document.createElement("article");
+            row.className = "daily-row";
+            const code = daily.weathercode?.[i];
+            row.innerHTML = `
+              <div>
+                <p class="daily-name">${name}</p>
+                <p class="daily-desc">${weatherMap[code] || "--"}</p>
+              </div>
+              <div class="daily-rain">${Math.round(daily.precipitation_probability_max?.[i] ?? 0)}%</div>
+              <div class="daily-temp">${Math.round(daily.temperature_2m_min?.[i] ?? 0)}° / ${Math.round(daily.temperature_2m_max?.[i] ?? 0)}°</div>
+            `;
+            dailyListEl.appendChild(row);
+          }
+        }
+
+        async function loadWeather() {
+          try {
+            const url = "https://api.open-meteo.com/v1/forecast"
+              + `?latitude=${lat}&longitude=${lon}`
+              + "&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,surface_pressure,visibility"
+              + "&hourly=temperature_2m,weathercode,uv_index"
+              + "&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max"
+              + `&timezone=${encodeURIComponent(tz)}`;
+
+            const res = await fetch(url);
+            const data = await res.json();
+            const current = data.current || {};
+            const daily = data.daily || {};
+
+            const desc = weatherMap[current.weather_code] || `Mã ${current.weather_code ?? "--"}`;
+            if (descEl) descEl.textContent = desc;
+            if (tempEl) tempEl.textContent = `${Math.round(current.temperature_2m ?? 0)}°`;
+            if (rangeEl && daily.temperature_2m_max?.length) {
+              rangeEl.textContent = `C:${Math.round(daily.temperature_2m_max[0])}°  T:${Math.round(daily.temperature_2m_min[0])}°`;
+            }
+
+            if (feelsEl) feelsEl.textContent = `${Math.round(current.apparent_temperature ?? 0)}°`;
+            if (humidityEl) humidityEl.textContent = `${Math.round(current.relative_humidity_2m ?? 0)}%`;
+            if (windEl) windEl.textContent = `${Math.round(current.wind_speed_10m ?? 0)} km/h`;
+            if (windDirEl) windDirEl.textContent = `Hướng gió: ${Math.round(current.wind_direction_10m ?? 0)}°`;
+            if (visEl) visEl.textContent = `${Math.round((current.visibility ?? 0) / 1000)} km`;
+            if (uvEl && daily.uv_index_max?.length) uvEl.textContent = `${Math.round(daily.uv_index_max[0] ?? 0)}`;
+
+            if (sunsetEl && daily.sunset?.length) sunsetEl.textContent = formatHour(daily.sunset[0]);
+            if (sunriseEl && daily.sunrise?.length) sunriseEl.textContent = `Mặt trời mọc: ${formatHour(daily.sunrise[0])}`;
+
+            renderHourly(data.hourly || {});
+            renderDaily(daily);
+          } catch (_err) {
+            if (descEl) descEl.textContent = "Chưa lấy được dữ liệu thời tiết.";
+          }
+        }
+
+        renderClock();
+        loadWeather();
+        setInterval(renderClock, 1000);
+        setInterval(loadWeather, 10 * 60 * 1000);
+      })();
     </script>
   </body>
 </html>
