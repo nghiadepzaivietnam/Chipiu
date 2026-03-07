@@ -534,6 +534,9 @@
   toggleBtn.addEventListener("pointerdown", (event) => {
     // Touch pointer may not consistently expose button=0 across browsers.
     if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (event.pointerType !== "mouse") {
+      event.preventDefault();
+    }
     startDrag(event.pointerType || "mouse", event.clientX, event.clientY, event.pointerId);
   });
 
@@ -576,17 +579,19 @@
     toggleBtn.addEventListener("touchstart", (event) => {
       const t = event.changedTouches?.[0];
       if (!t) return;
+      event.preventDefault();
       startDrag("touch", t.clientX, t.clientY, null);
-    }, { passive: true });
+    }, { passive: false });
     toggleBtn.addEventListener("touchmove", (event) => {
       const t = event.changedTouches?.[0];
       if (!t || !dragging) return;
+      event.preventDefault();
       lastPointerX = t.clientX;
       lastPointerY = t.clientY;
       const x = t.clientX - dragOffsetX;
       const y = t.clientY - dragOffsetY;
       applyWidgetPosition(x, y, false);
-    }, { passive: true });
+    }, { passive: false });
     toggleBtn.addEventListener("touchend", () => stopDrag({ pointerId: null }), { passive: true });
     toggleBtn.addEventListener("touchcancel", () => stopDrag({ pointerId: null }), { passive: true });
   }
