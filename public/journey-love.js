@@ -155,6 +155,37 @@ function bindReveal() {
   steps.forEach((step) => observer.observe(step));
 }
 
+function calcRoleGap() {
+  if (window.matchMedia("(max-width: 640px)").matches) return 24;
+  if (window.matchMedia("(max-width: 980px)").matches) return 30;
+  return 34;
+}
+
+function adjustVerticalLayout() {
+  if (!trackEl) return;
+  const steps = Array.from(trackEl.querySelectorAll(".journey-step"));
+  if (!steps.length) return;
+
+  let topMax = 0;
+  let bottomMax = 0;
+  steps.forEach((step) => {
+    const card = step.querySelector(".journey-card");
+    if (!card) return;
+    const h = Math.ceil(card.scrollHeight);
+    if (step.dataset.role === "toi") bottomMax = Math.max(bottomMax, h);
+    else topMax = Math.max(topMax, h);
+  });
+
+  const gap = calcRoleGap();
+  const stepMin = Math.min(860, Math.max(420, Math.ceil(Math.max(2 * (gap + topMax), 2 * (gap + bottomMax)) + 20)));
+  const trackMin = Math.min(920, stepMin + 44);
+
+  steps.forEach((step) => {
+    step.style.minHeight = `${stepMin}px`;
+  });
+  trackEl.style.minHeight = `${trackMin}px`;
+}
+
 function renderTimeline(data) {
   trackEl.querySelectorAll(".journey-step").forEach((n) => n.remove());
   const avatars = data?.avatars || fallbackData.avatars;
@@ -170,6 +201,7 @@ function renderTimeline(data) {
   items.forEach((item, index) => {
     trackEl.appendChild(buildStep(item, avatars, index));
   });
+  adjustVerticalLayout();
   bindReveal();
   updateFill();
   updateFocusedStep();
@@ -273,6 +305,7 @@ scrollEl?.addEventListener(
 window.addEventListener(
   "resize",
   () => {
+    adjustVerticalLayout();
     updateFill();
     updateFocusedStep();
   },
