@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thời tiết Hà Nội và Suwon</title>
+    <meta
+      name="description"
+      content="Trang thời tiết riêng hiển thị thời tiết và giờ hiện tại của Hà Nội và Suwon."
+    />
+    <style>
+      :root {
+        --bg-1: #0d182a;
+        --bg-2: #1e2d44;
+        --card: rgba(82, 102, 130, 0.46);
+        --line: rgba(255, 255, 255, 0.16);
+        --text: #f6f9ff;
+        --muted: #b8c5d8;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        font-family: "Quicksand", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 18% 12%, rgba(168, 187, 219, 0.22), transparent 35%),
+          radial-gradient(circle at 90% 86%, rgba(118, 145, 193, 0.2), transparent 35%),
+          linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      }
+
+      main {
+        width: min(980px, 100%);
+        margin: 0 auto;
+        padding: 18px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .top-links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .top-links a {
+        text-decoration: none;
+        border: 1px solid var(--line);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(30px, 6vw, 50px);
+        line-height: 1.02;
+      }
+
+      .muted {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .city-card {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--card);
+        padding: 14px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+      }
+
+      .city-title {
+        margin: 0;
+        font-size: clamp(30px, 7vw, 44px);
+        line-height: 1;
+      }
+
+      .city-time {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .city-date {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .hero-row {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 8px;
+      }
+
+      .temp {
+        margin: 0;
+        font-size: clamp(52px, 11vw, 78px);
+        line-height: 0.88;
+        letter-spacing: -0.03em;
+      }
+
+      .highlow {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .desc {
+        margin: 4px 0 0;
+        font-size: 18px;
+      }
+
+      .sub-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .mini {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 8px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .mini-label {
+        margin: 0;
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 700;
+      }
+
+      .mini-value {
+        margin: 4px 0 0;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .updated {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      @media (max-width: 760px) {
+        main { padding: 12px; }
+        .grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav class="top-links" aria-label="Điều hướng">
+        <a href="/">← Về trang chủ</a>
+      </nav>
+
+      <h1>Thời tiết</h1>
+      <p class="muted">Cập nhật thời tiết và giờ hiện tại của Hà Nội và Suwon.</p>
+
+      <section class="grid">
+        <article class="city-card">
+          <h2 class="city-title">Hà Nội</h2>
+          <p class="city-time" id="hanoiTime">--:--:--</p>
+          <p class="city-date" id="hanoiDate">--</p>
+
+          <div class="hero-row">
+            <p class="temp" id="hanoiTemp">--°</p>
+            <p class="highlow" id="hanoiRange">C:--° T:--°</p>
+          </div>
+          <p class="desc" id="hanoiDesc">Đang tải thời tiết...</p>
+
+          <div class="sub-grid">
+            <div class="mini">
+              <p class="mini-label">Độ ẩm</p>
+              <p class="mini-value" id="hanoiHumidity">--%</p>
+            </div>
+            <div class="mini">
+              <p class="mini-label">Gió</p>
+              <p class="mini-value" id="hanoiWind">-- km/h</p>
+            </div>
+          </div>
+          <p class="updated" id="hanoiUpdated">Cập nhật: --</p>
+        </article>
+
+        <article class="city-card">
+          <h2 class="city-title">Suwon</h2>
+          <p class="city-time" id="suwonTime">--:--:--</p>
+          <p class="city-date" id="suwonDate">--</p>
+
+          <div class="hero-row">
+            <p class="temp" id="suwonTemp">--°</p>
+            <p class="highlow" id="suwonRange">C:--° T:--°</p>
+          </div>
+          <p class="desc" id="suwonDesc">Đang tải thời tiết...</p>
+
+          <div class="sub-grid">
+            <div class="mini">
+              <p class="mini-label">Độ ẩm</p>
+              <p class="mini-value" id="suwonHumidity">--%</p>
+            </div>
+            <div class="mini">
+              <p class="mini-label">Gió</p>
+              <p class="mini-value" id="suwonWind">-- km/h</p>
+            </div>
+          </div>
+          <p class="updated" id="suwonUpdated">Cập nhật: --</p>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      (function initDualWeatherPage() {
+        const weatherMap = {
+          0: "Trời quang",
+          1: "Ít mây",
+          2: "Mây rải rác",
+          3: "Nhiều mây",
+          45: "Sương mù",
+          48: "Sương mù đóng băng",
+          51: "Mưa phùn nhẹ",
+          53: "Mưa phùn vừa",
+          55: "Mưa phùn dày",
+          56: "Mưa phùn lạnh nhẹ",
+          57: "Mưa phùn lạnh mạnh",
+          61: "Mưa nhẹ",
+          63: "Mưa vừa",
+          65: "Mưa to",
+          66: "Mưa lạnh nhẹ",
+          67: "Mưa lạnh to",
+          71: "Tuyết nhẹ",
+          73: "Tuyết vừa",
+          75: "Tuyết dày",
+          77: "Mưa tuyết",
+          80: "Mưa rào nhẹ",
+          81: "Mưa rào vừa",
+          82: "Mưa rào mạnh",
+          85: "Tuyết rào nhẹ",
+          86: "Tuyết rào mạnh",
+          95: "Dông",
+          96: "Dông kèm mưa đá nhẹ",
+          99: "Dông kèm mưa đá mạnh"
+        };
+
+        const cities = [
+          {
+            key: "hanoi",
+            lat: 21.0285,
+            lon: 105.8542,
+            timezone: "Asia/Bangkok"
+          },
+          {
+            key: "suwon",
+            lat: 37.2636,
+            lon: 127.0286,
+            timezone: "Asia/Seoul"
+          }
+        ];
+
+        function byId(id) {
+          return document.getElementById(id);
+        }
+
+        function setText(id, text) {
+          const el = byId(id);
+          if (el) el.textContent = text;
+        }
+
+        function updateClock(city) {
+          const now = new Date();
+          setText(
+            `${city.key}Time`,
+            new Intl.DateTimeFormat("vi-VN", {
+              timeZone: city.timezone,
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: false
+            }).format(now)
+          );
+          setText(
+            `${city.key}Date`,
+            new Intl.DateTimeFormat("vi-VN", {
+              timeZone: city.timezone,
+              weekday: "long",
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric"
+            }).format(now)
+          );
+        }
+
+        async function loadWeather(city) {
+          const url =
+            "https://api.open-meteo.com/v1/forecast"
+            + `?latitude=${city.lat}&longitude=${city.lon}`
+            + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m"
+            + "&daily=temperature_2m_max,temperature_2m_min"
+            + `&timezone=${encodeURIComponent(city.timezone)}`;
+
+          try {
+            const res = await fetch(url);
+            const data = await res.json();
+            const current = data.current || {};
+            const daily = data.daily || {};
+            const code = Number(current.weather_code);
+
+            setText(`${city.key}Temp`, `${Math.round(current.temperature_2m ?? 0)}°`);
+            setText(
+              `${city.key}Range`,
+              `C:${Math.round(daily.temperature_2m_max?.[0] ?? 0)}° T:${Math.round(daily.temperature_2m_min?.[0] ?? 0)}°`
+            );
+            setText(`${city.key}Desc`, weatherMap[code] || `Mã thời tiết ${code}`);
+            setText(`${city.key}Humidity`, `${Math.round(current.relative_humidity_2m ?? 0)}%`);
+            setText(`${city.key}Wind`, `${Math.round(current.wind_speed_10m ?? 0)} km/h`);
+            setText(`${city.key}Updated`, `Cập nhật: ${new Date().toLocaleTimeString("vi-VN")}`);
+          } catch (_err) {
+            setText(`${city.key}Desc`, "Không tải được thời tiết.");
+          }
+        }
+
+        function tickClockAll() {
+          cities.forEach(updateClock);
+        }
+
+        async function loadWeatherAll() {
+          await Promise.all(cities.map(loadWeather));
+        }
+
+        tickClockAll();
+        loadWeatherAll();
+        setInterval(tickClockAll, 1000);
+        setInterval(loadWeatherAll, 10 * 60 * 1000);
+      })();
+    </script>
+  </body>
+</html>
