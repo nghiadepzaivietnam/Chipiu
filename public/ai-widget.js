@@ -58,6 +58,12 @@
   let suppressToggleClick = false;
   let lastPointerX = 0;
   let lastPointerY = 0;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let pendingDragX = 0;
+  let pendingDragY = 0;
+  let dragRafId = 0;
+  let dragBounds = null;
   const supportsPointerEvents = typeof window !== "undefined" && "PointerEvent" in window;
 
   function makeAssistantGreeting() {
@@ -248,6 +254,65 @@
       x: Math.min(maxX, Math.max(margin, Math.round(x))),
       y: Math.min(maxY, Math.max(margin, Math.round(y))),
     };
+  }
+
+  function buildDragBounds() {
+    const margin = 8;
+    const width = toggleBtn.offsetWidth || 68;
+    const height = toggleBtn.offsetHeight || 68;
+    const viewportWidth = window.visualViewport?.width || window.innerWidth;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    return {
+      margin,
+      maxX: Math.max(margin, viewportWidth - width - margin),
+      maxY: Math.max(margin, viewportHeight - height - margin),
+    };
+  }
+
+  function clampWithBounds(x, y, bounds) {
+    if (!bounds) return clampWidgetPosition(x, y);
+    return {
+      x: Math.min(bounds.maxX, Math.max(bounds.margin, Math.round(x))),
+      y: Math.min(bounds.maxY, Math.max(bounds.margin, Math.round(y))),
+    };
+  }
+
+  function applyDragFrame() {
+    dragRafId = 0;
+    if (!dragging) return;
+    const pos = clampWithBounds(pendingDragX, pendingDragY, dragBounds);
+    root.style.left = `${pos.x}px`;
+    root.style.top = `${pos.y}px`;
+    root.style.right = "auto";
+    root.style.bottom = "auto";
+  }
+
+  function queueDragMove(x, y) {
+    pendingDragX = x;
+    pendingDragY = y;
+    if (dragRafId) return;
+    dragRafId = window.requestAnimationFrame(applyDragFrame);
+  }
+
+  function activateDrag(pointerId) {
+    if (dragging) return;
+    if (dragTimer) {
+      clearTimeout(dragTimer);
+      dragTimer = null;
+    }
+    dragging = true;
+    root.classList.add("dragging");
+    const rect = toggleBtn.getBoundingClientRect();
+    dragOffsetX = lastPointerX - rect.left;
+    dragOffsetY = lastPointerY - rect.top;
+    dragBounds = buildDragBounds();
+    if (pointerId != null) {
+      try {
+        toggleBtn.setPointerCapture(pointerId);
+      } catch (_err) {
+        // ignore
+      }
+    }
   }
 
   function saveWidgetPosition(x, y) {
@@ -514,20 +579,11 @@
     suppressToggleClick = false;
     lastPointerX = clientX;
     lastPointerY = clientY;
-    const holdDelay = pointerType === "touch" ? 420 : 260;
+    dragStartX = clientX;
+    dragStartY = clientY;
+    const holdDelay = pointerType === "touch" ? 240 : 160;
     dragTimer = setTimeout(() => {
-      dragging = true;
-      root.classList.add("dragging");
-      const rect = toggleBtn.getBoundingClientRect();
-      dragOffsetX = lastPointerX - rect.left;
-      dragOffsetY = lastPointerY - rect.top;
-      if (pointerId != null) {
-        try {
-          toggleBtn.setPointerCapture(pointerId);
-        } catch (_err) {
-          // ignore
-        }
-      }
+      activateDrag(pointerId);
     }, holdDelay);
   }
 
@@ -543,11 +599,17 @@
   toggleBtn.addEventListener("pointermove", (event) => {
     lastPointerX = event.clientX;
     lastPointerY = event.clientY;
-    if (!dragging) return;
+    if (!dragging) {
+      if (!dragTimer) return;
+      const dx = event.clientX - dragStartX;
+      const dy = event.clientY - dragStartY;
+      if ((dx * dx + dy * dy) < 36) return;
+      activateDrag(event.pointerId);
+    }
     event.preventDefault();
     const x = event.clientX - dragOffsetX;
     const y = event.clientY - dragOffsetY;
-    applyWidgetPosition(x, y, false);
+    queueDragMove(x, y);
   });
 
   function stopDrag(event) {
@@ -558,6 +620,11 @@
     if (!dragging) return;
     dragging = false;
     root.classList.remove("dragging");
+    dragBounds = null;
+    if (dragRafId) {
+      window.cancelAnimationFrame(dragRafId);
+      dragRafId = 0;
+    }
     suppressToggleClick = true;
     const rect = toggleBtn.getBoundingClientRect();
     applyWidgetPosition(rect.left, rect.top, true);
@@ -584,13 +651,20 @@
     }, { passive: false });
     toggleBtn.addEventListener("touchmove", (event) => {
       const t = event.changedTouches?.[0];
-      if (!t || !dragging) return;
+      if (!t) return;
       event.preventDefault();
       lastPointerX = t.clientX;
       lastPointerY = t.clientY;
+      if (!dragging) {
+        if (!dragTimer) return;
+        const dx = t.clientX - dragStartX;
+        const dy = t.clientY - dragStartY;
+        if ((dx * dx + dy * dy) < 36) return;
+        activateDrag(null);
+      }
       const x = t.clientX - dragOffsetX;
       const y = t.clientY - dragOffsetY;
-      applyWidgetPosition(x, y, false);
+      queueDragMove(x, y);
     }, { passive: false });
     toggleBtn.addEventListener("touchend", () => stopDrag({ pointerId: null }), { passive: true });
     toggleBtn.addEventListener("touchcancel", () => stopDrag({ pointerId: null }), { passive: true });

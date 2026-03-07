@@ -5,6 +5,7 @@
   z-index: 120;
   font-family: "Space Grotesk", system-ui, sans-serif;
   width: 68px;
+  will-change: left, top;
 }
 
 body.journal-page .ai-chat-widget {
@@ -38,6 +39,7 @@ body.period-page .ai-chat-widget {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  will-change: transform;
 }
 
 .ai-chat-toggle,
