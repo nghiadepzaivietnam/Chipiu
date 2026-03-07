@@ -341,8 +341,9 @@
       cursor: pointer;
     }
     .top-nav {
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      align-items: stretch;
       gap: 8px;
       padding: 8px;
       border-radius: 18px;
@@ -352,7 +353,7 @@
       box-shadow: 0 14px 34px rgba(38, 13, 18, 0.14);
     }
     .nav-link {
-      flex: 1 0 auto;
+      width: 100%;
       display: inline-flex;
       align-items: center;
       justify-content: center;
