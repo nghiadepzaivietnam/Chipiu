@@ -62,8 +62,15 @@ function openLightbox(item) {
     const video = document.createElement('video');
     video.src = item.mediaUrl;
     video.controls = true;
-    video.autoplay = true;
+    video.autoplay = false;
+    video.preload = 'metadata';
+    video.muted = true;
     video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.addEventListener('error', () => {
+      lightboxMediaWrap.innerHTML = '<p class="lightbox-only-text">Kh\u00f4ng t\u1ea3i \u0111\u01b0\u1ee3c video.</p>';
+    });
     lightboxMediaWrap.appendChild(video);
   } else {
     const text = document.createElement('p');
