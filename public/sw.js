@@ -1,4 +1,5 @@
 ﻿const CACHE_NAME = "hai-anh-pwa-v1";
+const CACHE_NAME = "hai-anh-pwa-v2";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -42,6 +43,15 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;
+  const url = new URL(request.url);
+  const isMedia =
+    url.pathname.startsWith("/uploads/") ||
+    request.destination === "video" ||
+    request.headers.has("range");
+  if (isMedia) {
+    event.respondWith(fetch(request));
+    return;
+  }
 
   const isNavigate = request.mode === "navigate";
   if (isNavigate) {
