@@ -164,7 +164,26 @@ function createCard(item) {
   if (item.mediaType === 'image' && item.mediaUrl) {
     card.innerHTML = `<img src="${item.mediaUrl}" alt="moment" loading="lazy" />`;
   } else if (item.mediaType === 'video' && item.mediaUrl) {
-    card.innerHTML = `<video src="${item.mediaUrl}" muted playsinline webkit-playsinline autoplay loop preload="metadata"></video>`;
+    card.innerHTML = `<video src="${item.mediaUrl}" muted playsinline webkit-playsinline preload="metadata"></video>`;
+    const video = card.querySelector('video');
+    if (video) {
+      video.muted = true;
+      video.playsInline = true;
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.preload = 'metadata';
+      video.addEventListener('loadedmetadata', () => {
+        try {
+          video.currentTime = Math.min(0.2, video.duration || 0.2);
+          video.pause();
+        } catch (_err) {}
+      });
+      video.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openLightbox(item);
+      });
+    }
   } else {
     const safeText = item.caption ? item.caption : 'Kho\u1ea3nh kh\u1eafc';
     card.classList.add('text-tile');

@@ -981,6 +981,10 @@ body.journal-page {
   display: block;
 }
 
+.camera-tile video {
+  pointer-events: none;
+}
+
 .camera-tile::after {
   content: "";
   position: absolute;
