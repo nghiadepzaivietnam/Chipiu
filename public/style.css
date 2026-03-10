@@ -32,6 +32,30 @@ body {
   overflow-x: hidden;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    animation: appFadeIn 360ms ease-out both;
+  }
+
+  main,
+  .locket-main,
+  .kitty-main,
+  .counter-main,
+  .camera-wall-page {
+    animation: appRiseIn 480ms ease-out both;
+  }
+}
+
+@keyframes appFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes appRiseIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 body.counter-page {
   position: relative;
   background: #0c0f1a;
