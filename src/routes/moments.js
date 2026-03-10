@@ -2,10 +2,16 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+const { execFile } = require('child_process');
+const { promisify } = require('util');
 const Moment = require('../models/Moment');
 const { cloudinary, isCloudinaryEnabled, toPublicIdFromUrl } = require('../lib/cloudinary');
 
 const router = express.Router();
+
+const execFileAsync = promisify(execFile);
+let ffmpegChecked = false;
+let ffmpegAvailable = false;
 
 function normalizeText(value) {
   return String(value || '')
@@ -58,6 +64,52 @@ async function safeDeleteFile(filePath) {
   }
 }
 
+async function checkFfmpeg() {
+  if (ffmpegChecked) return ffmpegAvailable;
+  ffmpegChecked = true;
+  try {
+    await execFileAsync('ffmpeg', ['-version']);
+    ffmpegAvailable = true;
+  } catch (_err) {
+    ffmpegAvailable = false;
+  }
+  return ffmpegAvailable;
+}
+
+async function compressVideoIfPossible(inputPath) {
+  const canRun = await checkFfmpeg();
+  if (!canRun) return { path: inputPath, compressed: false };
+
+  const ext = path.extname(inputPath);
+  const base = path.basename(inputPath, ext);
+  const outputPath = path.join(path.dirname(inputPath), `${base}-compressed.mp4`);
+
+  const args = [
+    '-y',
+    '-i',
+    inputPath,
+    '-vf',
+    'scale=min(1280,iw):-2',
+    '-c:v',
+    'libx264',
+    '-preset',
+    'veryfast',
+    '-crf',
+    '28',
+    '-c:a',
+    'aac',
+    '-b:a',
+    '96k',
+    '-movflags',
+    '+faststart',
+    outputPath,
+  ];
+
+  await execFileAsync('ffmpeg', args);
+  await safeDeleteFile(inputPath);
+  return { path: outputPath, compressed: true };
+}
+
 function buildDiskPathFromUrl(urlPath) {
   if (!urlPath || typeof urlPath !== 'string') return null;
   if (!urlPath.startsWith('/uploads/')) return null;
@@ -84,16 +136,42 @@ router.post('/', (req, res) => {
 
       if (req.file) {
         mediaType = req.file.mimetype.startsWith('video') ? 'video' : 'image';
+        let localPath = req.file.path;
+
+        if (mediaType === 'video') {
+          try {
+            const compressed = await compressVideoIfPossible(localPath);
+            localPath = compressed.path;
+          } catch (err) {
+            console.error('Video compression failed:', err.message);
+          }
+        }
 
         if (isCloudinaryEnabled) {
-          const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          const uploadResult = await cloudinary.uploader.upload(localPath, {
             folder: 'hdha/moments',
             resource_type: mediaType === 'video' ? 'video' : 'image',
+            ...(mediaType === 'video'
+              ? {
+                  eager: [
+                    {
+                      width: 1280,
+                      height: 720,
+                      crop: 'limit',
+                      quality: 'auto',
+                      fetch_format: 'mp4',
+                      video_codec: 'h264',
+                      audio_codec: 'aac',
+                    },
+                  ],
+                }
+              : {}),
           });
-          mediaUrl = uploadResult.secure_url;
-          await safeDeleteFile(req.file.path);
+          mediaUrl = uploadResult.eager?.[0]?.secure_url || uploadResult.secure_url;
+          await safeDeleteFile(localPath);
         } else {
-          mediaUrl = `/uploads/${req.file.filename}`;
+          const filename = path.basename(localPath);
+          mediaUrl = `/uploads/${filename}`;
         }
       }
 
