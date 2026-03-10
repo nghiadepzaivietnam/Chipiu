@@ -12,6 +12,7 @@ const router = express.Router();
 const execFileAsync = promisify(execFile);
 let ffmpegChecked = false;
 let ffmpegAvailable = false;
+let ffmpegPath = 'ffmpeg';
 
 function normalizeText(value) {
   return String(value || '')
@@ -64,11 +65,44 @@ async function safeDeleteFile(filePath) {
   }
 }
 
+function resolveFfmpegPath() {
+  if (process.env.FFMPEG_PATH && fs.existsSync(process.env.FFMPEG_PATH)) {
+    return process.env.FFMPEG_PATH;
+  }
+
+  if (process.platform === 'win32' && process.env.LOCALAPPDATA) {
+    const baseDir = path.join(
+      process.env.LOCALAPPDATA,
+      'Microsoft',
+      'WinGet',
+      'Packages',
+    );
+    try {
+      const packageDirs = fs.readdirSync(baseDir);
+      const ffmpegPackage = packageDirs.find((dir) => dir.startsWith('Gyan.FFmpeg_'));
+      if (ffmpegPackage) {
+        const pkgRoot = path.join(baseDir, ffmpegPackage);
+        const builds = fs.readdirSync(pkgRoot);
+        const buildDir = builds.find((dir) => dir.startsWith('ffmpeg-') && dir.includes('full_build'));
+        if (buildDir) {
+          const candidate = path.join(pkgRoot, buildDir, 'bin', 'ffmpeg.exe');
+          if (fs.existsSync(candidate)) return candidate;
+        }
+      }
+    } catch (_err) {
+      return 'ffmpeg';
+    }
+  }
+
+  return 'ffmpeg';
+}
+
 async function checkFfmpeg() {
   if (ffmpegChecked) return ffmpegAvailable;
   ffmpegChecked = true;
+  ffmpegPath = resolveFfmpegPath();
   try {
-    await execFileAsync('ffmpeg', ['-version']);
+    await execFileAsync(ffmpegPath, ['-version']);
     ffmpegAvailable = true;
   } catch (_err) {
     ffmpegAvailable = false;
@@ -105,7 +139,7 @@ async function compressVideoIfPossible(inputPath) {
     outputPath,
   ];
 
-  await execFileAsync('ffmpeg', args);
+  await execFileAsync(ffmpegPath, args);
   await safeDeleteFile(inputPath);
   return { path: outputPath, compressed: true };
 }
