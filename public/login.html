@@ -1,279 +1,183 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HDHA App</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-
-<style>
-
-body{
-margin:0;
-font-family:"Quicksand",sans-serif;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-background:linear-gradient(135deg,#ffd6e7,#fff0f6);
-overflow:hidden;
-}
-
-/* background hearts */
-
-.hearts span{
-position:absolute;
-color:#ff7fb0;
-font-size:20px;
-animation:float 7s linear infinite;
-}
-
-@keyframes float{
-0%{transform:translateY(110vh)}
-100%{transform:translateY(-10vh)}
-}
-
-/* login card */
-
-.card{
-width:360px;
-background:white;
-border-radius:30px;
-padding:35px;
-box-shadow:0 20px 50px rgba(255,105,160,0.25);
-text-align:center;
-position:relative;
-z-index:2;
-}
-
-/* kitty */
-
-.kitty{
-width:120px;
-margin:auto;
-position:relative;
-transition:0.3s;
-}
-
-.kitty img{
-width:100%;
-}
-
-.paw{
-position:absolute;
-width:35px;
-top:40px;
-transition:0.3s;
-}
-
-.paw.left{
-left:10px;
-}
-
-.paw.right{
-right:10px;
-}
-
-.hide-eyes .paw{
-top:5px;
-}
-
-/* text */
-
-h1{
-font-family:"Baloo 2";
-color:#ff5fa3;
-margin-bottom:5px;
-}
-
-.sub{
-color:#9b5d77;
-font-weight:600;
-margin-bottom:20px;
-}
-
-/* input */
-
-input{
-width:100%;
-padding:13px;
-border-radius:14px;
-border:1px solid #ffc1da;
-font-size:15px;
-}
-
-input:focus{
-outline:none;
-border-color:#ff6fa9;
-box-shadow:0 0 0 3px rgba(255,120,170,0.2);
-}
-
-/* button */
-
-button{
-margin-top:18px;
-width:100%;
-padding:13px;
-border:none;
-border-radius:30px;
-background:linear-gradient(135deg,#ff7eb3,#ff4f8b);
-color:white;
-font-weight:700;
-font-size:16px;
-cursor:pointer;
-transition:0.2s;
-}
-
-button:hover{
-transform:scale(1.03);
-box-shadow:0 10px 30px rgba(255,90,150,0.4);
-}
-
-/* status */
-
-.status{
-margin-top:10px;
-font-weight:700;
-color:#c04a7d;
-}
-
-/* sad animation */
-
-.sad{
-animation:shake .4s;
-}
-
-@keyframes shake{
-0%{transform:translateX(0)}
-25%{transform:translateX(-5px)}
-50%{transform:translateX(5px)}
-75%{transform:translateX(-5px)}
-100%{transform:translateX(0)}
-}
-
-/* success hearts */
-
-.big-heart{
-position:fixed;
-font-size:40px;
-animation:love 2s ease forwards;
-}
-
-@keyframes love{
-0%{transform:scale(0);opacity:1}
-100%{transform:scale(3);opacity:0}
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="hearts">
-<span style="left:10%">❤</span>
-<span style="left:30%;animation-delay:2s">❤</span>
-<span style="left:50%;animation-delay:4s">❤</span>
-<span style="left:70%;animation-delay:1s">❤</span>
-<span style="left:90%;animation-delay:3s">❤</span>
-</div>
-
-<div class="card">
-
-<div class="kitty" id="kitty">
-
-<img src="https://upload.wikimedia.org/wikipedia/en/0/05/Hello_Kitty_character_portrait.png">
-
-<img class="paw left" src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
-<img class="paw right" src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
-
-</div>
-
-<h1>HDHA App</h1>
-
-<div class="sub">
-Nhập mật khẩu để vào 
-</div>
-
-<form id="loginForm">
-
-<input
-id="password"
-type="password"
-placeholder="Nhập mật khẩu..."
-required
->
-
-<button type="submit">
-Vào không gian của tụi mình
-</button>
-
-<div class="status" id="status"></div>
-
-</form>
-
-</div>
-
-<script>
-
-const passwordInput = document.getElementById("password")
-const kitty = document.getElementById("kitty")
-const form = document.getElementById("loginForm")
-const status = document.getElementById("status")
-
-const PASSWORD = "iloveyou"
-
-passwordInput.addEventListener("focus",()=>{
-kitty.classList.add("hide-eyes")
-})
-
-passwordInput.addEventListener("blur",()=>{
-kitty.classList.remove("hide-eyes")
-})
-
-form.addEventListener("submit",(e)=>{
-
-e.preventDefault()
-
-if(passwordInput.value === PASSWORD){
-
-status.innerText="Đúng rồi bé yêu 💖"
-
-for(let i=0;i<10;i++){
-
-let heart=document.createElement("div")
-heart.innerHTML="💖"
-heart.className="big-heart"
-
-heart.style.left=Math.random()*100+"vw"
-heart.style.top=Math.random()*100+"vh"
-
-document.body.appendChild(heart)
-
-setTimeout(()=>heart.remove(),2000)
-
-}
-
-setTimeout(()=>{
-window.location.href="home.html"
-},1500)
-
-}else{
-
-status.innerText="Sai mật khẩu rồi 🥺"
-
-kitty.classList.add("sad")
-
-setTimeout(()=>{
-kitty.classList.remove("sad")
-},400)
-
-}
-
-})
-
-</script>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Đăng nhập - Hai Anh</title>
+    <style>
+      :root {
+        --pink: #ffc2d1;
+        --rose: #ff8fb1;
+        --deep: #7a2e52;
+        --cream: #fff7fb;
+        --shadow: 0 30px 60px rgba(0,0,0,.25);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Quicksand", "Baloo 2", sans-serif;
+        background:
+          radial-gradient(circle at 16% 12%, rgba(255, 190, 220, 0.35), transparent 36%),
+          radial-gradient(circle at 85% 0%, rgba(255, 210, 230, 0.4), transparent 40%),
+          #f4b7c3;
+        overflow: hidden;
+        color: var(--deep);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(white 2px, transparent 2px);
+        background-size: 40px 40px;
+        opacity: .35;
+      }
+      .phone {
+        width: 360px;
+        height: 680px;
+        background: var(--cream);
+        border-radius: 45px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        padding-top: 80px;
+        position: relative;
+        border: 2px solid rgba(255,255,255,.7);
+      }
+      .island {
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 160px;
+        height: 32px;
+        background: #111;
+        border-radius: 20px;
+      }
+      .kitty {
+        width: 200px;
+        margin: auto;
+        position: relative;
+      }
+      .eye { transition: .1s; }
+      .hand {
+        width: 60px;
+        height: 35px;
+        background: #ffc9d6;
+        border-radius: 30px;
+        position: absolute;
+        top: 120px;
+        display: none;
+      }
+      .hand.left { left: 20px; }
+      .hand.right { right: 20px; }
+      .blush {
+        position: absolute;
+        width: 20px;
+        height: 12px;
+        background: #ff8fa3;
+        border-radius: 20px;
+        top: 95px;
+        opacity: .6;
+      }
+      .blush.left { left: 55px; }
+      .blush.right { right: 55px; }
+      .tear {
+        width: 8px;
+        height: 14px;
+        background: #7fd0ff;
+        border-radius: 50%;
+        position: absolute;
+        top: 105px;
+        display: none;
+        animation: drop 1s infinite;
+      }
+      .t1 { left: 70px; }
+      .t2 { right: 70px; }
+      @keyframes drop {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(18px); }
+      }
+      .angry { animation: shake .3s; }
+      @keyframes shake {
+        0% { transform: translateX(-6px); }
+        50% { transform: translateX(6px); }
+        100% { transform: translateX(0); }
+      }
+      input {
+        width: 240px;
+        padding: 14px;
+        margin-top: 16px;
+        border-radius: 14px;
+        border: 1px solid #ddd;
+        background: #fff;
+        font-size: 15px;
+      }
+      button {
+        margin-top: 28px;
+        padding: 15px 60px;
+        border: none;
+        border-radius: 16px;
+        background: #ffb6c1;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .status {
+        margin-top: 10px;
+        font-weight: 700;
+        color: #a13b6a;
+        min-height: 20px;
+      }
+      .heart {
+        position: absolute;
+        font-size: 22px;
+        animation: float 2s forwards;
+      }
+      @keyframes float {
+        0% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(-300px); opacity: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <div class="island"></div>
+      <div class="kitty" id="kitty">
+        <svg width="200" height="200" aria-hidden="true">
+          <ellipse cx="100" cy="90" rx="85" ry="75" fill="#ffc9d6" />
+          <ellipse cx="70" cy="20" rx="20" ry="45" fill="#ffc9d6" />
+          <ellipse cx="130" cy="20" rx="20" ry="45" fill="#ffc9d6" />
+          <ellipse cx="70" cy="25" rx="10" ry="30" fill="#ffdfe7" />
+          <ellipse cx="130" cy="25" rx="10" ry="30" fill="#ffdfe7" />
+          <ellipse cx="100" cy="100" rx="60" ry="50" fill="white" />
+          <circle id="eyeL" class="eye" cx="80" cy="95" r="6" />
+          <circle id="eyeR" class="eye" cx="120" cy="95" r="6" />
+          <ellipse cx="100" cy="105" rx="7" ry="5" fill="#ffd54f" />
+          <line x1="40" y1="95" x2="70" y2="95" stroke="black" />
+          <line x1="40" y1="105" x2="70" y2="100" stroke="black" />
+          <line x1="160" y1="95" x2="130" y2="95" stroke="black" />
+          <line x1="160" y1="105" x2="130" y2="100" stroke="black" />
+          <circle cx="135" cy="70" r="12" fill="#ff4d4d" />
+          <circle cx="155" cy="70" r="12" fill="#ff4d4d" />
+          <circle cx="145" cy="70" r="6" fill="#ff4d4d" />
+        </svg>
+        <div class="blush left"></div>
+        <div class="blush right"></div>
+        <div class="hand left" id="handL"></div>
+        <div class="hand right" id="handR"></div>
+        <div class="tear t1" id="tear1"></div>
+        <div class="tear t2" id="tear2"></div>
+      </div>
+      <form id="loginForm" autocomplete="off">
+        <input id="user" placeholder="Username" value="chipiu" />
+        <input id="pass" type="password" placeholder="Password" />
+        <button type="submit">Login</button>
+        <div class="status" id="loginStatus"></div>
+      </form>
+    </div>
+    <script src="/login.js"></script>
+  </body>
 </html>
