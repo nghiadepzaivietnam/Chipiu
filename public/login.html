@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -49,6 +49,86 @@
         background: rgba(255, 190, 220, 0.45);
         filter: blur(50px);
         border-radius: 50%;
+      }
+      .kitty-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .kitty-badge {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 10px 20px rgba(255, 120, 170, 0.25);
+        border: 1px solid rgba(255, 170, 210, 0.5);
+      }
+      .kitty-face {
+        width: 40px;
+        height: 32px;
+        position: relative;
+      }
+      .kitty-head {
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
+        background: #fff;
+        border: 2px solid #3b2b2b;
+      }
+      .kitty-face::before,
+      .kitty-face::after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 3px 3px 6px 6px;
+        background: #fff;
+        border: 2px solid #3b2b2b;
+      }
+      .kitty-face::before { left: 2px; }
+      .kitty-face::after { right: 2px; }
+      .kitty-eye {
+        position: absolute;
+        top: 13px;
+        width: 4px;
+        height: 6px;
+        background: #3b2b2b;
+        border-radius: 3px;
+      }
+      .kitty-eye.left { left: 10px; }
+      .kitty-eye.right { right: 10px; }
+      .kitty-nose {
+        position: absolute;
+        top: 16px;
+        left: 50%;
+        width: 6px;
+        height: 4px;
+        transform: translateX(-50%);
+        border-radius: 3px;
+        background: #ffb3c8;
+      }
+      .kitty-bow {
+        position: absolute;
+        top: -6px;
+        right: -4px;
+        width: 14px;
+        height: 10px;
+        background: #ff6ea8;
+        border-radius: 6px;
+      }
+      .kitty-bow::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: 1px;
+        width: 10px;
+        height: 8px;
+        background: #ff6ea8;
+        border-radius: 6px;
       }
       h1 {
         margin: 0 0 6px;
@@ -120,8 +200,21 @@
   </head>
   <body>
     <div class="wrap">
-      <h1>Xin chào bé yêu</h1>
-      <p>Nhập mật khẩu để vào không gian riêng của tụi mình.</p>
+      <div class="kitty-row">
+        <div class="kitty-badge" aria-hidden="true">
+          <div class="kitty-face">
+            <div class="kitty-head"></div>
+            <div class="kitty-eye left"></div>
+            <div class="kitty-eye right"></div>
+            <div class="kitty-nose"></div>
+            <div class="kitty-bow"></div>
+          </div>
+        </div>
+        <div>
+          <h1>Xin chào bé yêu</h1>
+          <p>Nhập mật khẩu để vào không gian riêng của tụi mình.</p>
+        </div>
+      </div>
       <form id="loginForm" autocomplete="off">
         <label for="passwordInput">Mật khẩu</label>
         <input id="passwordInput" type="password" placeholder="••••••••••" required />
