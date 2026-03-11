@@ -1,183 +1,93 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Đăng nhập - Hai Anh</title>
-    <style>
-      :root {
-        --pink: #ffc2d1;
-        --rose: #ff8fb1;
-        --deep: #7a2e52;
-        --cream: #fff7fb;
-        --shadow: 0 30px 60px rgba(0,0,0,.25);
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: "Quicksand", "Baloo 2", sans-serif;
-        background:
-          radial-gradient(circle at 16% 12%, rgba(255, 190, 220, 0.35), transparent 36%),
-          radial-gradient(circle at 85% 0%, rgba(255, 210, 230, 0.4), transparent 40%),
-          #f4b7c3;
-        overflow: hidden;
-        color: var(--deep);
-      }
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background-image: radial-gradient(white 2px, transparent 2px);
-        background-size: 40px 40px;
-        opacity: .35;
-      }
-      .phone {
-        width: 360px;
-        height: 680px;
-        background: var(--cream);
-        border-radius: 45px;
-        box-shadow: var(--shadow);
-        text-align: center;
-        padding-top: 80px;
-        position: relative;
-        border: 2px solid rgba(255,255,255,.7);
-      }
-      .island {
-        position: absolute;
-        top: 12px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 160px;
-        height: 32px;
-        background: #111;
-        border-radius: 20px;
-      }
-      .kitty {
-        width: 200px;
-        margin: auto;
-        position: relative;
-      }
-      .eye { transition: .1s; }
-      .hand {
-        width: 60px;
-        height: 35px;
-        background: #ffc9d6;
-        border-radius: 30px;
-        position: absolute;
-        top: 120px;
-        display: none;
-      }
-      .hand.left { left: 20px; }
-      .hand.right { right: 20px; }
-      .blush {
-        position: absolute;
-        width: 20px;
-        height: 12px;
-        background: #ff8fa3;
-        border-radius: 20px;
-        top: 95px;
-        opacity: .6;
-      }
-      .blush.left { left: 55px; }
-      .blush.right { right: 55px; }
-      .tear {
-        width: 8px;
-        height: 14px;
-        background: #7fd0ff;
-        border-radius: 50%;
-        position: absolute;
-        top: 105px;
-        display: none;
-        animation: drop 1s infinite;
-      }
-      .t1 { left: 70px; }
-      .t2 { right: 70px; }
-      @keyframes drop {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(18px); }
-      }
-      .angry { animation: shake .3s; }
-      @keyframes shake {
-        0% { transform: translateX(-6px); }
-        50% { transform: translateX(6px); }
-        100% { transform: translateX(0); }
-      }
-      input {
-        width: 240px;
-        padding: 14px;
-        margin-top: 16px;
-        border-radius: 14px;
-        border: 1px solid #ddd;
-        background: #fff;
-        font-size: 15px;
-      }
-      button {
-        margin-top: 28px;
-        padding: 15px 60px;
-        border: none;
-        border-radius: 16px;
-        background: #ffb6c1;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;
-      }
-      .status {
-        margin-top: 10px;
-        font-weight: 700;
-        color: #a13b6a;
-        min-height: 20px;
-      }
-      .heart {
-        position: absolute;
-        font-size: 22px;
-        animation: float 2s forwards;
-      }
-      @keyframes float {
-        0% { transform: translateY(0); opacity: 1; }
-        100% { transform: translateY(-300px); opacity: 0; }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="phone">
-      <div class="island"></div>
-      <div class="kitty" id="kitty">
-        <svg width="200" height="200" aria-hidden="true">
-          <ellipse cx="100" cy="90" rx="85" ry="75" fill="#ffc9d6" />
-          <ellipse cx="70" cy="20" rx="20" ry="45" fill="#ffc9d6" />
-          <ellipse cx="130" cy="20" rx="20" ry="45" fill="#ffc9d6" />
-          <ellipse cx="70" cy="25" rx="10" ry="30" fill="#ffdfe7" />
-          <ellipse cx="130" cy="25" rx="10" ry="30" fill="#ffdfe7" />
-          <ellipse cx="100" cy="100" rx="60" ry="50" fill="white" />
-          <circle id="eyeL" class="eye" cx="80" cy="95" r="6" />
-          <circle id="eyeR" class="eye" cx="120" cy="95" r="6" />
-          <ellipse cx="100" cy="105" rx="7" ry="5" fill="#ffd54f" />
-          <line x1="40" y1="95" x2="70" y2="95" stroke="black" />
-          <line x1="40" y1="105" x2="70" y2="100" stroke="black" />
-          <line x1="160" y1="95" x2="130" y2="95" stroke="black" />
-          <line x1="160" y1="105" x2="130" y2="100" stroke="black" />
-          <circle cx="135" cy="70" r="12" fill="#ff4d4d" />
-          <circle cx="155" cy="70" r="12" fill="#ff4d4d" />
-          <circle cx="145" cy="70" r="6" fill="#ff4d4d" />
-        </svg>
-        <div class="blush left"></div>
-        <div class="blush right"></div>
-        <div class="hand left" id="handL"></div>
-        <div class="hand right" id="handR"></div>
-        <div class="tear t1" id="tear1"></div>
-        <div class="tear t2" id="tear2"></div>
-      </div>
-      <form id="loginForm" autocomplete="off">
-        <input id="user" placeholder="Username" value="chipiu" />
-        <input id="pass" type="password" placeholder="Password" />
-        <button type="submit">Login</button>
-        <div class="status" id="loginStatus"></div>
-      </form>
-    </div>
-    <script src="/login.js"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#f6b6c7;
+font-family:sans-serif;
+}
+.phone{
+width:360px;
+height:680px;
+background:white;
+border-radius:40px;
+box-shadow:0 30px 60px rgba(0,0,0,.25);
+text-align:center;
+padding-top:80px;
+}
+.kitty{
+width:200px;
+margin:auto;
+position:relative;
+}
+.kitty img{
+width:100%;
+}
+.eye{
+width:10px;
+height:10px;
+background:black;
+border-radius:50%;
+position:absolute;
+top:92px;
+}
+.eye.left{left:72px}
+.eye.right{right:72px}
+input{
+width:240px;
+padding:14px;
+margin-top:20px;
+border-radius:14px;
+border:1px solid #ccc;
+}
+button{
+margin-top:30px;
+padding:16px 60px;
+border:none;
+border-radius:16px;
+background:#ffb6c1;
+font-weight:700;
+}
+.status{
+margin-top:12px;
+font-weight:700;
+color:#a13b6a;
+min-height:20px;
+}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="kitty">
+    <img src="/login.jpg" alt="Hello Kitty">
+    <div class="eye left" id="eyeL"></div>
+    <div class="eye right" id="eyeR"></div>
+  </div>
+  <form id="loginForm" autocomplete="off">
+    <input id="user" placeholder="Username" value="chipiu">
+    <input id="pass" type="password" placeholder="Password">
+    <button type="submit">Login</button>
+    <div class="status" id="loginStatus"></div>
+  </form>
+</div>
+<script>
+const eyeL=document.getElementById("eyeL")
+const eyeR=document.getElementById("eyeR")
+
+document.addEventListener("mousemove",e=>{
+  let x=(e.clientX/window.innerWidth-.5)*10
+  let y=(e.clientY/window.innerHeight-.5)*6
+  eyeL.style.transform=`translate(${x}px,${y}px)`
+  eyeR.style.transform=`translate(${x}px,${y}px)`
+})
+</script>
+<script src="/login.js"></script>
+</body>
 </html>
