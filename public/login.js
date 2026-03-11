@@ -1,4 +1,5 @@
 const form = document.getElementById('loginForm');
+const form = document.getElementById('loginForm');
 const usernameInput = document.getElementById('user');
 const passwordInput = document.getElementById('pass');
 const statusEl = document.getElementById('loginStatus');
