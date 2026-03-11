@@ -1,5 +1,5 @@
 ﻿const CACHE_NAME = "hai-anh-pwa-v1";
-const CACHE_NAME = "hai-anh-pwa-v3";
+const CACHE_NAME = "hai-anh-pwa-v4";
 const CORE_ASSETS = [
   "/",
   "/index.html",
