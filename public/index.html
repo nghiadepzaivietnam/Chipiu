@@ -102,6 +102,23 @@
       position: relative;
       overflow: hidden;
     }
+    .lottie-heart {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 120px;
+      height: 120px;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    @media (max-width: 640px) {
+      .lottie-heart {
+        width: 88px;
+        height: 88px;
+        right: 10px;
+        top: 10px;
+      }
+    }
     .hero::after, .hero::before {
       content: "";
       position: absolute;
@@ -535,6 +552,7 @@
   </section>
   <main class="page">
     <section class="hero">
+      <div class="lottie-heart" aria-hidden="true"></div>
       <div class="tag">
         <svg width="20" height="18" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M12 21s-6.6-4.35-9.5-8.36C-0.45 8.61 1.07 3.5 5.2 2.36 7.48 1.72 9.7 2.7 12 5.15 14.3 2.7 16.52 1.72 18.8 2.36c4.13 1.14 5.65 6.25 2.7 10.28C18.6 16.65 12 21 12 21Z" fill="#ff5f8d"/>
@@ -652,6 +670,7 @@
 
     <p class="footer">From Vietnam with luv. Trọng Nghĩa của em.</p>
   </main>
+  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
   <script src="https://w.soundcloud.com/player/api.js"></script>
   <script>
     const navWrap = document.getElementById("topNavWrap");
@@ -787,6 +806,17 @@
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
+      });
+    }
+
+    const lottieTarget = document.querySelector(".lottie-heart");
+    if (lottieTarget && window.lottie) {
+      window.lottie.loadAnimation({
+        container: lottieTarget,
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "https://assets7.lottiefiles.com/packages/lf20_7fCbvNSmFD.json",
       });
     }
   </script>
