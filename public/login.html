@@ -1,228 +1,279 @@
 ﻿<!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng nhập - Hai Anh</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --pink: #ff9ac3;
-        --rose: #ff6ea8;
-        --deep: #7a2e52;
-        --cream: #fff7fb;
-        --card: rgba(255, 255, 255, 0.92);
-        --shadow: 0 18px 40px rgba(255, 110, 168, 0.18);
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: "Quicksand", sans-serif;
-        background:
-          radial-gradient(circle at 16% 12%, rgba(255, 190, 220, 0.35), transparent 36%),
-          radial-gradient(circle at 85% 0%, rgba(255, 210, 230, 0.4), transparent 40%),
-          var(--cream);
-        display: grid;
-        place-items: center;
-        padding: 20px;
-        color: var(--deep);
-      }
-      .wrap {
-        width: min(420px, 100%);
-        background: var(--card);
-        border-radius: 24px;
-        padding: 28px;
-        box-shadow: var(--shadow);
-        border: 1px solid rgba(255, 160, 205, 0.35);
-        position: relative;
-        overflow: hidden;
-      }
-      .wrap::before {
-        content: "";
-        position: absolute;
-        inset: -40% -30% auto auto;
-        width: 220px;
-        height: 220px;
-        background: rgba(255, 190, 220, 0.45);
-        filter: blur(50px);
-        border-radius: 50%;
-      }
-      .kitty-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 10px;
-      }
-      .kitty-badge {
-        width: 56px;
-        height: 56px;
-        border-radius: 16px;
-        background: #fff;
-        display: grid;
-        place-items: center;
-        box-shadow: 0 10px 20px rgba(255, 120, 170, 0.25);
-        border: 1px solid rgba(255, 170, 210, 0.5);
-      }
-      .kitty-face {
-        width: 40px;
-        height: 32px;
-        position: relative;
-      }
-      .kitty-head {
-        position: absolute;
-        inset: 0;
-        border-radius: 16px;
-        background: #fff;
-        border: 2px solid #3b2b2b;
-      }
-      .kitty-face::before,
-      .kitty-face::after {
-        content: "";
-        position: absolute;
-        top: 4px;
-        width: 10px;
-        height: 10px;
-        border-radius: 3px 3px 6px 6px;
-        background: #fff;
-        border: 2px solid #3b2b2b;
-      }
-      .kitty-face::before { left: 2px; }
-      .kitty-face::after { right: 2px; }
-      .kitty-eye {
-        position: absolute;
-        top: 13px;
-        width: 4px;
-        height: 6px;
-        background: #3b2b2b;
-        border-radius: 3px;
-      }
-      .kitty-eye.left { left: 10px; }
-      .kitty-eye.right { right: 10px; }
-      .kitty-nose {
-        position: absolute;
-        top: 16px;
-        left: 50%;
-        width: 6px;
-        height: 4px;
-        transform: translateX(-50%);
-        border-radius: 3px;
-        background: #ffb3c8;
-      }
-      .kitty-bow {
-        position: absolute;
-        top: -6px;
-        right: -4px;
-        width: 14px;
-        height: 10px;
-        background: #ff6ea8;
-        border-radius: 6px;
-      }
-      .kitty-bow::before {
-        content: "";
-        position: absolute;
-        left: -6px;
-        top: 1px;
-        width: 10px;
-        height: 8px;
-        background: #ff6ea8;
-        border-radius: 6px;
-      }
-      h1 {
-        margin: 0 0 6px;
-        font-family: "Baloo 2", sans-serif;
-        font-size: 30px;
-        color: #f05c9a;
-      }
-      p {
-        margin: 0 0 18px;
-        font-size: 15px;
-        color: #8a4f6b;
-        font-weight: 600;
-      }
-      label {
-        display: block;
-        font-weight: 700;
-        font-size: 14px;
-        margin-bottom: 8px;
-        color: #8a4f6b;
-      }
-      input[type="password"] {
-        width: 100%;
-        border-radius: 14px;
-        padding: 12px 14px;
-        border: 1px solid rgba(240, 120, 170, 0.3);
-        background: #fff;
-        font-size: 15px;
-        outline: none;
-        color: #5f2e45;
-        font-weight: 600;
-      }
-      input[type="password"]:focus {
-        border-color: #ff8fb8;
-        box-shadow: 0 0 0 3px rgba(255, 140, 188, 0.2);
-      }
-      button {
-        margin-top: 16px;
-        width: 100%;
-        border: none;
-        border-radius: 999px;
-        padding: 12px 16px;
-        background: linear-gradient(135deg, #ff86b4, #ff5f8d);
-        color: #fff;
-        font-weight: 700;
-        font-size: 16px;
-        cursor: pointer;
-        box-shadow: 0 10px 26px rgba(255, 95, 141, 0.28);
-      }
-      .status {
-        margin-top: 12px;
-        font-size: 14px;
-        font-weight: 700;
-        color: #a13b6a;
-        min-height: 20px;
-      }
-      .kitty {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 12px;
-        color: #a86483;
-        font-weight: 700;
-      }
-      .kitty::before {
-        content: "♡";
-        color: #ff6ea8;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <div class="kitty-row">
-        <div class="kitty-badge" aria-hidden="true">
-          <div class="kitty-face">
-            <div class="kitty-head"></div>
-            <div class="kitty-eye left"></div>
-            <div class="kitty-eye right"></div>
-            <div class="kitty-nose"></div>
-            <div class="kitty-bow"></div>
-          </div>
-        </div>
-        <div>
-          <h1>Xin chào bé yêu</h1>
-          <p>Nhập mật khẩu để vào không gian riêng của tụi mình.</p>
-        </div>
-      </div>
-      <form id="loginForm" autocomplete="off">
-        <label for="passwordInput">Mật khẩu</label>
-        <input id="passwordInput" type="password" placeholder="••••••••••" required />
-        <button type="submit">Vào app</button>
-        <div class="status" id="loginStatus"></div>
-      </form>
-      <div class="kitty">Tone hồng nhẹ nhàng cho Hello Kitty</div>
-    </div>
-    <script src="/login.js"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HDHA App</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:"Quicksand",sans-serif;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#ffd6e7,#fff0f6);
+overflow:hidden;
+}
+
+/* background hearts */
+
+.hearts span{
+position:absolute;
+color:#ff7fb0;
+font-size:20px;
+animation:float 7s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(110vh)}
+100%{transform:translateY(-10vh)}
+}
+
+/* login card */
+
+.card{
+width:360px;
+background:white;
+border-radius:30px;
+padding:35px;
+box-shadow:0 20px 50px rgba(255,105,160,0.25);
+text-align:center;
+position:relative;
+z-index:2;
+}
+
+/* kitty */
+
+.kitty{
+width:120px;
+margin:auto;
+position:relative;
+transition:0.3s;
+}
+
+.kitty img{
+width:100%;
+}
+
+.paw{
+position:absolute;
+width:35px;
+top:40px;
+transition:0.3s;
+}
+
+.paw.left{
+left:10px;
+}
+
+.paw.right{
+right:10px;
+}
+
+.hide-eyes .paw{
+top:5px;
+}
+
+/* text */
+
+h1{
+font-family:"Baloo 2";
+color:#ff5fa3;
+margin-bottom:5px;
+}
+
+.sub{
+color:#9b5d77;
+font-weight:600;
+margin-bottom:20px;
+}
+
+/* input */
+
+input{
+width:100%;
+padding:13px;
+border-radius:14px;
+border:1px solid #ffc1da;
+font-size:15px;
+}
+
+input:focus{
+outline:none;
+border-color:#ff6fa9;
+box-shadow:0 0 0 3px rgba(255,120,170,0.2);
+}
+
+/* button */
+
+button{
+margin-top:18px;
+width:100%;
+padding:13px;
+border:none;
+border-radius:30px;
+background:linear-gradient(135deg,#ff7eb3,#ff4f8b);
+color:white;
+font-weight:700;
+font-size:16px;
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{
+transform:scale(1.03);
+box-shadow:0 10px 30px rgba(255,90,150,0.4);
+}
+
+/* status */
+
+.status{
+margin-top:10px;
+font-weight:700;
+color:#c04a7d;
+}
+
+/* sad animation */
+
+.sad{
+animation:shake .4s;
+}
+
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-5px)}
+50%{transform:translateX(5px)}
+75%{transform:translateX(-5px)}
+100%{transform:translateX(0)}
+}
+
+/* success hearts */
+
+.big-heart{
+position:fixed;
+font-size:40px;
+animation:love 2s ease forwards;
+}
+
+@keyframes love{
+0%{transform:scale(0);opacity:1}
+100%{transform:scale(3);opacity:0}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="hearts">
+<span style="left:10%">❤</span>
+<span style="left:30%;animation-delay:2s">❤</span>
+<span style="left:50%;animation-delay:4s">❤</span>
+<span style="left:70%;animation-delay:1s">❤</span>
+<span style="left:90%;animation-delay:3s">❤</span>
+</div>
+
+<div class="card">
+
+<div class="kitty" id="kitty">
+
+<img src="https://upload.wikimedia.org/wikipedia/en/0/05/Hello_Kitty_character_portrait.png">
+
+<img class="paw left" src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
+<img class="paw right" src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
+
+</div>
+
+<h1>HDHA App</h1>
+
+<div class="sub">
+Nhập mật khẩu để vào 
+</div>
+
+<form id="loginForm">
+
+<input
+id="password"
+type="password"
+placeholder="Nhập mật khẩu..."
+required
+>
+
+<button type="submit">
+Vào không gian của tụi mình
+</button>
+
+<div class="status" id="status"></div>
+
+</form>
+
+</div>
+
+<script>
+
+const passwordInput = document.getElementById("password")
+const kitty = document.getElementById("kitty")
+const form = document.getElementById("loginForm")
+const status = document.getElementById("status")
+
+const PASSWORD = "iloveyou"
+
+passwordInput.addEventListener("focus",()=>{
+kitty.classList.add("hide-eyes")
+})
+
+passwordInput.addEventListener("blur",()=>{
+kitty.classList.remove("hide-eyes")
+})
+
+form.addEventListener("submit",(e)=>{
+
+e.preventDefault()
+
+if(passwordInput.value === PASSWORD){
+
+status.innerText="Đúng rồi bé yêu 💖"
+
+for(let i=0;i<10;i++){
+
+let heart=document.createElement("div")
+heart.innerHTML="💖"
+heart.className="big-heart"
+
+heart.style.left=Math.random()*100+"vw"
+heart.style.top=Math.random()*100+"vh"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>heart.remove(),2000)
+
+}
+
+setTimeout(()=>{
+window.location.href="home.html"
+},1500)
+
+}else{
+
+status.innerText="Sai mật khẩu rồi 🥺"
+
+kitty.classList.add("sad")
+
+setTimeout(()=>{
+kitty.classList.remove("sad")
+},400)
+
+}
+
+})
+
+</script>
+
+</body>
 </html>
