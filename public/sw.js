@@ -1,8 +1,11 @@
 ﻿const CACHE_NAME = "hai-anh-pwa-v1";
-const CACHE_NAME = "hai-anh-pwa-v2";
+const CACHE_NAME = "hai-anh-pwa-v3";
 const CORE_ASSETS = [
   "/",
   "/index.html",
+  "/login.html",
+  "/login.js",
+  "/auth-guard.js",
   "/manifest.webmanifest",
   "/offline.html",
   "/ai-widget.css",
