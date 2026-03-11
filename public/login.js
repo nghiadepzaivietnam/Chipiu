@@ -13,6 +13,7 @@ const tear2 = document.getElementById('tear2');
 
 const HASH = '616e7fe36c4fd47aaf136464690b71a12f073293af7c9a7f5ff15cb9192324e0';
 const USERNAME = 'chipiu';
+const PASSWORD = 'anhyeuemnhieulam';
 let attempts = 0;
 
 function getNextUrl() {
@@ -72,15 +73,17 @@ if (form) {
     statusEl.textContent = 'Đang kiểm tra...';
     const userValue = (usernameInput?.value || '').trim();
     const passValue = passwordInput?.value || '';
+    let ok = userValue === USERNAME && passValue === PASSWORD;
     try {
       const digest = await sha256(passValue);
-      if (userValue === USERNAME && digest === HASH) {
-        localStorage.setItem('app_auth', '1');
-        spawnHearts();
-        setTimeout(() => window.location.replace(getNextUrl()), 300);
-        return;
-      }
+      if (userValue === USERNAME && digest === HASH) ok = true;
     } catch (_err) {}
+    if (ok) {
+      localStorage.setItem('app_auth', '1');
+      spawnHearts();
+      setTimeout(() => window.location.replace(getNextUrl()), 300);
+      return;
+    }
     attempts += 1;
     statusEl.textContent = 'Sai thông tin. Thử lại nhé.';
     if (kitty) {
