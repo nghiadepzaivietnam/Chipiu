@@ -160,10 +160,12 @@
       (function initSplash() {
         const splash = document.getElementById("splash");
         const params = new URLSearchParams(window.location.search);
-        const next = params.get("next");
-        const loginUrl = next
-          ? `/login.html?next=${encodeURIComponent(next)}`
-          : "/login.html";
+        const rawNext = params.get("next") || "/index.html";
+        const next = rawNext.startsWith("/") ? rawNext : "/index.html";
+        const authed = localStorage.getItem("app_auth") === "1";
+        const loginUrl = `/login.html?next=${encodeURIComponent(next)}`;
+        const targetUrl = authed ? next : loginUrl;
+        sessionStorage.setItem("splash_seen", "1");
 
         const totalMs = 3800;
         const fadeMs = 800;
@@ -173,7 +175,7 @@
         }, totalMs - fadeMs);
 
         setTimeout(() => {
-          window.location.replace(loginUrl);
+          window.location.replace(targetUrl);
         }, totalMs);
       })();
     </script>
