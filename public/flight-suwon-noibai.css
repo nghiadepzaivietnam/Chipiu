@@ -32,6 +32,137 @@ body {
   padding-bottom: 76px;
 }
 
+.top-header,
+.page,
+.bottom-nav {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+body.flight-splashing {
+  overflow: hidden;
+}
+
+body.flight-splashing .top-header,
+body.flight-splashing .page,
+body.flight-splashing .bottom-nav {
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+}
+
+.flight-splash {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #eef6ff;
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 450ms ease;
+}
+
+.flight-splash.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.flight-splash.hide {
+  opacity: 0;
+  transform: scale(1.03);
+}
+
+.flight-splash-track {
+  position: relative;
+  width: min(80vw, 520px);
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 800;
+  color: #2b6aa2;
+}
+
+.flight-splash-line {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(43, 106, 162, 0.25), rgba(43, 106, 162, 0.6), rgba(43, 106, 162, 0.25));
+}
+
+.flight-splash-start,
+.flight-splash-end {
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+.flight-splash-plane {
+  position: absolute;
+  left: 8%;
+  top: 50%;
+  font-size: 28px;
+  transform: translate(-50%, -50%) rotate(6deg);
+  color: #2f8ddf;
+  filter: drop-shadow(0 8px 18px rgba(33, 120, 194, 0.25));
+  opacity: 0;
+}
+
+.flight-splash-caption {
+  margin: 16px 0 0;
+  font-weight: 700;
+  color: #2b6aa2;
+}
+
+.flight-splash.show .flight-splash-plane {
+  animation: splashPlaneIn 1.6s ease-out forwards;
+}
+
+.flight-splash.show .flight-splash-line {
+  animation: splashLineDraw 1.6s ease-out forwards;
+}
+
+@keyframes splashPlaneIn {
+  0% {
+    opacity: 0;
+    transform: translate(-30%, -50%) rotate(8deg) scale(0.9);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(2deg) scale(1.05);
+    left: 50%;
+  }
+}
+
+@keyframes splashLineDraw {
+  0% {
+    opacity: 0.15;
+    transform: scaleX(0.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flight-splash.show .flight-splash-plane,
+  .flight-splash.show .flight-splash-line {
+    animation: none;
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+    left: 50%;
+  }
+}
+
 .top-header {
   margin: 0 auto;
   width: min(1400px, 100%);

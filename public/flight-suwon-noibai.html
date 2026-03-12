@@ -6,7 +6,16 @@
     <title>Hành Trình Suwon -> Nội Bài</title>
     <link rel="stylesheet" href="/flight-suwon-noibai.css" />
   </head>
-  <body>
+  <body class="flight-splashing">
+    <div class="flight-splash" id="flightSplash" aria-hidden="true">
+      <div class="flight-splash-track">
+        <span class="flight-splash-start">SUW</span>
+        <span class="flight-splash-line"></span>
+        <span class="flight-splash-end">HAN</span>
+        <span class="flight-splash-plane">✈</span>
+      </div>
+      <p class="flight-splash-caption">Suwon → Nội Bài</p>
+    </div>
     <header class="top-header">
       <div class="header-flight">
         <a class="brand" href="/index.html">Chipiu Journey</a>
@@ -99,6 +108,9 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
     <script src="/flight-suwon-noibai.js"></script>
+    <script>
+      window.HDHA_DISABLE_HA_SPLASH = true;
+    </script>
     <script src="/auth-guard.js"></script>
 </body>
 </html>

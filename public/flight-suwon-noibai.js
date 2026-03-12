@@ -22,8 +22,29 @@
   const startMarker = document.getElementById("startMarker");
   const endMarker = document.getElementById("endMarker");
   const plane = document.querySelector(".plane");
+  const splash = document.getElementById("flightSplash");
 
   let flightTween = null;
+
+  function runSplash() {
+    if (!splash) {
+      document.body.classList.remove("flight-splashing");
+      return;
+    }
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const totalMs = reduceMotion ? 1400 : 2200;
+    const exitMs = reduceMotion ? 300 : 520;
+
+    splash.classList.add("show");
+    window.setTimeout(() => {
+      splash.classList.add("hide");
+      document.body.classList.remove("flight-splashing");
+    }, Math.max(0, totalMs - exitMs));
+
+    window.setTimeout(() => {
+      splash.remove();
+    }, totalMs + 80);
+  }
 
   function toClock(timeZone) {
     return new Intl.DateTimeFormat("vi-VN", {
@@ -181,6 +202,7 @@
   }
 
   async function init() {
+    runSplash();
     try {
       await drawRealWorldMap();
       buildFlightPath();

@@ -9,6 +9,8 @@
     return;
   }
 
+  if (window.HDHA_DISABLE_HA_SPLASH === true) return;
+
   const style = document.createElement('style');
   style.textContent = `
     .hdha-splash {
@@ -59,8 +61,8 @@
     const splash = ensureSplash();
     requestAnimationFrame(() => splash.classList.add('show'));
     if (!autoHide) return;
-    const holdMs = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 320 : 620;
-    const hideMs = 260;
+    const holdMs = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 700 : 1900;
+    const hideMs = 300;
     window.setTimeout(() => {
       splash.classList.remove('show');
     }, holdMs);
@@ -100,7 +102,7 @@
     event.preventDefault();
     navigating = true;
     showSplash({ autoHide: false });
-    const navDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 180 : 360;
+    const navDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 360 : 560;
     window.setTimeout(() => {
       window.location.href = url.toString();
     }, navDelay);
