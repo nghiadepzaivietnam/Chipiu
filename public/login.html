@@ -1,93 +1,135 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-body{
-margin:0;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#f6b6c7;
-font-family:sans-serif;
-}
-.phone{
-width:360px;
-height:680px;
-background:white;
-border-radius:40px;
-box-shadow:0 30px 60px rgba(0,0,0,.25);
-text-align:center;
-padding-top:80px;
-}
-.kitty{
-width:200px;
-margin:auto;
-position:relative;
-}
-.kitty img{
-width:100%;
-}
-.eye{
-width:10px;
-height:10px;
-background:black;
-border-radius:50%;
-position:absolute;
-top:92px;
-}
-.eye.left{left:72px}
-.eye.right{right:72px}
-input{
-width:240px;
-padding:14px;
-margin-top:20px;
-border-radius:14px;
-border:1px solid #ccc;
-}
-button{
-margin-top:30px;
-padding:16px 60px;
-border:none;
-border-radius:16px;
-background:#ffb6c1;
-font-weight:700;
-}
-.status{
-margin-top:12px;
-font-weight:700;
-color:#a13b6a;
-min-height:20px;
-}
-</style>
-</head>
-<body>
-<div class="phone">
-  <div class="kitty">
-    <img src="/login.jpg" alt="Hello Kitty">
-    <div class="eye left" id="eyeL"></div>
-    <div class="eye right" id="eyeR"></div>
-  </div>
-  <form id="loginForm" autocomplete="off">
-    <input id="user" placeholder="Username" value="chipiu">
-    <input id="pass" type="password" placeholder="Password">
-    <button type="submit">Login</button>
-    <div class="status" id="loginStatus"></div>
-  </form>
-</div>
-<script>
-const eyeL=document.getElementById("eyeL")
-const eyeR=document.getElementById("eyeR")
-
-document.addEventListener("mousemove",e=>{
-  let x=(e.clientX/window.innerWidth-.5)*10
-  let y=(e.clientY/window.innerHeight-.5)*6
-  eyeL.style.transform=`translate(${x}px,${y}px)`
-  eyeR.style.transform=`translate(${x}px,${y}px)`
-})
-</script>
-<script src="/login.js?v=2"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập - Hai Anh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --pink: #ff9ac3;
+        --rose: #ff6ea8;
+        --deep: #7a2e52;
+        --cream: #fff7fb;
+        --card: rgba(255, 255, 255, 0.92);
+        --shadow: 0 18px 40px rgba(255, 110, 168, 0.18);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Quicksand", sans-serif;
+        background:
+          radial-gradient(circle at 16% 12%, rgba(255, 190, 220, 0.35), transparent 36%),
+          radial-gradient(circle at 85% 0%, rgba(255, 210, 230, 0.4), transparent 40%),
+          var(--cream);
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        color: var(--deep);
+      }
+      .wrap {
+        width: min(420px, 100%);
+        background: var(--card);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 160, 205, 0.35);
+        position: relative;
+        overflow: hidden;
+      }
+      .wrap::before {
+        content: "";
+        position: absolute;
+        inset: -40% -30% auto auto;
+        width: 220px;
+        height: 220px;
+        background: rgba(255, 190, 220, 0.45);
+        filter: blur(50px);
+        border-radius: 50%;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font-family: "Baloo 2", sans-serif;
+        font-size: 30px;
+        color: #f05c9a;
+      }
+      p {
+        margin: 0 0 18px;
+        font-size: 15px;
+        color: #8a4f6b;
+        font-weight: 600;
+      }
+      label {
+        display: block;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: #8a4f6b;
+      }
+      input[type="password"] {
+        width: 100%;
+        border-radius: 14px;
+        padding: 12px 14px;
+        border: 1px solid rgba(240, 120, 170, 0.3);
+        background: #fff;
+        font-size: 15px;
+        outline: none;
+        color: #5f2e45;
+        font-weight: 600;
+      }
+      input[type="password"]:focus {
+        border-color: #ff8fb8;
+        box-shadow: 0 0 0 3px rgba(255, 140, 188, 0.2);
+      }
+      button {
+        margin-top: 16px;
+        width: 100%;
+        border: none;
+        border-radius: 999px;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #ff86b4, #ff5f8d);
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 10px 26px rgba(255, 95, 141, 0.28);
+      }
+      .status {
+        margin-top: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #a13b6a;
+        min-height: 20px;
+      }
+      .kitty {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #a86483;
+        font-weight: 700;
+      }
+      .kitty::before {
+        content: "♡";
+        color: #ff6ea8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Xin chào bé yêu</h1>
+      <p>Nhập mật khẩu để vào không gian riêng của tụi mình.</p>
+      <form id="loginForm" autocomplete="off">
+        <label for="passwordInput">Mật khẩu</label>
+        <input id="passwordInput" type="password" placeholder="••••••••••" required />
+        <button type="submit">Vào app</button>
+        <div class="status" id="loginStatus"></div>
+      </form>
+      <div class="kitty">Tone hồng nhẹ nhàng cho Hello Kitty</div>
+    </div>
+    <script src="/login.js"></script>
+  </body>
 </html>
