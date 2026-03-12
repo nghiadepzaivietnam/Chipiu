@@ -75,7 +75,7 @@
     const happySet = new Set(["happy", "ecstatic", "loved", "playful", "grateful", "hopeful"]);
 
     if (sadSet.has(mood)) {
-      return "Cảnh báo: Hải Anh buồn. Nguyễn Trọng Nghĩa cần bật chế độ siêu yêu.";
+      return "Cảnh báo: Hải Anh buồn. Nguyễn Trọng Nghĩa cần bật chế độ siêu yêu thương.";
     }
     if (happySet.has(mood)) {
       return "Hải Anh đang hạnh phúc. Có thể do Nghĩa đẹp trai.";
