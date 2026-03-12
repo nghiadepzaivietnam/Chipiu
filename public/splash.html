@@ -1,25 +1,17 @@
-<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>HDHA</title>
     <style>
-      :root {
-        --pink-1: #ffd6e7;
-        --pink-2: #ff9fc8;
-        --purple-1: #d6b6ff;
-        --purple-2: #b08cff;
-        --text: #fff7fb;
-      }
       * { box-sizing: border-box; }
       html, body {
         margin: 0;
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: #0b0b12;
-        font-family: "Quicksand", "Segoe UI", sans-serif;
+        background: #fff6f2;
+        font-family: "Baloo 2", "Quicksand", "Segoe UI", sans-serif;
       }
       body {
         display: grid;
@@ -32,128 +24,34 @@
         inset: 0;
         display: grid;
         place-items: center;
-        background:
-          radial-gradient(circle at 16% 20%, rgba(255, 175, 210, 0.35), transparent 45%),
-          radial-gradient(circle at 82% 14%, rgba(196, 168, 255, 0.28), transparent 42%),
-          radial-gradient(circle at 50% 88%, rgba(255, 140, 190, 0.25), transparent 45%),
-          linear-gradient(160deg, #2a193b 0%, #3a1f4a 45%, #351e3f 100%);
-        color: var(--text);
+        background: #fff6f2;
       }
-      .glow {
-        position: absolute;
-        inset: -20%;
-        background:
-          radial-gradient(circle at 30% 30%, rgba(255, 180, 215, 0.18), transparent 40%),
-          radial-gradient(circle at 70% 60%, rgba(190, 165, 255, 0.16), transparent 45%);
-        filter: blur(10px);
-        opacity: 0.8;
-        animation: pulse 4s ease-in-out infinite;
-      }
-      .message {
-        position: relative;
-        text-align: center;
-        max-width: 80vw;
-        z-index: 2;
-        font-size: clamp(18px, 4.2vw, 26px);
-        line-height: 1.5;
-        font-weight: 600;
-        text-shadow: 0 6px 24px rgba(255, 160, 210, 0.35);
+      .mark {
+        font-size: clamp(40px, 14vw, 104px);
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        margin-left: 0.18em;
+        color: #ff6fb0;
         opacity: 0;
-        transform: translateY(10px);
-        animation: fadeIn 1.4s ease-out 0.7s forwards;
-      }
-      .subtitle {
-        margin-top: 10px;
-        font-size: clamp(12px, 3.2vw, 16px);
-        color: rgba(255, 255, 255, 0.72);
-        letter-spacing: 0.02em;
-      }
-      .heart {
-        position: absolute;
-        bottom: -10%;
-        width: 14px;
-        height: 14px;
-        background: linear-gradient(145deg, var(--pink-2), var(--purple-2));
-        transform: rotate(45deg);
-        border-radius: 4px 4px 0 0;
-        opacity: 0.8;
-        filter: drop-shadow(0 6px 10px rgba(255, 160, 210, 0.35));
-        animation: floatUp 5s linear infinite;
-      }
-      .heart::before,
-      .heart::after {
-        content: "";
-        position: absolute;
-        width: 14px;
-        height: 14px;
-        border-radius: 50%;
-        background: inherit;
-      }
-      .heart::before { left: -7px; top: 0; }
-      .heart::after { top: -7px; left: 0; }
-
-      .particle {
-        position: absolute;
-        width: 3px;
-        height: 3px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.65);
-        opacity: 0.6;
-        animation: drift 6s ease-in-out infinite;
+        transform: translateY(6px);
+        animation: fadeIn 0.6s ease-out 0.2s forwards;
       }
 
       .fade-out {
-        animation: fadeOut 0.8s ease-in forwards;
+        animation: fadeOut 0.45s ease-in forwards;
       }
 
-      @keyframes floatUp {
-        0% { transform: translateY(0) rotate(45deg) scale(0.8); opacity: 0; }
-        10% { opacity: 0.9; }
-        100% { transform: translateY(-140vh) rotate(45deg) scale(1.2); opacity: 0; }
-      }
-      @keyframes drift {
-        0% { transform: translateY(0) translateX(0); opacity: 0; }
-        20% { opacity: 0.6; }
-        100% { transform: translateY(-120vh) translateX(40px); opacity: 0; }
-      }
       @keyframes fadeIn {
         to { opacity: 1; transform: translateY(0); }
       }
       @keyframes fadeOut {
         to { opacity: 0; }
       }
-      @keyframes pulse {
-        0%, 100% { opacity: 0.7; }
-        50% { opacity: 1; }
-      }
-
-      @media (max-width: 430px) {
-        .heart { width: 12px; height: 12px; }
-        .heart::before, .heart::after { width: 12px; height: 12px; }
-      }
     </style>
   </head>
   <body>
     <div class="splash" id="splash">
-      <div class="glow" aria-hidden="true"></div>
-
-      <div class="message">
-        Every second with you is my favorite moment.
-        <div class="subtitle">Opening our little universe…</div>
-      </div>
-
-      <span class="heart" style="left: 12%; animation-delay: 0.2s;"></span>
-      <span class="heart" style="left: 22%; animation-delay: 1.2s; animation-duration: 5.4s;"></span>
-      <span class="heart" style="left: 38%; animation-delay: 0.6s; animation-duration: 5.8s;"></span>
-      <span class="heart" style="left: 52%; animation-delay: 1.8s; animation-duration: 5.2s;"></span>
-      <span class="heart" style="left: 66%; animation-delay: 0.4s; animation-duration: 5.9s;"></span>
-      <span class="heart" style="left: 78%; animation-delay: 1.5s; animation-duration: 5.5s;"></span>
-
-      <span class="particle" style="left: 15%; bottom: -5%; animation-delay: 0.4s;"></span>
-      <span class="particle" style="left: 30%; bottom: -10%; animation-delay: 1.2s;"></span>
-      <span class="particle" style="left: 48%; bottom: -8%; animation-delay: 0.8s;"></span>
-      <span class="particle" style="left: 62%; bottom: -6%; animation-delay: 1.6s;"></span>
-      <span class="particle" style="left: 80%; bottom: -12%; animation-delay: 0.2s;"></span>
+      <div class="mark">HA</div>
     </div>
 
     <script>
@@ -167,8 +65,8 @@
         const targetUrl = authed ? next : loginUrl;
         sessionStorage.setItem("splash_seen", "1");
 
-        const totalMs = 3800;
-        const fadeMs = 800;
+        const totalMs = 1200;
+        const fadeMs = 450;
 
         setTimeout(() => {
           splash.classList.add("fade-out");

@@ -16,7 +16,7 @@
       inset: 0;
       display: grid;
       place-items: center;
-      background: #fff;
+      background: #fff6f2;
       z-index: 9999;
       opacity: 0;
       pointer-events: none;
@@ -27,12 +27,12 @@
       pointer-events: auto;
     }
     .hdha-splash-mark {
-      font-family: "Playfair Display", "Space Grotesk", "Times New Roman", serif;
-      font-size: clamp(36px, 12vw, 96px);
+      font-family: "Baloo 2", "Quicksand", "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: clamp(40px, 14vw, 104px);
       font-weight: 700;
-      letter-spacing: 0.28em;
-      margin-left: 0.28em;
-      color: #111;
+      letter-spacing: 0.18em;
+      margin-left: 0.18em;
+      color: #ff6fb0;
     }
     @media (prefers-reduced-motion: reduce) {
       .hdha-splash {
