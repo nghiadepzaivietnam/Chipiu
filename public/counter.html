@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>�?m ng�y y�u</title>
+    <title>Đếm ngày yêu</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/ai-widget.css" />
     <style>
@@ -107,63 +107,63 @@
   <body class="counter-page">
     <header class="counter-nav-wrap" id="counterNavWrap">
       <button class="counter-nav-toggle" id="counterNavToggle" type="button" aria-expanded="false" aria-controls="counterNavMenu">
-        ??<span>Menu</span>
+        ☰<span>Menu</span>
       </button>
       <nav class="top-nav counter-top-nav" id="counterNavMenu">
-        <a class="nav-link" href="/">Trang ch?</a>
-        <a class="nav-link" href="/journal.html">Nh?t k�</a>
-        <a class="nav-link" href="/create.html">T?o kho?nh kh?c</a>
-        <a class="nav-link primary" href="/counter.html">�?m ng�y y�u</a>
-        <a class="nav-link" href="/period.html">D? do�n k? kinh</a>
-        <a class="nav-link" href="/mood-map.html">B?n d? c?m x�c</a>
-        <a class="nav-link" href="/flight-suwon-noibai.html">? Chuy?n bay SUW -> HAN</a>
-        <a class="nav-link" href="/weather-dual.html">??? Th?i ti?t d�i</a>
-        <a class="nav-link" href="/hanh-trinh-toi-2-dua.html">H�nh tr�nh</a>
-        <a class="nav-link" href="/owner-data.html">?? B?i c?nh, � tu?ng</a>
-      </nav>
+  <a class="nav-link" href="/">Trang chủ</a>
+  <a class="nav-link" href="/journal.html">Nhật ký</a>
+  <a class="nav-link" href="/create.html">Tạo khoảnh khắc</a>
+  <a class="nav-link primary" href="/counter.html">Đếm ngày yêu</a>
+  <a class="nav-link" href="/period.html">Dự đoán kỳ kinh</a>
+  <a class="nav-link" href="/mood-map.html">Bản đồ cảm xúc</a>
+  <a class="nav-link" href="/flight-suwon-noibai.html">✈ Chuyến bay SUW -> HAN</a>
+  <a class="nav-link" href="/weather-dual.html">🌦️ Thời tiết đôi</a>
+  <a class="nav-link" href="/hanh-trinh-toi-2-dua.html">Hành trình</a>
+  <a class="nav-link" href="/owner-data.html">📝 Bối cảnh, ý tưởng</a>
+</nav>
     </header>
 
     <main class="counter-main">
       <header class="hero counter-hero">
-        <p class="eyebrow">�?m ng�y y�u</p>
-        <h1 class="counter-title">Ch�ng m�nh d� b�n nhau bao l�u?</h1>
-        <p class="subhead">Ch?n ng�y b?t d?u, trang s? t? d?ng t�nh s? ng�y, tu?n, th�ng v� k? ni?m tr�n th�ng ti?p theo.</p>
-      </header>
+  <p class="eyebrow">Đếm ngày yêu</p>
+  <h1 class="counter-title">Chúng mình đã bên nhau bao lâu?</h1>
+  <p class="subhead">Chọn ngày bắt đầu, trang sẽ tự động tính số ngày, tuần, tháng và kỷ niệm tròn tháng tiếp theo.</p>
+</header>
 
       <section class="card counter-settings">
-        <div class="section-header">
-          <div>
-            <p class="eyebrow">C�i d?t</p>
-            <h3>Ch?n ng�y y�u</h3>
-          </div>
-        </div>
+  <div class="section-header">
+    <div>
+      <p class="eyebrow">Cài đặt</p>
+      <h3>Chọn ngày yêu</h3>
+    </div>
+  </div>
 
-        <div class="field two-col">
-          <label>
-            <span>Ng�y y�u nhau</span>
-            <input type="date" id="startDate" />
-          </label>
-          <label>
-            <span>Gi? ph�t (T�y ch?n)</span>
-            <input type="time" id="startTime" />
-          </label>
-        </div>
+  <div class="field two-col">
+    <label>
+      <span>Ngày yêu nhau</span>
+      <input type="date" id="startDate" />
+    </label>
+    <label>
+      <span>Giờ phút (Tùy chọn)</span>
+      <input type="time" id="startTime" />
+    </label>
+  </div>
 
-        <div class="field">
-          <label>
-            <span>C� th? ch?n ?nh n?n cho trang n�y</span>
-            <input type="file" id="bgImageInput" accept="image/*" />
-          </label>
-        </div>
+  <div class="field">
+    <label>
+      <span>Có thể chọn ảnh nền cho trang này</span>
+      <input type="file" id="bgImageInput" accept="image/*" />
+    </label>
+  </div>
 
-        <div class="counter-actions">
-          <button class="ghost" id="clearBgBtn" type="button">X�a ?nh n?n</button>
-          <button class="primary" id="saveBtn" type="button">Luu ng�y y�u</button>
-        </div>
+  <div class="counter-actions">
+    <button class="ghost" id="clearBgBtn" type="button">Xóa ảnh nền</button>
+    <button class="primary" id="saveBtn" type="button">Lưu ngày yêu</button>
+  </div>
 
-        <p class="status" id="saveMsg"></p>
-        <p class="status" id="bgMsg"></p>
-      </section>
+  <p class="status" id="saveMsg"></p>
+  <p class="status" id="bgMsg"></p>
+</section>
 
       <section class="card heart-box counter-heart">
         <canvas id="heartCanvas"></canvas>
@@ -171,18 +171,18 @@
       </section>
 
       <section class="card love-counter counter-stats">
-        <div class="section-header">
-          <div>
-            <p class="eyebrow">Th?ng k�</p>
-            <h3>T�nh y�u c?a t?i m�nh</h3>
-          </div>
-          <button class="ghost" id="refreshBtn" type="button">?</button>
-        </div>
+  <div class="section-header">
+    <div>
+      <p class="eyebrow">Thống kê</p>
+      <h3>Tình yêu của tụi mình</h3>
+    </div>
+    <button class="ghost" id="refreshBtn" type="button">↻</button>
+  </div>
 
-        <div id="counterDisplay" class="counter-display">
-          <p class="status">Chua c� ng�y b?t d?u, hay ch?n ? tr�n nhe.</p>
-        </div>
-      </section>
+  <div id="counterDisplay" class="counter-display">
+    <p class="status">Chưa có ngày bắt đầu, hãy chọn ở trên nhé.</p>
+  </div>
+</section>
     </main>
 
     <script src="/user-context.js"></script>
@@ -223,4 +223,5 @@
     <script src="/auth-guard.js"></script>
 </body>
 </html>
+
 
