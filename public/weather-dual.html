@@ -29,6 +29,8 @@
           radial-gradient(circle at 18% 12%, rgba(168, 187, 219, 0.22), transparent 35%),
           radial-gradient(circle at 90% 86%, rgba(118, 145, 193, 0.2), transparent 35%),
           linear-gradient(180deg, var(--bg-1), var(--bg-2));
+        padding: env(safe-area-inset-top) env(safe-area-inset-right)
+          env(safe-area-inset-bottom) env(safe-area-inset-left);
       }
 
       main {
@@ -282,6 +284,85 @@
       @media (max-width: 760px) {
         main { padding: 12px; }
         .grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 430px) {
+        main {
+          padding: 14px 12px 20px;
+          gap: 10px;
+        }
+
+        .top-links a {
+          padding: 6px 10px;
+          font-size: 13px;
+        }
+
+        .city-card {
+          border-radius: 20px;
+          padding: 12px;
+        }
+
+        .city-title {
+          font-size: clamp(26px, 9vw, 36px);
+        }
+
+        .hero-row {
+          grid-template-columns: 1fr;
+          align-items: start;
+          gap: 4px;
+        }
+
+        .temp {
+          font-size: clamp(44px, 14vw, 64px);
+        }
+
+        .highlow {
+          font-size: 16px;
+        }
+
+        .desc {
+          font-size: 16px;
+        }
+
+        .sub-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .mini-value {
+          font-size: 20px;
+        }
+
+        .hourly-track {
+          grid-auto-columns: minmax(80px, 1fr);
+        }
+
+        .hour-temp {
+          font-size: 19px;
+        }
+
+        .daily-row {
+          grid-template-columns: 1fr auto;
+          row-gap: 4px;
+        }
+
+        .daily-range {
+          justify-self: end;
+        }
+
+        .daily-rain {
+          order: 3;
+          justify-self: end;
+        }
+      }
+
+      @media (max-width: 390px) {
+        .temp {
+          font-size: clamp(40px, 14vw, 58px);
+        }
+
+        .hourly-track {
+          grid-auto-columns: minmax(76px, 1fr);
+        }
       }
     </style>
   </head>
