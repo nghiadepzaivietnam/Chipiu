@@ -390,6 +390,9 @@
       async function tryPlay() {
         if (!music || !music.getAttribute("src")) return false;
         try {
+          if (!Number.isNaN(music.duration) && music.currentTime < 9.5) {
+            music.currentTime = 10;
+          }
           await music.play();
           return true;
         } catch (err) {
