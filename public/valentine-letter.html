@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine Letter</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Playfair+Display:wght@600;700&display=swap");
+
+      :root {
+        --pink: #ff8bb3;
+        --pink-2: #ffb7cf;
+        --red: #ff5d7c;
+        --paper: #fff9fb;
+        --paper-edge: #f5dbe7;
+        --ink: #4d2b36;
+        --shadow: 0 24px 60px rgba(255, 120, 160, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Playfair Display", serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 20% 20%, rgba(255, 208, 226, 0.6), transparent 45%),
+          radial-gradient(circle at 80% 15%, rgba(255, 180, 210, 0.55), transparent 45%),
+          radial-gradient(circle at 50% 90%, rgba(255, 210, 225, 0.5), transparent 55%),
+          #fff3f7;
+        overflow: hidden;
+      }
+
+      body.opened {
+        overflow-y: auto;
+      }
+
+      .hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .heart {
+        position: absolute;
+        bottom: -10%;
+        width: 14px;
+        height: 14px;
+        background: linear-gradient(140deg, var(--pink), var(--pink-2));
+        transform: rotate(45deg);
+        border-radius: 4px 4px 0 0;
+        opacity: 0;
+        animation: floatHeart 8s linear infinite;
+        filter: drop-shadow(0 8px 16px rgba(255, 120, 170, 0.25));
+      }
+
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: inherit;
+      }
+
+      .heart::before {
+        left: -7px;
+        top: 0;
+      }
+
+      .heart::after {
+        top: -7px;
+        left: 0;
+      }
+
+      @keyframes floatHeart {
+        0% {
+          transform: translateY(0) rotate(45deg) scale(0.9);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateY(-120vh) rotate(45deg) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      .stage {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 16px 140px;
+      }
+
+      body.opened .stage {
+        align-items: flex-start;
+      }
+
+      .envelope-wrap {
+        position: relative;
+        width: min(520px, 92vw);
+        height: 360px;
+      }
+
+      .envelope {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 100%;
+        height: 220px;
+        transform: translateX(-50%);
+        cursor: pointer;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease, opacity 0.6s ease;
+      }
+
+      body.opened .envelope {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0.85;
+        pointer-events: none;
+      }
+
+      .envelope-body {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(160deg, #ffe3ee, #ffd2e3);
+        border-radius: 18px;
+        border: 1px solid rgba(255, 160, 190, 0.6);
+        box-shadow: 0 18px 40px rgba(255, 120, 170, 0.25);
+      }
+
+      .envelope-body::before,
+      .envelope-body::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        background: linear-gradient(135deg, transparent 48%, rgba(255, 190, 210, 0.8) 50%);
+        clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+        opacity: 0.8;
+      }
+
+      .envelope-flap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        height: 120px;
+        background: linear-gradient(160deg, #ffd4e6, #ffc1d8);
+        clip-path: polygon(0 0, 50% 90%, 100% 0);
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        transform-origin: top;
+        transition: transform 0.8s ease;
+        border: 1px solid rgba(255, 160, 190, 0.6);
+      }
+
+      body.opened .envelope-flap {
+        transform: rotateX(180deg);
+      }
+
+      .seal {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 48px;
+        height: 48px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #ff7aa4, #ff4f7a);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 18px;
+        box-shadow: 0 12px 20px rgba(255, 90, 130, 0.35);
+        transition: transform 0.6s ease, opacity 0.6s ease;
+      }
+
+      body.opened .seal {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.4;
+      }
+
+      .letter {
+        position: absolute;
+        left: 50%;
+        bottom: 40px;
+        width: min(520px, 92vw);
+        transform: translate(-50%, 40px) scale(0.98);
+        opacity: 0;
+        transition: transform 0.9s ease, opacity 0.9s ease;
+        pointer-events: none;
+      }
+
+      body.opened .letter {
+        transform: translate(-50%, -140px) scale(1);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .letter-paper {
+        background: var(--paper);
+        border-radius: 18px;
+        padding: 28px 26px 32px;
+        border: 1px solid var(--paper-edge);
+        box-shadow: var(--shadow);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 20px;
+        line-height: 1.7;
+      }
+
+      .letter-paper p {
+        margin: 0 0 16px;
+      }
+
+      .letter-paper .date {
+        font-weight: 600;
+        font-size: 22px;
+      }
+
+      .letter-paper .sign {
+        margin-top: 24px;
+        font-weight: 600;
+        font-size: 22px;
+      }
+
+      .hint {
+        position: absolute;
+        bottom: -34px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        color: rgba(77, 43, 54, 0.7);
+      }
+
+      .music-toggle {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 5;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 12px 24px rgba(255, 120, 160, 0.25);
+        cursor: pointer;
+        font-size: 18px;
+        color: #ff6f96;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        opacity: 0.6;
+      }
+
+      .music-toggle.enabled {
+        opacity: 1;
+      }
+
+      .music-toggle.muted {
+        color: #b98a9a;
+      }
+
+      .music-toggle:hover {
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 640px) {
+        .envelope-wrap {
+          height: 320px;
+        }
+
+        .letter-paper {
+          font-size: 18px;
+          padding: 22px 20px 26px;
+        }
+
+        .letter-paper .date,
+        .letter-paper .sign {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+    <button class="music-toggle muted" id="musicToggle" type="button" aria-pressed="false" title="Mute/unmute">
+      ♪
+    </button>
+
+    <main class="stage">
+      <div class="envelope-wrap">
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Mở thư tình">
+          <div class="envelope-flap"></div>
+          <div class="envelope-body"></div>
+          <div class="seal">&#10084;</div>
+        </div>
+        <p class="hint">Chạm để mở thư</p>
+        <section class="letter" id="letter" aria-hidden="true">
+          <div class="letter-paper">
+            <p class="date">Việt Nam, ngày 14/03/2026</p>
+            <p>
+              Nhân ngày 14/03 – Valentine Trắng, cảm ơn em vì đã xuất hiện trong cuộc đời anh theo
+              một cách thật bất ngờ. Tình yêu của chúng mình đến với nhau và bắt đầu theo một cách
+              rất riêng. Với anh, em giống như ánh nắng dịu dàng khiến mỗi buổi sáng thức dậy trở
+              nên đẹp hơn rất nhiều.
+            </p>
+            <p>
+              Ngay lúc này, khi chúng ta đang ở hai đất nước khác nhau, anh đoán chắc rằng em vừa
+              đi làm về và cũng đang nhớ anh lắm, đúng không? Anh hiểu điều đó, và anh thương em
+              rất nhiều.
+            </p>
+            <p>
+              Hai đứa mình vẫn thường nói với nhau: “Thôi còn trẻ thì cố gắng”. Nhưng đôi khi nghĩ
+              lại, anh cũng thấy tủi thân cho cả hai. Có lúc anh tự hỏi: “Liệu hai đứa mình sẽ còn
+              phải chịu cảm giác xa nhau và vất vả như thế này đến bao giờ?”. Nhưng rồi anh lại tin
+              rằng, những nỗ lực của hai đứa chắc chắn sẽ có ngày được đền đáp.
+            </p>
+            <p>
+              Anh nhớ em nhiều lắm. Anh nhận ra rằng chính tình yêu đã khiến chúng ta vượt qua
+              những khoảng cách mà trước đây cả hai chưa từng nghĩ tới. Và chính điều đó là minh
+              chứng rằng tình yêu của chúng ta vẫn đang lớn lên từng ngày.
+            </p>
+            <p>
+              Với em, tình yêu là sự đồng hành. Còn với anh, tình yêu là nhận ra những thay đổi mà
+              chúng ta dành cho nhau. Dù là theo cách nào, anh vẫn luôn trân trọng những điều
+              thiêng liêng ấy.
+            </p>
+            <p>
+              Anh mong em từng ngày, Hải Anh ạ...
+            </p>
+            <p class="sign">
+              Your Valentine!<br />
+              Trọng Nghĩa
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <audio id="bgMusic" src="/audio/buc-thu-tinh-dau-tien.mp3" preload="none" loop></audio>
+
+    <script>
+      const envelope = document.getElementById("envelope");
+      const letter = document.getElementById("letter");
+      const music = document.getElementById("bgMusic");
+      const musicToggle = document.getElementById("musicToggle");
+      const hearts = document.getElementById("hearts");
+      let opened = false;
+      let soundEnabled = false;
+
+      function spawnHearts(count = 18) {
+        for (let i = 0; i < count; i += 1) {
+          const heart = document.createElement("span");
+          heart.className = "heart";
+          const size = 10 + Math.random() * 16;
+          const left = Math.random() * 100;
+          const duration = 6 + Math.random() * 6;
+          const delay = Math.random() * 4;
+          heart.style.left = `${left}%`;
+          heart.style.width = `${size}px`;
+          heart.style.height = `${size}px`;
+          heart.style.animationDuration = `${duration}s`;
+          heart.style.animationDelay = `${delay}s`;
+          hearts.appendChild(heart);
+        }
+      }
+
+      function updateToggle() {
+        musicToggle.classList.toggle("enabled", soundEnabled);
+        musicToggle.classList.toggle("muted", !soundEnabled);
+        musicToggle.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
+        musicToggle.textContent = soundEnabled ? "♫" : "♪";
+      }
+
+      async function tryPlay() {
+        if (!music || !music.getAttribute("src")) return false;
+        try {
+          await music.play();
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      async function openLetter() {
+        if (opened) return;
+        opened = true;
+        document.body.classList.add("opened");
+        letter.setAttribute("aria-hidden", "false");
+        soundEnabled = true;
+        updateToggle();
+        const ok = await tryPlay();
+        if (!ok) {
+          musicToggle.title =
+            "Missing audio file. Add public/audio/buc-thu-tinh-dau-tien.mp3";
+        }
+      }
+
+      envelope.addEventListener("click", openLetter);
+      envelope.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openLetter();
+        }
+      });
+
+      musicToggle.addEventListener("click", async () => {
+        if (!opened) return;
+        soundEnabled = !soundEnabled;
+        music.muted = !soundEnabled;
+        if (soundEnabled) {
+          await tryPlay();
+        }
+        updateToggle();
+      });
+
+      spawnHearts();
+      updateToggle();
+    </script>
+  </body>
+</html>
