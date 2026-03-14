@@ -290,6 +290,42 @@
         transform: translateY(-2px);
       }
 
+      @media (min-width: 900px) {
+        .stage {
+          padding: 120px 24px 180px;
+        }
+
+        .envelope-wrap {
+          width: min(720px, 70vw);
+          height: 380px;
+        }
+
+        .letter {
+          width: min(760px, 70vw);
+        }
+
+        .letter-paper {
+          font-size: 22px;
+          line-height: 1.9;
+          padding: 40px 44px 46px;
+        }
+
+        .letter-paper .date,
+        .letter-paper .sign {
+          font-size: 24px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .letter {
+          width: min(860px, 68vw);
+        }
+
+        .letter-paper {
+          font-size: 23px;
+        }
+      }
+
       @media (max-width: 640px) {
         .envelope-wrap {
           height: 300px;
