@@ -266,6 +266,161 @@
       border: 1px dashed rgba(0,0,0,0.08);
       line-height: 1.6;
     }
+    .today-letters {
+      display: grid;
+      gap: 14px;
+    }
+    .letter-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .letter-card {
+      position: relative;
+      border-radius: 18px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid rgba(255,95,141,0.18);
+      box-shadow: 0 16px 34px rgba(255, 95, 141, 0.2);
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease;
+      overflow: hidden;
+      animation: letterPop 320ms ease both;
+    }
+    .letter-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(255, 95, 141, 0.25);
+    }
+    .letter-card .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #ff5f8d, #f47c3c);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+    .letter-card .title {
+      margin: 10px 0 6px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .letter-card .preview {
+      margin: 0;
+      line-height: 1.5;
+      opacity: 0.8;
+      font-size: 14px;
+    }
+    .letter-card .meta {
+      margin-top: 10px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+    .letter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .letter-actions button {
+      border: none;
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid rgba(255,95,141,0.2);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    @keyframes letterPop {
+      from { transform: translateY(8px) scale(0.98); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .letter-sheet,
+    .letter-archive {
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      display: none;
+      background: rgba(13, 5, 18, 0.5);
+      backdrop-filter: blur(8px);
+    }
+    .letter-sheet.open,
+    .letter-archive.open {
+      display: block;
+    }
+    .sheet-panel,
+    .archive-panel {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: min(980px, 100%);
+      max-height: 85vh;
+      background: rgba(255,255,255,0.96);
+      border-radius: 22px 22px 0 0;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 -18px 40px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sheet-header,
+    .archive-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .sheet-title,
+    .archive-title {
+      font-weight: 700;
+    }
+    .sheet-close,
+    .archive-close {
+      border: none;
+      background: rgba(0,0,0,0.06);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .sheet-body,
+    .archive-body {
+      padding: 12px 18px 20px;
+      overflow-y: auto;
+    }
+    .sheet-message {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .sheet-message .who {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 13px;
+    }
+    .sheet-message .time {
+      font-size: 12px;
+      opacity: 0.65;
+    }
+    .archive-item {
+      border-bottom: 1px dashed rgba(0,0,0,0.08);
+      padding: 10px 0;
+    }
+    .archive-item:last-child { border-bottom: 0; }
+    .archive-item .line {
+      margin: 4px 0 0;
+      opacity: 0.85;
+      font-size: 14px;
+    }
     .footer {
       text-align: center;
       margin-top: 12px;
@@ -535,6 +690,24 @@
     <button id="letterModalClose" class="letter-modal-close" type="button" aria-label="Đóng">✕</button>
     <iframe id="letterFrame" class="letter-modal-frame" src="/romantic-letter.html" title="Romantic letter"></iframe>
   </section>
+  <section id="loveLetterSheet" class="letter-sheet" aria-hidden="true">
+    <div class="sheet-panel">
+      <div class="sheet-header">
+        <div class="sheet-title" id="sheetTitle">Thư hôm nay</div>
+        <button class="sheet-close" id="sheetClose" type="button">x</button>
+      </div>
+      <div class="sheet-body" id="sheetBody"></div>
+    </div>
+  </section>
+  <section id="loveArchive" class="letter-archive" aria-hidden="true">
+    <div class="archive-panel">
+      <div class="archive-header">
+        <div class="archive-title">Tất cả thư đã viết</div>
+        <button class="archive-close" id="archiveClose" type="button">x</button>
+      </div>
+      <div class="archive-body" id="archiveBody"></div>
+    </div>
+  </section>
   <main class="page">
     <section class="hero">
       <div class="tag">
@@ -551,6 +724,15 @@
         <a class="cta" href="journal.html">📚 Xem kho kỷ niệm</a>
         <a class="cta secondary" href="create.html">✍️ Tạo khoảng khắc</a>
         <a class="cta secondary" href="counter.html">🌸 Đếm ngày yêu</a>
+      </div>
+    </section>
+
+    <section class="card today-letters" id="todayLettersSection">
+      <h3>Th&#432; h&#244;m nay</h3>
+      <p class="mood-quick-meta" id="todayLettersHint">&#272;ang t&#7843;i l&#7841;i d&#7919; li&#7879;u th&#432;c...</p>
+      <div class="letter-grid" id="todayLettersGrid"></div>
+      <div class="letter-actions">
+        <button type="button" id="openArchiveBtn">Xem t&#7845;t c&#7843; th&#432;</button>
       </div>
     </section>
 
@@ -784,6 +966,159 @@
       if (event.key === "Escape") setLetterModalOpen(false);
     });
 
+  </script>
+  <script>
+    (() => {
+      const LOVE_KEY = "love_calendar_chat";
+      const todayLettersSection = document.getElementById("todayLettersSection");
+      const todayLettersHint = document.getElementById("todayLettersHint");
+      const todayLettersGrid = document.getElementById("todayLettersGrid");
+      const openArchiveBtn = document.getElementById("openArchiveBtn");
+      const sheet = document.getElementById("loveLetterSheet");
+      const sheetTitle = document.getElementById("sheetTitle");
+      const sheetBody = document.getElementById("sheetBody");
+      const sheetClose = document.getElementById("sheetClose");
+      const archive = document.getElementById("loveArchive");
+      const archiveBody = document.getElementById("archiveBody");
+      const archiveClose = document.getElementById("archiveClose");
+
+      if (!todayLettersSection) return;
+
+      const toIso = (d) => {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${day}`;
+      };
+
+      const formatDate = (iso) => {
+        const parts = iso.split("-").map(Number);
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        return d.toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      };
+
+      const formatTime = (ts) =>
+        new Date(ts).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+
+      const loadData = () => {
+        try {
+          return JSON.parse(localStorage.getItem(LOVE_KEY)) || {};
+        } catch {
+          return {};
+        }
+      };
+
+      const renderTodayLetters = () => {
+        const data = loadData();
+        const todayIso = toIso(new Date());
+        const list = Array.isArray(data[todayIso]) ? data[todayIso] : [];
+        todayLettersGrid.innerHTML = "";
+
+        if (!list.length) {
+          todayLettersHint.textContent = "Hom nay chua co thu.";
+          return;
+        }
+
+        todayLettersHint.textContent = `Co ${list.length} thu trong ngay hom nay.`;
+
+        const byAuthor = list.reduce((acc, msg) => {
+          const key = msg.author || "unknown";
+          acc[key] = acc[key] || [];
+          acc[key].push(msg);
+          return acc;
+        }, {});
+
+        Object.keys(byAuthor).forEach((key) => {
+          const msgs = byAuthor[key];
+          const last = msgs[msgs.length - 1];
+          const card = document.createElement("div");
+          card.className = "letter-card";
+          card.dataset.author = key;
+          card.innerHTML = `
+            <span class="badge">${last.name || "Thu hom nay"}</span>
+            <div class="title">${formatDate(todayIso)}</div>
+            <p class="preview">${(last.content || "").slice(0, 120)}</p>
+            <div class="meta">${msgs.length} tin · ${formatTime(last.timestamp)}</div>
+          `;
+          card.addEventListener("click", () => openSheet(todayIso, key));
+          todayLettersGrid.appendChild(card);
+        });
+      };
+
+      const openSheet = (iso, authorKey) => {
+        const data = loadData();
+        const list = Array.isArray(data[iso]) ? data[iso] : [];
+        const filtered = authorKey ? list.filter((m) => (m.author || "unknown") === authorKey) : list;
+        sheetTitle.textContent = formatDate(iso);
+        sheetBody.innerHTML = "";
+
+        if (!filtered.length) {
+          sheetBody.innerHTML = "<p>Chua co noi dung.</p>";
+        } else {
+          filtered.forEach((msg) => {
+            const item = document.createElement("div");
+            item.className = "sheet-message";
+            item.innerHTML = `
+              <div class="who">${msg.name || "Nguoi viet"}</div>
+              <div>${msg.content || ""}</div>
+              <div class="time">${formatTime(msg.timestamp)}</div>
+            `;
+            sheetBody.appendChild(item);
+          });
+        }
+
+        sheet.classList.add("open");
+        sheet.setAttribute("aria-hidden", "false");
+      };
+
+      const closeSheet = () => {
+        sheet.classList.remove("open");
+        sheet.setAttribute("aria-hidden", "true");
+      };
+
+      const openArchive = () => {
+        const data = loadData();
+        const all = Object.entries(data).flatMap(([date, msgs]) =>
+          (msgs || []).map((m) => ({ ...m, date }))
+        );
+        all.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        archiveBody.innerHTML = "";
+
+        if (!all.length) {
+          archiveBody.innerHTML = "<p>Chua co thu nao.</p>";
+        } else {
+          all.forEach((msg) => {
+            const item = document.createElement("div");
+            item.className = "archive-item";
+            item.innerHTML = `
+              <strong>${formatDate(msg.date)}</strong> · ${msg.name || "Nguoi viet"} · ${formatTime(msg.timestamp)}
+              <div class="line">${msg.content || ""}</div>
+            `;
+            archiveBody.appendChild(item);
+          });
+        }
+
+        archive.classList.add("open");
+        archive.setAttribute("aria-hidden", "false");
+      };
+
+      const closeArchive = () => {
+        archive.classList.remove("open");
+        archive.setAttribute("aria-hidden", "true");
+      };
+
+      openArchiveBtn?.addEventListener("click", openArchive);
+      sheetClose?.addEventListener("click", closeSheet);
+      archiveClose?.addEventListener("click", closeArchive);
+      sheet?.addEventListener("click", (e) => {
+        if (e.target === sheet) closeSheet();
+      });
+      archive?.addEventListener("click", (e) => {
+        if (e.target === archive) closeArchive();
+      });
+
+      renderTodayLetters();
+    })();
   </script>
   <script>
     if ("serviceWorker" in navigator) {
