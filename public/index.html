@@ -71,9 +71,9 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: linear-gradient(125deg, rgba(255,95,141,0.22), rgba(255,255,255,0.18)), url("hai-anh.jpg") center / cover no-repeat;
+      background: linear-gradient(125deg, rgba(255,95,141,0.22), rgba(255,255,255,0.18)), url("hello-kitty-wallpaper.jpg") center / cover no-repeat;
       opacity: 0.55;
-      filter: blur(10px) saturate(1.05);
+      filter: blur(8px) saturate(1.05);
       transform: scale(1.04);
       z-index: -2;
     }
@@ -1015,11 +1015,11 @@
         todayLettersGrid.innerHTML = "";
 
         if (!list.length) {
-          todayLettersHint.textContent = "Hom nay chua co thu.";
+          todayLettersHint.textContent = `Thu hom nay (${todayIso}) chua co noi dung.`;
           return;
         }
 
-        todayLettersHint.textContent = `Co ${list.length} thu trong ngay hom nay.`;
+        todayLettersHint.textContent = `Thu hom nay (${todayIso}) co ${list.length} tin.`;
 
         const byAuthor = list.reduce((acc, msg) => {
           const key = msg.author || "unknown";
