@@ -3,31 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Love Calendar</title>
+    <title>Nhật Ký Đôi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --bg: #fff5f9;
-        --card: rgba(255, 255, 255, 0.75);
-        --stroke: rgba(255, 200, 220, 0.5);
+        --bg: #fff4f8;
+        --card: rgba(255, 255, 255, 0.8);
+        --stroke: rgba(255, 196, 216, 0.6);
         --ink: #3a2430;
         --muted: #7b5566;
         --pink: #ff8fb6;
-        --pink-2: #ffd1e3;
-        --blue: #a9c7ff;
+        --pink-2: #ffd2e3;
         --blue-2: #dbe7ff;
-        --shadow: 0 18px 40px rgba(255, 120, 160, 0.18);
-        --radius: 20px;
+        --shadow: 0 18px 40px rgba(255, 120, 160, 0.2);
+        --radius: 22px;
       }
 
       * {
         box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
       }
 
       body {
@@ -36,9 +31,9 @@
         font-family: "Manrope", system-ui, sans-serif;
         color: var(--ink);
         background:
-          radial-gradient(circle at 20% 15%, rgba(255, 208, 226, 0.6), transparent 45%),
-          radial-gradient(circle at 80% 10%, rgba(255, 182, 215, 0.5), transparent 45%),
-          radial-gradient(circle at 50% 90%, rgba(255, 210, 225, 0.5), transparent 55%),
+          radial-gradient(circle at 18% 18%, rgba(255, 210, 226, 0.6), transparent 45%),
+          radial-gradient(circle at 82% 10%, rgba(255, 182, 215, 0.52), transparent 45%),
+          radial-gradient(circle at 50% 92%, rgba(255, 210, 225, 0.5), transparent 55%),
           var(--bg);
       }
 
@@ -60,6 +55,13 @@
         font-family: "Cormorant Garamond", serif;
         font-size: clamp(28px, 4vw, 40px);
         margin: 0;
+      }
+
+      .month-title {
+        font-weight: 700;
+        font-size: 15px;
+        margin-top: 4px;
+        color: var(--muted);
       }
 
       .month-nav {
@@ -84,14 +86,6 @@
         border-radius: 50%;
         cursor: pointer;
         box-shadow: 0 6px 12px rgba(255, 140, 180, 0.15);
-      }
-
-      .month-title {
-        font-weight: 700;
-        font-size: 15px;
-        padding: 0 8px;
-        min-width: 120px;
-        text-align: center;
       }
 
       .calendar-card {
@@ -127,7 +121,7 @@
       .day {
         position: relative;
         border: none;
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.9);
         border-radius: 16px;
         padding: 10px 0;
         text-align: center;
@@ -192,7 +186,7 @@
       .sheet-panel {
         width: min(860px, 100%);
         max-height: 85vh;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.96);
         border-radius: 28px 28px 0 0;
         border: 1px solid var(--stroke);
         box-shadow: 0 -18px 40px rgba(255, 140, 180, 0.2);
@@ -372,7 +366,7 @@
     <div class="app">
       <header>
         <div>
-          <h1>Love Calendar</h1>
+          <h1>Nhật Ký Đôi</h1>
           <div class="month-title" id="monthTitle"></div>
         </div>
         <div class="month-nav">
@@ -412,256 +406,257 @@
     </div>
 
     <script>
-      const STORAGE_KEY = "love_calendar_chat";
-      const calendarDays = document.getElementById("calendarDays");
-      const monthTitle = document.getElementById("monthTitle");
-      const prevMonthBtn = document.getElementById("prevMonth");
-      const nextMonthBtn = document.getElementById("nextMonth");
-      const sheet = document.getElementById("daySheet");
-      const sheetDate = document.getElementById("sheetDate");
-      const closeSheet = document.getElementById("closeSheet");
-      const messageList = document.getElementById("messageList");
-      const messageInput = document.getElementById("messageInput");
-      const authorNghia = document.getElementById("authorNghia");
-      const authorChip = document.getElementById("authorChip");
-      const sendBtn = document.getElementById("sendBtn");
-      const editLastBtn = document.getElementById("editLastBtn");
+      window.addEventListener("DOMContentLoaded", () => {
+        const STORAGE_KEY = "love_calendar_chat";
+        const calendarDays = document.getElementById("calendarDays");
+        const monthTitle = document.getElementById("monthTitle");
+        const prevMonthBtn = document.getElementById("prevMonth");
+        const nextMonthBtn = document.getElementById("nextMonth");
+        const sheet = document.getElementById("daySheet");
+        const sheetDate = document.getElementById("sheetDate");
+        const closeSheet = document.getElementById("closeSheet");
+        const messageList = document.getElementById("messageList");
+        const messageInput = document.getElementById("messageInput");
+        const authorNghia = document.getElementById("authorNghia");
+        const authorChip = document.getElementById("authorChip");
+        const sendBtn = document.getElementById("sendBtn");
+        const editLastBtn = document.getElementById("editLastBtn");
 
-      const today = new Date();
-      let monthCursor = new Date(today.getFullYear(), today.getMonth(), 1);
-      let selectedIso = toIsoDate(today);
-      let author = "nghia";
-      let editingIndex = null;
+        const today = new Date();
+        let monthCursor = new Date(today.getFullYear(), today.getMonth(), 1);
+        let selectedIso = toIsoDate(today);
+        let author = "nghia";
+        let editingIndex = null;
 
-      const state = loadState();
+        const state = loadState();
 
-      function loadState() {
-        try {
-          return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-        } catch {
-          return {};
+        function loadState() {
+          try {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+          } catch {
+            return {};
+          }
         }
-      }
 
-      function saveState() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      }
-
-      function toIsoDate(date) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        const d = String(date.getDate()).padStart(2, "0");
-        return `${y}-${m}-${d}`;
-      }
-
-      function fromIso(iso) {
-        const [y, m, d] = iso.split("-").map(Number);
-        return new Date(y, m - 1, d);
-      }
-
-      function startOfMonth(date) {
-        return new Date(date.getFullYear(), date.getMonth(), 1);
-      }
-
-      function addMonths(date, diff) {
-        return new Date(date.getFullYear(), date.getMonth() + diff, 1);
-      }
-
-      function formatMonthTitle(date) {
-        return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-      }
-
-      function formatSheetDate(iso) {
-        return fromIso(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-      }
-
-      function getMessages(iso) {
-        return Array.isArray(state[iso]) ? state[iso] : [];
-      }
-
-      function renderCalendar() {
-        monthTitle.textContent = formatMonthTitle(monthCursor);
-        calendarDays.innerHTML = "";
-        const monthStart = startOfMonth(monthCursor);
-        const firstWeekday = (monthStart.getDay() + 6) % 7;
-        const gridStart = new Date(monthStart);
-        gridStart.setDate(monthStart.getDate() - firstWeekday);
-
-        for (let i = 0; i < 42; i += 1) {
-          const day = new Date(gridStart);
-          day.setDate(gridStart.getDate() + i);
-          const iso = toIsoDate(day);
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "day";
-          btn.textContent = String(day.getDate());
-          btn.dataset.iso = iso;
-          if (day.getMonth() !== monthStart.getMonth()) btn.classList.add("outside");
-          if (iso === toIsoDate(today)) btn.classList.add("today");
-          if (iso === selectedIso) btn.classList.add("selected");
-
-          const count = getMessages(iso).length;
-          if (count > 0) btn.classList.add("has-messages");
-          if (count >= 4) btn.classList.add("many-messages");
-
-          calendarDays.appendChild(btn);
+        function saveState() {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         }
-      }
 
-      function openSheet(iso) {
-        selectedIso = iso;
-        sheetDate.textContent = formatSheetDate(iso);
-        sheet.classList.add("open");
-        sheet.setAttribute("aria-hidden", "false");
-        renderMessages();
-        renderCalendar();
-        setTimeout(() => {
-          messageList.scrollTop = messageList.scrollHeight;
-        }, 0);
-      }
+        function toIsoDate(date) {
+          const y = date.getFullYear();
+          const m = String(date.getMonth() + 1).padStart(2, "0");
+          const d = String(date.getDate()).padStart(2, "0");
+          return `${y}-${m}-${d}`;
+        }
 
-      function closeSheetView() {
-        sheet.classList.remove("open");
-        sheet.setAttribute("aria-hidden", "true");
-        editingIndex = null;
-        messageInput.value = "";
-      }
+        function fromIso(iso) {
+          const parts = iso.split("-");
+          return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+        }
 
-      function renderMessages() {
-        messageList.innerHTML = "";
-        const list = getMessages(selectedIso);
-        list.forEach((msg, index) => {
-          const bubble = document.createElement("div");
-          bubble.className = `bubble ${msg.author === \"chip\" ? \"left\" : \"right\"}`;
-          bubble.dataset.index = String(index);
-          bubble.innerHTML = `
-            <div>${msg.content}</div>
-            <span class="meta">${msg.name} • ${formatTime(msg.timestamp)}</span>
-          `;
-          attachLongPress(bubble, index);
-          messageList.appendChild(bubble);
-        });
-      }
+        function startOfMonth(date) {
+          return new Date(date.getFullYear(), date.getMonth(), 1);
+        }
 
-      function formatTime(ts) {
-        return new Date(ts).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
-      }
+        function addMonths(date, diff) {
+          return new Date(date.getFullYear(), date.getMonth() + diff, 1);
+        }
 
-      function attachLongPress(el, index) {
-        let timer = null;
-        const start = () => {
-          timer = setTimeout(() => {
-            if (confirm("Xóa tin nhắn này?")) {
-              const list = getMessages(selectedIso);
-              list.splice(index, 1);
-              state[selectedIso] = list;
-              saveState();
-              renderMessages();
-              renderCalendar();
-            }
-          }, 600);
-        };
-        const clear = () => {
-          if (timer) clearTimeout(timer);
-          timer = null;
-        };
-        el.addEventListener("pointerdown", start);
-        el.addEventListener("pointerup", clear);
-        el.addEventListener("pointerleave", clear);
-      }
+        function formatMonthTitle(date) {
+          return date.toLocaleDateString("vi-VN", { month: "long", year: "numeric" });
+        }
 
-      function setAuthor(next) {
-        author = next;
-        authorNghia.classList.toggle("active", author === "nghia");
-        authorChip.classList.toggle("active", author === "chip");
-      }
+        function formatSheetDate(iso) {
+          return fromIso(iso).toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+        }
 
-      function sendMessage() {
-        const content = messageInput.value.trim();
-        if (!content) return;
-        const list = getMessages(selectedIso);
-        const msg = {
-          author,
-          name: author === "nghia" ? "Trọng Nghĩa (Chồng iu)" : "Chíp (Vợ iu)",
-          content,
-          timestamp: Date.now()
-        };
-        if (editingIndex !== null) {
-          list[editingIndex] = msg;
+        function getMessages(iso) {
+          return Array.isArray(state[iso]) ? state[iso] : [];
+        }
+
+        function renderCalendar() {
+          monthTitle.textContent = formatMonthTitle(monthCursor);
+          calendarDays.innerHTML = "";
+          const monthStart = startOfMonth(monthCursor);
+          const firstWeekday = (monthStart.getDay() + 6) % 7;
+          const gridStart = new Date(monthStart);
+          gridStart.setDate(monthStart.getDate() - firstWeekday);
+
+          for (let i = 0; i < 42; i += 1) {
+            const day = new Date(gridStart);
+            day.setDate(gridStart.getDate() + i);
+            const iso = toIsoDate(day);
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "day";
+            btn.textContent = String(day.getDate());
+            btn.dataset.iso = iso;
+            if (day.getMonth() !== monthStart.getMonth()) btn.classList.add("outside");
+            if (iso === toIsoDate(today)) btn.classList.add("today");
+            if (iso === selectedIso) btn.classList.add("selected");
+
+            const count = getMessages(iso).length;
+            if (count > 0) btn.classList.add("has-messages");
+            if (count >= 4) btn.classList.add("many-messages");
+
+            calendarDays.appendChild(btn);
+          }
+        }
+
+        function openSheet(iso) {
+          selectedIso = iso;
+          sheetDate.textContent = formatSheetDate(iso);
+          sheet.classList.add("open");
+          sheet.setAttribute("aria-hidden", "false");
+          renderMessages();
+          renderCalendar();
+          setTimeout(() => {
+            messageList.scrollTop = messageList.scrollHeight;
+          }, 0);
+        }
+
+        function closeSheetView() {
+          sheet.classList.remove("open");
+          sheet.setAttribute("aria-hidden", "true");
           editingIndex = null;
-        } else {
-          list.push(msg);
+          messageInput.value = "";
         }
-        state[selectedIso] = list;
-        saveState();
-        messageInput.value = "";
-        renderMessages();
-        renderCalendar();
-        messageList.scrollTop = messageList.scrollHeight;
-      }
 
-      function editLastMessage() {
-        const list = getMessages(selectedIso);
-        if (!list.length) return;
-        const lastIndex = list.length - 1;
-        editingIndex = lastIndex;
-        messageInput.value = list[lastIndex].content;
-        messageInput.focus();
-      }
-
-      function autoResize() {
-        messageInput.style.height = "auto";
-        messageInput.style.height = `${Math.min(messageInput.scrollHeight, 140)}px`;
-      }
-
-      calendarDays.addEventListener("click", (event) => {
-        const btn = event.target.closest(".day");
-        if (!btn) return;
-        btn.classList.add("selected");
-        selectedIso = btn.dataset.iso;
-        openSheet(selectedIso);
-      });
-
-      prevMonthBtn.addEventListener("click", () => {
-        monthCursor = addMonths(monthCursor, -1);
-        renderCalendar();
-      });
-
-      nextMonthBtn.addEventListener("click", () => {
-        monthCursor = addMonths(monthCursor, 1);
-        renderCalendar();
-      });
-
-      let touchStartX = 0;
-      calendarDays.addEventListener("touchstart", (e) => {
-        touchStartX = e.touches[0].clientX;
-      });
-      calendarDays.addEventListener("touchend", (e) => {
-        const delta = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(delta) < 40) return;
-        monthCursor = addMonths(monthCursor, delta > 0 ? -1 : 1);
-        renderCalendar();
-      });
-
-      closeSheet.addEventListener("click", closeSheetView);
-      sheet.addEventListener("click", (e) => {
-        if (e.target === sheet) closeSheetView();
-      });
-
-      authorNghia.addEventListener("click", () => setAuthor("nghia"));
-      authorChip.addEventListener("click", () => setAuthor("chip"));
-      sendBtn.addEventListener("click", sendMessage);
-      editLastBtn.addEventListener("click", editLastMessage);
-      messageInput.addEventListener("input", autoResize);
-      messageInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" && !event.shiftKey) {
-          event.preventDefault();
-          sendMessage();
+        function renderMessages() {
+          messageList.innerHTML = "";
+          const list = getMessages(selectedIso);
+          list.forEach((msg, index) => {
+            const bubble = document.createElement("div");
+            bubble.className = `bubble ${msg.author === "chip" ? "left" : "right"}`;
+            bubble.dataset.index = String(index);
+            bubble.innerHTML = `
+              <div>${msg.content}</div>
+              <span class="meta">${msg.name} • ${formatTime(msg.timestamp)}</span>
+            `;
+            attachLongPress(bubble, index);
+            messageList.appendChild(bubble);
+          });
         }
-      });
 
-      setAuthor(author);
-      renderCalendar();
+        function formatTime(ts) {
+          return new Date(ts).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+        }
+
+        function attachLongPress(el, index) {
+          let timer = null;
+          const start = () => {
+            timer = setTimeout(() => {
+              if (confirm("Xóa tin nhắn này?")) {
+                const list = getMessages(selectedIso);
+                list.splice(index, 1);
+                state[selectedIso] = list;
+                saveState();
+                renderMessages();
+                renderCalendar();
+              }
+            }, 600);
+          };
+          const clear = () => {
+            if (timer) clearTimeout(timer);
+            timer = null;
+          };
+          el.addEventListener("pointerdown", start);
+          el.addEventListener("pointerup", clear);
+          el.addEventListener("pointerleave", clear);
+        }
+
+        function setAuthor(next) {
+          author = next;
+          authorNghia.classList.toggle("active", author === "nghia");
+          authorChip.classList.toggle("active", author === "chip");
+        }
+
+        function sendMessage() {
+          const content = messageInput.value.trim();
+          if (!content) return;
+          const list = getMessages(selectedIso);
+          const msg = {
+            author,
+            name: author === "nghia" ? "Trọng Nghĩa (Chồng iu)" : "Chíp (Vợ iu)",
+            content,
+            timestamp: Date.now()
+          };
+          if (editingIndex !== null) {
+            list[editingIndex] = msg;
+            editingIndex = null;
+          } else {
+            list.push(msg);
+          }
+          state[selectedIso] = list;
+          saveState();
+          messageInput.value = "";
+          renderMessages();
+          renderCalendar();
+          messageList.scrollTop = messageList.scrollHeight;
+        }
+
+        function editLastMessage() {
+          const list = getMessages(selectedIso);
+          if (!list.length) return;
+          const lastIndex = list.length - 1;
+          editingIndex = lastIndex;
+          messageInput.value = list[lastIndex].content;
+          messageInput.focus();
+        }
+
+        function autoResize() {
+          messageInput.style.height = "auto";
+          messageInput.style.height = `${Math.min(messageInput.scrollHeight, 140)}px`;
+        }
+
+        calendarDays.addEventListener("click", (event) => {
+          const btn = event.target.closest(".day");
+          if (!btn) return;
+          selectedIso = btn.dataset.iso;
+          openSheet(selectedIso);
+        });
+
+        prevMonthBtn.addEventListener("click", () => {
+          monthCursor = addMonths(monthCursor, -1);
+          renderCalendar();
+        });
+
+        nextMonthBtn.addEventListener("click", () => {
+          monthCursor = addMonths(monthCursor, 1);
+          renderCalendar();
+        });
+
+        let touchStartX = 0;
+        calendarDays.addEventListener("touchstart", (e) => {
+          touchStartX = e.touches[0].clientX;
+        });
+        calendarDays.addEventListener("touchend", (e) => {
+          const delta = e.changedTouches[0].clientX - touchStartX;
+          if (Math.abs(delta) < 40) return;
+          monthCursor = addMonths(monthCursor, delta > 0 ? -1 : 1);
+          renderCalendar();
+        });
+
+        closeSheet.addEventListener("click", closeSheetView);
+        sheet.addEventListener("click", (e) => {
+          if (e.target === sheet) closeSheetView();
+        });
+
+        authorNghia.addEventListener("click", () => setAuthor("nghia"));
+        authorChip.addEventListener("click", () => setAuthor("chip"));
+        sendBtn.addEventListener("click", sendMessage);
+        editLastBtn.addEventListener("click", editLastMessage);
+        messageInput.addEventListener("input", autoResize);
+        messageInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+
+        setAuthor(author);
+        renderCalendar();
+      });
     </script>
   </body>
 </html>
