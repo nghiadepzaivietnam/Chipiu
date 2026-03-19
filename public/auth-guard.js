@@ -1,11 +1,18 @@
 (() => {
   const path = window.location.pathname;
-  if (path.endsWith('/login.html') || path.endsWith('/offline.html') || path.endsWith('/splash.html')) return;
+  if (path.endsWith('/login.html') || path.endsWith('/offline.html') || path.endsWith('/splash.html') || path.endsWith('/intro.html')) return;
 
   const ok = localStorage.getItem('app_auth') === '1';
   if (!ok) {
     const next = encodeURIComponent(path + window.location.search + window.location.hash);
     window.location.replace(`/login.html?next=${next}`);
+    return;
+  }
+
+  const introSeen = localStorage.getItem('intro_seen') === 'true';
+  if (!introSeen) {
+    const next = encodeURIComponent(path + window.location.search + window.location.hash);
+    window.location.replace(`/intro.html?next=${next}`);
     return;
   }
 

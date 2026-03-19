@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Entry Letter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #fff6f1;
+        --pink: #ffd1e3;
+        --rose: #ff9fc1;
+        --lavender: #e6ddff;
+        --ink: #3a2430;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html, body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: "Manrope", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 20% 20%, rgba(255, 210, 226, 0.6), transparent 45%),
+          radial-gradient(circle at 80% 10%, rgba(230, 221, 255, 0.45), transparent 45%),
+          linear-gradient(140deg, #fff4f8, #fff9f4);
+        overflow: hidden;
+      }
+      .bg-flow {
+        position: fixed;
+        inset: -20%;
+        background:
+          radial-gradient(circle at 30% 30%, rgba(255, 190, 210, 0.25), transparent 50%),
+          radial-gradient(circle at 70% 60%, rgba(226, 210, 255, 0.25), transparent 55%);
+        animation: slowDrift 18s ease-in-out infinite;
+        z-index: 0;
+      }
+      @keyframes slowDrift {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(12px); }
+      }
+      .wrap {
+        position: relative;
+        z-index: 1;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      .intro {
+        display: grid;
+        place-items: center;
+        gap: 16px;
+        text-align: center;
+      }
+      .name {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(20px, 4vw, 26px);
+        letter-spacing: 0.03em;
+      }
+      .hint {
+        font-size: 14px;
+        opacity: 0.7;
+        animation: hintFade 2.2s ease-in-out infinite;
+      }
+      @keyframes hintFade {
+        0%, 100% { opacity: 0.35; }
+        50% { opacity: 0.8; }
+      }
+      .envelope {
+        position: relative;
+        width: min(320px, 82vw);
+        height: 200px;
+        cursor: pointer;
+        transform-style: preserve-3d;
+        animation: floatIdle 3.4s ease-in-out infinite;
+      }
+      @keyframes floatIdle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+      }
+      .env-body {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 190, 210, 0.6);
+        box-shadow: 0 18px 36px rgba(255, 120, 160, 0.2);
+      }
+      .env-body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        background: linear-gradient(135deg, transparent 48%, rgba(255, 210, 228, 0.8) 50%);
+        clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+        opacity: 0.8;
+      }
+      .env-flap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        height: 110px;
+        background: linear-gradient(160deg, #ffe3ef, #ffd2e3);
+        clip-path: polygon(0 0, 50% 90%, 100% 0);
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        transform-origin: top;
+        transition: transform 700ms ease;
+        border: 1px solid rgba(255, 190, 210, 0.6);
+      }
+      .letter {
+        position: absolute;
+        left: 50%;
+        bottom: 22px;
+        width: 86%;
+        height: 140px;
+        background: #fffafc;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 210, 228, 0.7);
+        transform: translate(-50%, 30px);
+        opacity: 0;
+        transition: transform 700ms ease, opacity 700ms ease;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        text-align: center;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(16px, 3.5vw, 20px);
+        line-height: 1.4;
+      }
+      .open .env-flap {
+        transform: rotateX(180deg);
+      }
+      .open .letter {
+        transform: translate(-50%, -50px);
+        opacity: 1;
+      }
+      .open .envelope {
+        animation: none;
+        transform: scale(1);
+      }
+      .outro {
+        opacity: 0;
+        transition: opacity 500ms ease;
+      }
+      .fade-out {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-flow" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="intro" id="intro">
+        <div class="name">Trọng Nghĩa 💙 Chíp</div>
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Chạm để mở thư">
+          <div class="env-flap"></div>
+          <div class="env-body"></div>
+          <div class="letter" id="letter">
+            <span id="letterQuote">Đối với chúng ta, mỗi ngày đều đáng để lưu giữ.</span>
+          </div>
+        </div>
+        <div class="hint" id="hint">Chạm để mở</div>
+      </div>
+    </div>
+    <script>
+      const INTRO_KEY = "intro_seen";
+      const envelope = document.getElementById("envelope");
+      const intro = document.getElementById("intro");
+      const letterQuote = document.getElementById("letterQuote");
+      const hint = document.getElementById("hint");
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next") || "/love-calendar.html";
+
+      const quotes = [
+        "Đối với chúng ta, mỗi ngày đều đáng để lưu giữ.",
+        "Một lá thư nhỏ để bắt đầu ngày mới thật dịu dàng.",
+        "Gặp nhau mỗi ngày, trong từng dòng chữ."
+      ];
+      letterQuote.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+      function openIntro() {
+        if (intro.classList.contains("open")) return;
+        intro.classList.add("open");
+        hint.classList.add("outro");
+        if (navigator.vibrate) navigator.vibrate(20);
+        localStorage.setItem(INTRO_KEY, "true");
+        setTimeout(() => {
+          document.body.classList.add("fade-out");
+        }, 700);
+        setTimeout(() => {
+          window.location.replace(next);
+        }, 1200);
+      }
+
+      envelope.addEventListener("click", openIntro);
+      envelope.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openIntro();
+        }
+      });
+    </script>
+  </body>
+</html>
