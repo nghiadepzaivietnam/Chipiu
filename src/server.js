@@ -10,6 +10,7 @@ const CounterConfig = require("./models/CounterConfig");
 const Journey = require("./models/Journey");
 const PeriodTracker = require("./models/PeriodTracker");
 const MoodMap = require("./models/MoodMap");
+const WaterReminder = require("./models/WaterReminder");
 const { userContext } = require("./middleware/userContext");
 const { migrateToSharedUser, SHARED_USER_ID } = require("./lib/migrateSharedUserData");
 
@@ -30,6 +31,7 @@ mongoose
       Journey.syncIndexes(),
       PeriodTracker.syncIndexes(),
       MoodMap.syncIndexes(),
+      WaterReminder.syncIndexes(),
     ]).catch((err) => {
       console.error("Index sync warning:", err.message || err);
     });
@@ -68,6 +70,7 @@ app.use("/api/period-ai", require("./routes/periodAi"));
 app.use("/api/ai-chat", require("./routes/aiChat"));
 app.use("/api/journey", require("./routes/journey"));
 app.use("/api/mood-map", require("./routes/moodMap"));
+app.use("/api/water-reminder", require("./routes/waterReminder"));
 
 app.get(/^\/(?!api|uploads).*/, (_req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));

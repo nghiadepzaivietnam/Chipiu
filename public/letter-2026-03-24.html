@@ -1,0 +1,323 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thu 24/03/2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #fff6f8;
+        --ink: #3a2328;
+        --muted: #7a5c63;
+        --accent: #ff7aa6;
+        --accent-2: #ffb7ce;
+        --paper: #fffafc;
+        --shadow: 0 22px 50px rgba(255, 120, 160, 0.22);
+        --radius: 22px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Manrope", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 12% 18%, rgba(255, 216, 228, 0.65), transparent 45%),
+          radial-gradient(circle at 86% 12%, rgba(255, 190, 210, 0.5), transparent 45%),
+          radial-gradient(circle at 50% 90%, rgba(255, 210, 222, 0.5), transparent 55%),
+          var(--bg);
+        padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 36px) 120px;
+        overflow-x: hidden;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(circle at 1px 1px, rgba(58, 35, 40, 0.06) 1px, transparent 0);
+        background-size: 24px 24px;
+        opacity: 0.25;
+        pointer-events: none;
+      }
+
+      .page {
+        width: min(960px, 100%);
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero {
+        position: relative;
+        background: linear-gradient(140deg, rgba(255, 165, 195, 0.35), rgba(255, 240, 246, 0.9));
+        border-radius: var(--radius);
+        padding: clamp(24px, 4vw, 36px);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .hero::before,
+      .hero::after {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        filter: blur(50px);
+        z-index: 0;
+      }
+
+      .hero::before {
+        background: rgba(255, 170, 205, 0.45);
+        top: -60px;
+        right: -60px;
+      }
+
+      .hero::after {
+        background: rgba(255, 210, 225, 0.55);
+        bottom: -70px;
+        left: -70px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #fff;
+        color: var(--accent);
+        font-weight: 700;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(30px, 5vw, 44px);
+        margin: 12px 0 8px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 640px;
+        color: var(--muted);
+        line-height: 1.6;
+        position: relative;
+        z-index: 1;
+      }
+
+      .letter-wrap {
+        position: relative;
+        display: grid;
+        gap: 18px;
+      }
+
+      .letter {
+        background: var(--paper);
+        border-radius: var(--radius);
+        padding: clamp(20px, 3.5vw, 36px);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 180, 210, 0.5);
+        font-size: clamp(16px, 2.7vw, 19px);
+        line-height: 1.9;
+        position: relative;
+      }
+
+      .letter::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        border-radius: var(--radius) 0 0 var(--radius);
+        background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      }
+
+      .letter p {
+        margin: 0 0 16px;
+      }
+
+      .letter p:last-child {
+        margin-bottom: 0;
+      }
+
+      .date {
+        font-weight: 700;
+        color: var(--accent);
+        font-size: 18px;
+      }
+
+      .signature {
+        margin-top: 18px;
+        font-weight: 700;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 22px;
+      }
+
+      .audio-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 180, 210, 0.4);
+        padding: 14px 16px;
+        border-radius: 16px;
+        box-shadow: 0 14px 32px rgba(255, 120, 160, 0.2);
+      }
+
+      .audio-title {
+        font-weight: 700;
+        font-size: 15px;
+      }
+
+      .audio-sub {
+        margin: 4px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .audio-card button {
+        border: none;
+        background: linear-gradient(135deg, #ff7aa6, #ff9fbe);
+        color: #fff;
+        font-weight: 700;
+        padding: 10px 18px;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(255, 120, 160, 0.3);
+        transition: transform 180ms ease, box-shadow 180ms ease;
+      }
+
+      .audio-card button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px rgba(255, 120, 160, 0.35);
+      }
+
+      .footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+        margin-top: 4px;
+      }
+
+      @media (max-width: 640px) {
+        .audio-card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .audio-card button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <span class="tag">Thu xin loi • 24/03/2026</span>
+        <h1>Gửi em yêu,</h1>
+        <p>Một bức thư để nói rằng anh thật sự trân trọng em và đang cố gắng trở nên tốt hơn.</p>
+      </section>
+
+      <section class="letter-wrap">
+        <article class="letter">
+          <p class="date">Ngày 24/03/2026</p>
+          <p>Gửi em yêu,</p>
+          <p>Hôm nay là ngày 24/03/2026 — một ngày chẳng có gì đặc biệt với thế giới ngoài kia, nhưng với anh lại là một ngày rất nhiều cảm xúc. Anh ngồi đây, nghĩ về em, về những chuyện đã qua, và về cả những điều anh vẫn chưa làm tốt… để rồi nhận ra rằng anh nhớ em nhiều đến thế nào.</p>
+          <p>Anh biết, trong tình yêu không ai là hoàn hảo. Ai cũng sẽ có lúc sai, lúc vô tâm, lúc làm tổn thương người mình thương nhất. Nhưng anh cũng hiểu rằng, không thể vì thế mà anh cho phép bản thân cứ lặp lại những lỗi lầm ấy. Hôm qua, khi làm em giận, anh đã suy nghĩ rất nhiều. Không phải chỉ là một chút áy náy thoáng qua, mà là cảm giác day dứt thật sự — vì người anh làm tổn thương lại chính là em, người anh luôn muốn bảo vệ và yêu thương nhất.</p>
+          <p>Anh biết em cũng buồn, cũng suy nghĩ nhiều, có khi còn mệt mỏi vì những lần như vậy. Nghĩ đến điều đó, anh càng thấy mình cần phải thay đổi nhiều hơn, không chỉ bằng lời nói mà bằng hành động. Anh không phải là một cái máy hoàn hảo, nên đôi khi vẫn còn những thiếu sót, những điều nhỏ nhặt mà anh vô tình làm em tổn thương. Nhưng em à, điều anh có thể chắc chắn là: tình cảm anh dành cho em là thật, và anh luôn muốn trở thành một người tốt hơn — vì em, và vì chính tình yêu của chúng ta.</p>
+          <p>Cảm ơn em vì đã luôn dịu dàng, luôn bao dung, và đã cho anh cơ hội để sửa sai. Không phải ai cũng đủ kiên nhẫn để ở lại và yêu thương một người còn nhiều thiếu sót như anh. Những gì em làm, anh đều ghi nhận và trân trọng từng chút một.</p>
+          <p>Nếu có thể, anh mong em hãy cho anh thêm thời gian — không phải để biện minh cho lỗi lầm, mà để chứng minh rằng anh thực sự đang cố gắng thay đổi. Anh muốn em thấy một phiên bản tốt hơn của anh, một người biết quan tâm em nhiều hơn, hiểu em nhiều hơn, và không để em phải buồn thêm vì những điều đáng lẽ anh có thể làm tốt hơn.</p>
+          <p>Anh nhớ em. Nhớ cách em cười, nhớ những lúc em dỗi, thậm chí cả những lúc em im lặng — vì anh biết, đằng sau đó là rất nhiều cảm xúc mà em đã cố giữ lại. Anh không muốn em phải giữ những điều đó một mình nữa.</p>
+          <p>Mong rằng khi em đọc những dòng này, em sẽ hiểu rằng anh thật sự hối lỗi và thật sự yêu em rất nhiều. Không phải chỉ là hôm nay, mà là mỗi ngày sau này, anh vẫn muốn được ở bên em, cùng em đi qua những vui buồn, và cùng nhau trở nên tốt hơn.</p>
+          <p>Anh thương em nhiều lắm.</p>
+          <p class="signature">Trọng Nghĩa của em!</p>
+        </article>
+
+        <div class="audio-card" aria-label="Phat nhac cho em">
+          <div>
+            <div class="audio-title">HOÀNG TÔN - YÊU EM RẤT NHIỀU</div>
+            <p class="audio-sub">Lyrics Video</p>
+          </div>
+          <button type="button" id="playBtn">Play</button>
+        </div>
+      </section>
+
+      <p class="footer">Anh xin lỗi, và anh yêu em.</p>
+    </main>
+
+    <audio
+      id="loveSong"
+      src="/audio/HO%C3%80NG%20T%C3%94N%20-%20Y%C3%8AU%20EM%20R%E1%BA%A4T%20NHI%E1%BB%80U%20(Lyrics%20Video)%20-%20YouTube.mp3"
+      preload="none"
+    ></audio>
+
+    <script>
+      const audio = document.getElementById("loveSong");
+      const playBtn = document.getElementById("playBtn");
+      let isPlaying = false;
+
+      const syncButton = () => {
+        playBtn.textContent = isPlaying ? "Pause" : "Play";
+      };
+
+      const safePlay = async () => {
+        try {
+          await audio.play();
+          return true;
+        } catch {
+          return false;
+        }
+      };
+
+      playBtn.addEventListener("click", async () => {
+        if (!audio) return;
+        if (isPlaying) {
+          audio.pause();
+          isPlaying = false;
+          syncButton();
+          return;
+        }
+
+        const ok = await safePlay();
+        if (!ok) {
+          playBtn.textContent = "Tap to Play";
+          return;
+        }
+        isPlaying = true;
+        syncButton();
+      });
+
+      audio.addEventListener("ended", () => {
+        isPlaying = false;
+        syncButton();
+      });
+
+      syncButton();
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        const ok = await safePlay();
+        if (!ok) {
+          playBtn.textContent = "Tap to Play";
+          return;
+        }
+        isPlaying = true;
+        syncButton();
+      });
+    </script>
+  </body>
+</html>

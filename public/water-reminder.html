@@ -1,0 +1,652 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nhac nho uong nuoc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f3fbff;
+        --card: rgba(255, 255, 255, 0.92);
+        --ink: #1d2b36;
+        --muted: #5c7184;
+        --accent: #45b2ff;
+        --accent-2: #9ad9ff;
+        --shadow: 0 18px 40px rgba(69, 178, 255, 0.2);
+        --radius: 22px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Manrope", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 15% 15%, rgba(120, 205, 255, 0.35), transparent 45%),
+          radial-gradient(circle at 80% 10%, rgba(160, 220, 255, 0.4), transparent 45%),
+          radial-gradient(circle at 50% 90%, rgba(160, 220, 255, 0.4), transparent 55%),
+          var(--bg);
+        padding: clamp(22px, 4vw, 42px) clamp(14px, 4vw, 32px) 120px;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(circle at 1px 1px, rgba(29, 43, 54, 0.06) 1px, transparent 0);
+        background-size: 26px 26px;
+        opacity: 0.2;
+        pointer-events: none;
+      }
+
+      .page {
+        width: min(980px, 100%);
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, rgba(69, 178, 255, 0.2), rgba(255, 255, 255, 0.9));
+        border-radius: var(--radius);
+        padding: clamp(22px, 4vw, 34px);
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(69, 178, 255, 0.3);
+        filter: blur(50px);
+        right: -60px;
+        top: -60px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-family: "Fraunces", serif;
+        font-size: clamp(28px, 5vw, 44px);
+      }
+
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 640px;
+        line-height: 1.6;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 20px;
+        border: 1px solid rgba(120, 205, 255, 0.35);
+        box-shadow: var(--shadow);
+      }
+
+      .card h3 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+
+      .progress {
+        background: rgba(69, 178, 255, 0.16);
+        border-radius: 999px;
+        height: 12px;
+        overflow: hidden;
+      }
+
+      .progress span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        transition: width 200ms ease;
+      }
+
+      .count-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        font-weight: 700;
+      }
+
+      .person-toggle {
+        display: inline-flex;
+        gap: 8px;
+        background: rgba(69, 178, 255, 0.12);
+        border-radius: 999px;
+        padding: 4px;
+        margin-bottom: 10px;
+      }
+
+      .person-toggle button {
+        border: none;
+        background: transparent;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-weight: 700;
+        cursor: pointer;
+        color: #2a6f9e;
+        font-size: 12px;
+      }
+
+      .person-toggle button.active {
+        background: #fff;
+        color: var(--ink);
+        box-shadow: 0 8px 16px rgba(69, 178, 255, 0.25);
+      }
+
+      .person-summary {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .person-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid rgba(69, 178, 255, 0.2);
+        font-size: 13px;
+      }
+
+      .person-item .name {
+        font-weight: 700;
+      }
+
+      .person-item .count {
+        color: var(--muted);
+      }
+
+      .person-item button {
+        border: none;
+        background: rgba(69, 178, 255, 0.16);
+        color: #2a6f9e;
+        border-radius: 10px;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 12px;
+      }
+
+      .primary-btn {
+        border: none;
+        background: linear-gradient(135deg, var(--accent), #2d9af0);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 12px 25px rgba(69, 178, 255, 0.3);
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 30px rgba(69, 178, 255, 0.35);
+      }
+
+      .ghost-btn {
+        border: 1px solid rgba(69, 178, 255, 0.35);
+        background: #fff;
+        color: var(--accent);
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(69, 178, 255, 0.12);
+        color: #2d79b0;
+        font-weight: 700;
+        font-size: 12px;
+      }
+
+      .time-list {
+        display: grid;
+        gap: 8px;
+        margin: 12px 0 0;
+      }
+
+      .time-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid rgba(69, 178, 255, 0.2);
+      }
+
+      .time-item button {
+        border: none;
+        background: rgba(69, 178, 255, 0.16);
+        color: #2a6f9e;
+        border-radius: 10px;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .input-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      input[type="time"],
+      input[type="number"] {
+        border: 1px solid rgba(69, 178, 255, 0.4);
+        border-radius: 12px;
+        padding: 8px 10px;
+        font-family: inherit;
+      }
+
+      .note {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 8px 0 0;
+      }
+
+      .footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <span class="pill" id="todayText">Hom nay</span>
+        <h1>Nhac nho em uong nuoc</h1>
+        <p>Mot goc nho de nhac em uong nuoc deu dan, nhe nhang va khong bi ap luc.</p>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h3>Hom nay da uong</h3>
+          <div class="person-toggle" role="tablist" aria-label="Chon nguoi">
+            <button type="button" id="toggleHaiAnh" class="active">Hai Anh</button>
+            <button type="button" id="toggleTrongNghia">Trong Nghia</button>
+          </div>
+          <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+          <div class="count-row">
+            <span id="countLabel">0/8 ly</span>
+            <button class="primary-btn" id="drinkBtn" type="button">Tich 1 ly</button>
+          </div>
+          <div class="person-summary" id="personSummary"></div>
+          <div class="input-row">
+            <label for="goalInput" class="note">Muc tieu:</label>
+            <input id="goalInput" type="number" min="1" max="20" step="1" value="8" />
+            <button class="ghost-btn" id="saveGoalBtn" type="button">Luu</button>
+          </div>
+          <p class="note">Moi lan bam la tinh them 1 ly nho. Du lieu tu dong luu theo ngay.</p>
+        </div>
+
+        <div class="card">
+          <h3>Khung gio nhac</h3>
+          <div class="time-list" id="timeList"></div>
+          <div class="input-row">
+            <input id="timeInput" type="time" />
+            <button class="ghost-btn" id="addTimeBtn" type="button">Them gio</button>
+          </div>
+          <p class="note">Them hoac xoa gio nhac bat ky luc nao.</p>
+        </div>
+
+        <div class="card">
+          <h3>Thong bao tu dong</h3>
+          <p class="note">Bat thong bao de trinh duyet nhac em dung gio. Neu trinh duyet chan tu dong, hay bam nut nay.</p>
+          <button class="primary-btn" id="notifyBtn" type="button">Bat nhac nho</button>
+          <p class="note" id="notifyStatus">Trang thai: chua bat.</p>
+        </div>
+      </section>
+
+      <p class="footer">Uong nuoc day du, tinh yeu cung day day.</p>
+    </main>
+
+    <script>
+      const STORAGE_KEY = "water_reminder_state";
+      const API = "/api/water-reminder";
+      const todayText = document.getElementById("todayText");
+      const progressBar = document.getElementById("progressBar");
+      const countLabel = document.getElementById("countLabel");
+      const drinkBtn = document.getElementById("drinkBtn");
+      const toggleHaiAnh = document.getElementById("toggleHaiAnh");
+      const toggleTrongNghia = document.getElementById("toggleTrongNghia");
+      const personSummary = document.getElementById("personSummary");
+      const goalInput = document.getElementById("goalInput");
+      const saveGoalBtn = document.getElementById("saveGoalBtn");
+      const timeList = document.getElementById("timeList");
+      const timeInput = document.getElementById("timeInput");
+      const addTimeBtn = document.getElementById("addTimeBtn");
+      const notifyBtn = document.getElementById("notifyBtn");
+      const notifyStatus = document.getElementById("notifyStatus");
+
+      const todayIso = () => {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${y}-${m}-${day}`;
+      };
+
+      const formatDate = (iso) => {
+        const parts = iso.split("-").map(Number);
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
+        return d.toLocaleDateString("vi-VN", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+      };
+
+      const defaultState = {
+        goal: 8,
+        times: ["08:30", "10:30", "12:30", "15:00", "17:00", "20:30"],
+        countByDate: {},
+        sentByDate: {},
+        selectedPerson: "haiAnh"
+      };
+
+      const loadState = () => {
+        try {
+          return { ...defaultState, ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}) };
+        } catch {
+          return { ...defaultState };
+        }
+      };
+
+      const saveState = () => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      };
+
+      let state = loadState();
+      let remoteReady = false;
+
+      const people = [
+        { key: "haiAnh", name: "Hai Anh" },
+        { key: "trongNghia", name: "Trong Nghia" }
+      ];
+
+      const normalizeCountsForDate = (date) => {
+        const current = state.countByDate[date];
+        if (typeof current === "number") {
+          state.countByDate[date] = { haiAnh: current, trongNghia: 0 };
+        } else if (!current) {
+          state.countByDate[date] = { haiAnh: 0, trongNghia: 0 };
+        } else {
+          state.countByDate[date] = {
+            haiAnh: Number(current.haiAnh ?? current["hai-anh"] ?? 0) || 0,
+            trongNghia: Number(current.trongNghia ?? current["trong-nghia"] ?? 0) || 0
+          };
+        }
+      };
+
+      const normalizeState = () => {
+        if (state.selectedPerson === "hai-anh") state.selectedPerson = "haiAnh";
+        if (state.selectedPerson === "trong-nghia") state.selectedPerson = "trongNghia";
+        const today = todayIso();
+        normalizeCountsForDate(today);
+        saveState();
+      };
+
+      const getCount = (personKey) => {
+        const today = todayIso();
+        normalizeCountsForDate(today);
+        return state.countByDate[today][personKey] || 0;
+      };
+
+      const setCount = (personKey, value) => {
+        const today = todayIso();
+        normalizeCountsForDate(today);
+        state.countByDate[today][personKey] = Math.max(0, value);
+        saveState();
+        renderProgress();
+        syncCounts(today);
+      };
+
+      const renderProgress = () => {
+        const active = state.selectedPerson || "haiAnh";
+        const count = getCount(active);
+        const goal = Math.max(1, state.goal || 8);
+        const pct = Math.min(100, Math.round((count / goal) * 100));
+        progressBar.style.width = `${pct}%`;
+        countLabel.textContent = `${count}/${goal} ly`;
+        goalInput.value = goal;
+        toggleHaiAnh.classList.toggle("active", active === "haiAnh");
+        toggleTrongNghia.classList.toggle("active", active === "trongNghia");
+        renderSummary();
+      };
+
+      const renderSummary = () => {
+        const goal = Math.max(1, state.goal || 8);
+        personSummary.innerHTML = "";
+        people.forEach((person) => {
+          const count = getCount(person.key);
+          const row = document.createElement("div");
+          row.className = "person-item";
+          row.innerHTML = `
+            <div>
+              <div class="name">${person.name}</div>
+              <div class="count">${count}/${goal} ly</div>
+            </div>
+            <button type="button">Tich</button>
+          `;
+          row.querySelector("button").addEventListener("click", () => {
+            setCount(person.key, getCount(person.key) + 1);
+            state.selectedPerson = person.key;
+            saveState();
+            renderProgress();
+          });
+          personSummary.appendChild(row);
+        });
+      };
+
+      const renderTimes = () => {
+        const times = [...new Set(state.times)].sort();
+        state.times = times;
+        saveState();
+        timeList.innerHTML = "";
+
+        times.forEach((time) => {
+          const item = document.createElement("div");
+          item.className = "time-item";
+          item.innerHTML = `
+            <span>${time}</span>
+            <button type="button">Xoa</button>
+          `;
+          item.querySelector("button").addEventListener("click", () => {
+            state.times = state.times.filter((t) => t !== time);
+            saveState();
+            renderTimes();
+            syncTimes();
+          });
+          timeList.appendChild(item);
+        });
+      };
+
+      const setNotifyStatus = (text) => {
+        notifyStatus.textContent = `Trang thai: ${text}`;
+      };
+
+      const requestNotify = async () => {
+        if (!("Notification" in window)) {
+          setNotifyStatus("trinh duyet khong ho tro.");
+          return;
+        }
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          setNotifyStatus("da bat.");
+        } else {
+          setNotifyStatus("bi tu choi.");
+        }
+      };
+
+      const shouldSend = (timeStr) => {
+        const today = todayIso();
+        state.sentByDate[today] = state.sentByDate[today] || {};
+        return !state.sentByDate[today][timeStr];
+      };
+
+      const markSent = (timeStr) => {
+        const today = todayIso();
+        state.sentByDate[today] = state.sentByDate[today] || {};
+        state.sentByDate[today][timeStr] = true;
+        saveState();
+      };
+
+      const checkSchedule = () => {
+        const now = new Date();
+        const current = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+        if (!state.times.includes(current)) return;
+        if (!shouldSend(current)) return;
+
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("Nhac nho uong nuoc", {
+            body: "Em oi, uong mot ly nhe. Anh thuong em.",
+            icon: "/icons/icon-192.png"
+          });
+          markSent(current);
+        }
+      };
+
+      const syncRemote = async (payload) => {
+        try {
+          const res = await fetch(API, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Khong the luu.");
+          applyRemote(data);
+          remoteReady = true;
+        } catch {
+          remoteReady = false;
+        }
+      };
+
+      const syncCounts = (date) => {
+        const counts = state.countByDate[date] || { haiAnh: 0, trongNghia: 0 };
+        syncRemote({ date, counts });
+      };
+
+      const syncGoal = () => syncRemote({ goal: state.goal });
+      const syncTimes = () => syncRemote({ times: state.times });
+
+      const applyRemote = (data) => {
+        if (!data) return;
+        if (Number.isFinite(Number(data.goal))) state.goal = Number(data.goal);
+        if (Array.isArray(data.times)) state.times = data.times;
+        if (Array.isArray(data.entries)) {
+          state.countByDate = {};
+          data.entries.forEach((entry) => {
+            if (!entry?.date) return;
+            state.countByDate[entry.date] = {
+              haiAnh: Number(entry?.counts?.haiAnh ?? 0) || 0,
+              trongNghia: Number(entry?.counts?.trongNghia ?? 0) || 0
+            };
+          });
+        } else if (data.entry?.date) {
+          state.countByDate[data.entry.date] = {
+            haiAnh: Number(data.entry?.counts?.haiAnh ?? 0) || 0,
+            trongNghia: Number(data.entry?.counts?.trongNghia ?? 0) || 0
+          };
+        }
+        normalizeState();
+        renderProgress();
+        renderTimes();
+      };
+
+      const loadRemote = async () => {
+        try {
+          const res = await fetch(API);
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Khong the tai du lieu.");
+          applyRemote(data);
+          remoteReady = true;
+        } catch {
+          remoteReady = false;
+        }
+      };
+
+      drinkBtn.addEventListener("click", () => {
+        const active = state.selectedPerson || "haiAnh";
+        setCount(active, getCount(active) + 1);
+      });
+      toggleHaiAnh.addEventListener("click", () => {
+        state.selectedPerson = "haiAnh";
+        saveState();
+        renderProgress();
+      });
+      toggleTrongNghia.addEventListener("click", () => {
+        state.selectedPerson = "trongNghia";
+        saveState();
+        renderProgress();
+      });
+
+      saveGoalBtn.addEventListener("click", () => {
+        const next = Number(goalInput.value) || 8;
+        state.goal = Math.max(1, Math.min(20, next));
+        saveState();
+        renderProgress();
+        syncGoal();
+      });
+
+      addTimeBtn.addEventListener("click", () => {
+        const value = timeInput.value;
+        if (!value) return;
+        state.times = [...state.times, value];
+        timeInput.value = "";
+        saveState();
+        renderTimes();
+        syncTimes();
+      });
+
+      notifyBtn.addEventListener("click", requestNotify);
+
+      todayText.textContent = formatDate(todayIso());
+      normalizeState();
+      renderProgress();
+      renderTimes();
+      setNotifyStatus(typeof Notification !== "undefined" && Notification.permission === "granted" ? "da bat." : "chua bat.");
+
+      loadRemote();
+      window.setInterval(checkSchedule, 60 * 1000);
+      checkSchedule();
+    </script>
+  </body>
+</html>
+
