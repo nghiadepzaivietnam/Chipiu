@@ -3,321 +3,510 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thu 24/03/2026</title>
+    <title>Thư 24/03/2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --bg: #fff6f8;
-        --ink: #3a2328;
-        --muted: #7a5c63;
-        --accent: #ff7aa6;
-        --accent-2: #ffb7ce;
-        --paper: #fffafc;
-        --shadow: 0 22px 50px rgba(255, 120, 160, 0.22);
-        --radius: 22px;
+        --pink: #ff8bb3;
+        --pink-2: #ffc2d6;
+        --red: #ff5d7c;
+        --paper: #fff9fb;
+        --paper-edge: #f4dbe7;
+        --ink: #4a2a35;
+        --shadow: 0 24px 60px rgba(255, 120, 160, 0.25);
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: "Manrope", system-ui, sans-serif;
+        font-family: "Playfair Display", serif;
         color: var(--ink);
         background:
-          radial-gradient(circle at 12% 18%, rgba(255, 216, 228, 0.65), transparent 45%),
-          radial-gradient(circle at 86% 12%, rgba(255, 190, 210, 0.5), transparent 45%),
-          radial-gradient(circle at 50% 90%, rgba(255, 210, 222, 0.5), transparent 55%),
-          var(--bg);
-        padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 36px) 120px;
-        overflow-x: hidden;
-      }
-
-      body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background-image: radial-gradient(circle at 1px 1px, rgba(58, 35, 40, 0.06) 1px, transparent 0);
-        background-size: 24px 24px;
-        opacity: 0.25;
-        pointer-events: none;
-      }
-
-      .page {
-        width: min(960px, 100%);
-        margin: 0 auto;
-        display: grid;
-        gap: 18px;
-      }
-
-      .hero {
-        position: relative;
-        background: linear-gradient(140deg, rgba(255, 165, 195, 0.35), rgba(255, 240, 246, 0.9));
-        border-radius: var(--radius);
-        padding: clamp(24px, 4vw, 36px);
-        box-shadow: var(--shadow);
+          radial-gradient(circle at 18% 18%, rgba(255, 208, 226, 0.55), transparent 45%),
+          radial-gradient(circle at 82% 12%, rgba(255, 180, 210, 0.5), transparent 45%),
+          radial-gradient(circle at 50% 90%, rgba(255, 210, 225, 0.5), transparent 55%),
+          #fff3f7;
         overflow: hidden;
       }
 
-      .hero::before,
-      .hero::after {
-        content: "";
-        position: absolute;
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        filter: blur(50px);
+      body.opened {
+        overflow-y: auto;
+      }
+
+      .hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
         z-index: 0;
       }
 
-      .hero::before {
-        background: rgba(255, 170, 205, 0.45);
-        top: -60px;
-        right: -60px;
+      .heart {
+        position: absolute;
+        bottom: -10%;
+        width: 14px;
+        height: 14px;
+        background: linear-gradient(140deg, var(--pink), var(--pink-2));
+        transform: rotate(45deg);
+        border-radius: 4px 4px 0 0;
+        opacity: 0;
+        animation: floatHeart 8s linear infinite;
+        filter: drop-shadow(0 8px 16px rgba(255, 120, 170, 0.25));
       }
 
-      .hero::after {
-        background: rgba(255, 210, 225, 0.55);
-        bottom: -70px;
-        left: -70px;
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: inherit;
       }
 
-      .tag {
-        display: inline-flex;
+      .heart::before {
+        left: -7px;
+        top: 0;
+      }
+
+      .heart::after {
+        top: -7px;
+        left: 0;
+      }
+
+      @keyframes floatHeart {
+        0% {
+          transform: translateY(0) rotate(45deg) scale(0.9);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateY(-120vh) rotate(45deg) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      .stage {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 8px 14px;
-        border-radius: 999px;
-        background: #fff;
-        color: var(--accent);
-        font-weight: 700;
-        position: relative;
-        z-index: 1;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+        justify-content: center;
+        padding: 80px 16px 140px;
       }
 
-      h1 {
-        font-family: "Cormorant Garamond", serif;
-        font-size: clamp(30px, 5vw, 44px);
-        margin: 12px 0 8px;
-        position: relative;
-        z-index: 1;
+      body.opened .stage {
+        align-items: flex-start;
       }
 
-      .hero p {
-        margin: 0;
-        max-width: 640px;
-        color: var(--muted);
-        line-height: 1.6;
+      .envelope-wrap {
         position: relative;
-        z-index: 1;
+        width: min(620px, 92vw);
+        height: 360px;
       }
 
-      .letter-wrap {
-        position: relative;
+      .envelope {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 100%;
+        height: 240px;
+        transform: translateX(-50%);
+        cursor: pointer;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease, opacity 0.6s ease;
+      }
+
+      body.opened .envelope {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0.75;
+        pointer-events: none;
+      }
+
+      .envelope-body {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(160deg, #ffe7f2, #ffd1e6);
+        border-radius: 18px;
+        border: 1px solid rgba(255, 160, 190, 0.6);
+        box-shadow: 0 18px 40px rgba(255, 120, 170, 0.25);
+      }
+
+      .envelope-body::before,
+      .envelope-body::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        background: linear-gradient(135deg, transparent 48%, rgba(255, 190, 210, 0.8) 50%);
+        clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+        opacity: 0.8;
+      }
+
+      .envelope-flap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        height: 130px;
+        background: linear-gradient(160deg, #ffd8ed, #ffc2db);
+        clip-path: polygon(0 0, 50% 90%, 100% 0);
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        transform-origin: top;
+        transition: transform 0.8s ease;
+        border: 1px solid rgba(255, 160, 190, 0.6);
+      }
+
+      body.opened .envelope-flap {
+        transform: rotateX(180deg);
+      }
+
+      .seal {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 52px;
+        height: 52px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #ff8fb5, #ff5a8a);
         display: grid;
-        gap: 18px;
+        place-items: center;
+        color: #fff;
+        font-size: 18px;
+        box-shadow: 0 12px 20px rgba(255, 90, 130, 0.35);
+        transition: transform 0.6s ease, opacity 0.6s ease;
+      }
+
+      body.opened .seal {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.4;
       }
 
       .letter {
-        background: var(--paper);
-        border-radius: var(--radius);
-        padding: clamp(20px, 3.5vw, 36px);
-        box-shadow: var(--shadow);
-        border: 1px solid rgba(255, 180, 210, 0.5);
-        font-size: clamp(16px, 2.7vw, 19px);
-        line-height: 1.9;
-        position: relative;
-      }
-
-      .letter::before {
-        content: "";
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 6px;
-        border-radius: var(--radius) 0 0 var(--radius);
-        background: linear-gradient(180deg, var(--accent), var(--accent-2));
+        left: 50%;
+        bottom: 40px;
+        width: min(620px, 92vw);
+        transform: translate(-50%, 40px) scale(0.98);
+        opacity: 0;
+        transition: transform 0.9s ease, opacity 0.9s ease;
+        pointer-events: none;
       }
 
-      .letter p {
+      body.opened .letter {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        transform: translateY(-120px);
+        opacity: 1;
+        pointer-events: auto;
+        margin: 0 auto 60px;
+      }
+
+      .letter-paper {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 245, 250, 0.95)),
+          repeating-linear-gradient(0deg, transparent 0 28px, rgba(255, 205, 220, 0.16) 28px 29px);
+        border-radius: 20px;
+        padding: 32px 30px 38px;
+        border: 1px solid var(--paper-edge);
+        box-shadow: var(--shadow);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 20px;
+        line-height: 1.85;
+      }
+
+      .letter-paper p {
         margin: 0 0 16px;
       }
 
-      .letter p:last-child {
-        margin-bottom: 0;
-      }
-
-      .date {
+      .letter-paper .date {
         font-weight: 700;
-        color: var(--accent);
-        font-size: 18px;
-      }
-
-      .signature {
-        margin-top: 18px;
-        font-weight: 700;
-        font-family: "Cormorant Garamond", serif;
         font-size: 22px;
       }
 
-      .audio-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(255, 180, 210, 0.4);
-        padding: 14px 16px;
-        border-radius: 16px;
-        box-shadow: 0 14px 32px rgba(255, 120, 160, 0.2);
-      }
-
-      .audio-title {
+      .letter-paper .sign {
+        margin-top: 24px;
         font-weight: 700;
-        font-size: 15px;
+        font-size: 22px;
       }
 
-      .audio-sub {
-        margin: 4px 0 0;
-        font-size: 13px;
-        color: var(--muted);
-      }
-
-      .audio-card button {
-        border: none;
-        background: linear-gradient(135deg, #ff7aa6, #ff9fbe);
-        color: #fff;
-        font-weight: 700;
-        padding: 10px 18px;
-        border-radius: 12px;
-        cursor: pointer;
-        box-shadow: 0 10px 24px rgba(255, 120, 160, 0.3);
-        transition: transform 180ms ease, box-shadow 180ms ease;
-      }
-
-      .audio-card button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 14px 30px rgba(255, 120, 160, 0.35);
-      }
-
-      .footer {
-        text-align: center;
-        color: var(--muted);
+      .hint {
+        position: absolute;
+        bottom: -34px;
+        left: 50%;
+        transform: translateX(-50%);
         font-size: 14px;
-        margin-top: 4px;
+        color: rgba(77, 43, 54, 0.7);
+      }
+
+      .sparkles {
+        position: absolute;
+        inset: -20px;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 210, 230, 0.1));
+        border-radius: 50%;
+        opacity: 0;
+        transform: scale(0.4) rotate(0deg);
+        filter: drop-shadow(0 4px 10px rgba(255, 140, 180, 0.35));
+        animation: sparklePop 1.6s ease both;
+      }
+
+      .sparkles.show .sparkle {
+        opacity: 1;
+      }
+
+      @keyframes sparklePop {
+        0% {
+          opacity: 0;
+          transform: scale(0.4) rotate(0deg);
+        }
+        40% {
+          opacity: 1;
+          transform: scale(1) rotate(20deg);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.2) translateY(-10px) rotate(60deg);
+        }
+      }
+
+      body.opened .hint {
+        opacity: 0;
+        transform: translateX(-50%) translateY(6px);
+      }
+
+      .music-toggle {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 5;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 12px 24px rgba(255, 120, 160, 0.25);
+        cursor: pointer;
+        font-size: 18px;
+        color: #ff6f96;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        opacity: 0.65;
+      }
+
+      .music-toggle.enabled {
+        opacity: 1;
+      }
+
+      .music-toggle.muted {
+        color: #b98a9a;
+      }
+
+      .music-toggle:hover {
+        transform: translateY(-2px);
+      }
+
+      @media (min-width: 900px) {
+        .stage {
+          padding: 120px 24px 180px;
+        }
+
+        .envelope-wrap {
+          width: min(760px, 70vw);
+          height: 400px;
+        }
+
+        .letter {
+          width: min(800px, 70vw);
+        }
+
+        .letter-paper {
+          font-size: 22px;
+          line-height: 1.95;
+          padding: 40px 44px 46px;
+        }
+
+        .letter-paper .date,
+        .letter-paper .sign {
+          font-size: 24px;
+        }
       }
 
       @media (max-width: 640px) {
-        .audio-card {
-          flex-direction: column;
-          align-items: flex-start;
+        .envelope-wrap {
+          height: 320px;
         }
 
-        .audio-card button {
-          width: 100%;
+        body.opened .letter {
+          transform: translateY(-100px);
+        }
+
+        .letter-paper {
+          font-size: 18px;
+          padding: 24px 22px 30px;
+        }
+
+        .letter-paper .date,
+        .letter-paper .sign {
+          font-size: 20px;
         }
       }
     </style>
   </head>
   <body>
-    <main class="page">
-      <section class="hero">
-        <span class="tag">Thu xin loi • 24/03/2026</span>
-        <h1>Gửi em yêu,</h1>
-        <p>Một bức thư để nói rằng anh thật sự trân trọng em và đang cố gắng trở nên tốt hơn.</p>
-      </section>
+    <div class="hearts" id="hearts" aria-hidden="true"></div>
 
-      <section class="letter-wrap">
-        <article class="letter">
-          <p class="date">Ngày 24/03/2026</p>
-          <p>Gửi em yêu,</p>
-          <p>Hôm nay là ngày 24/03/2026 — một ngày chẳng có gì đặc biệt với thế giới ngoài kia, nhưng với anh lại là một ngày rất nhiều cảm xúc. Anh ngồi đây, nghĩ về em, về những chuyện đã qua, và về cả những điều anh vẫn chưa làm tốt… để rồi nhận ra rằng anh nhớ em nhiều đến thế nào.</p>
-          <p>Anh biết, trong tình yêu không ai là hoàn hảo. Ai cũng sẽ có lúc sai, lúc vô tâm, lúc làm tổn thương người mình thương nhất. Nhưng anh cũng hiểu rằng, không thể vì thế mà anh cho phép bản thân cứ lặp lại những lỗi lầm ấy. Hôm qua, khi làm em giận, anh đã suy nghĩ rất nhiều. Không phải chỉ là một chút áy náy thoáng qua, mà là cảm giác day dứt thật sự — vì người anh làm tổn thương lại chính là em, người anh luôn muốn bảo vệ và yêu thương nhất.</p>
-          <p>Anh biết em cũng buồn, cũng suy nghĩ nhiều, có khi còn mệt mỏi vì những lần như vậy. Nghĩ đến điều đó, anh càng thấy mình cần phải thay đổi nhiều hơn, không chỉ bằng lời nói mà bằng hành động. Anh không phải là một cái máy hoàn hảo, nên đôi khi vẫn còn những thiếu sót, những điều nhỏ nhặt mà anh vô tình làm em tổn thương. Nhưng em à, điều anh có thể chắc chắn là: tình cảm anh dành cho em là thật, và anh luôn muốn trở thành một người tốt hơn — vì em, và vì chính tình yêu của chúng ta.</p>
-          <p>Cảm ơn em vì đã luôn dịu dàng, luôn bao dung, và đã cho anh cơ hội để sửa sai. Không phải ai cũng đủ kiên nhẫn để ở lại và yêu thương một người còn nhiều thiếu sót như anh. Những gì em làm, anh đều ghi nhận và trân trọng từng chút một.</p>
-          <p>Nếu có thể, anh mong em hãy cho anh thêm thời gian — không phải để biện minh cho lỗi lầm, mà để chứng minh rằng anh thực sự đang cố gắng thay đổi. Anh muốn em thấy một phiên bản tốt hơn của anh, một người biết quan tâm em nhiều hơn, hiểu em nhiều hơn, và không để em phải buồn thêm vì những điều đáng lẽ anh có thể làm tốt hơn.</p>
-          <p>Anh nhớ em. Nhớ cách em cười, nhớ những lúc em dỗi, thậm chí cả những lúc em im lặng — vì anh biết, đằng sau đó là rất nhiều cảm xúc mà em đã cố giữ lại. Anh không muốn em phải giữ những điều đó một mình nữa.</p>
-          <p>Mong rằng khi em đọc những dòng này, em sẽ hiểu rằng anh thật sự hối lỗi và thật sự yêu em rất nhiều. Không phải chỉ là hôm nay, mà là mỗi ngày sau này, anh vẫn muốn được ở bên em, cùng em đi qua những vui buồn, và cùng nhau trở nên tốt hơn.</p>
-          <p>Anh thương em nhiều lắm.</p>
-          <p class="signature">Trọng Nghĩa của em!</p>
-        </article>
+    <button class="music-toggle muted" id="musicToggle" type="button" aria-pressed="false" title="Mute/unmute">
+      ♪
+    </button>
 
-        <div class="audio-card" aria-label="Phat nhac cho em">
-          <div>
-            <div class="audio-title">HOÀNG TÔN - YÊU EM RẤT NHIỀU</div>
-            <p class="audio-sub">Lyrics Video</p>
-          </div>
-          <button type="button" id="playBtn">Play</button>
+    <main class="stage">
+      <div class="envelope-wrap">
+        <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Mở thư tình">
+          <div class="envelope-flap"></div>
+          <div class="envelope-body"></div>
+          <div class="seal">❤</div>
         </div>
-      </section>
-
-      <p class="footer">Anh xin lỗi, và anh yêu em.</p>
+        <p class="hint">Chạm để mở thư</p>
+        <section class="letter" id="letter" aria-hidden="true">
+          <div class="letter-paper">
+            <p class="date">Ngày 24/03/2026</p>
+            <p>Gửi em yêu,</p>
+            <p>Hôm nay là ngày 24/03/2026 — một ngày chẳng có gì đặc biệt với thế giới ngoài kia, nhưng với anh lại là một ngày rất nhiều cảm xúc. Anh ngồi đây, nghĩ về em, về những chuyện đã qua, và về cả những điều anh vẫn chưa làm tốt… để rồi nhận ra rằng anh nhớ em nhiều đến thế nào.</p>
+            <p>Anh biết, trong tình yêu không ai là hoàn hảo. Ai cũng sẽ có lúc sai, lúc vô tâm, lúc làm tổn thương người mình thương nhất. Nhưng anh cũng hiểu rằng, không thể vì thế mà anh cho phép bản thân cứ lặp lại những lỗi lầm ấy. Hôm qua, khi làm em giận, anh đã suy nghĩ rất nhiều. Không phải chỉ là một chút áy náy thoáng qua, mà là cảm giác day dứt thật sự — vì người anh làm tổn thương lại chính là em, người anh luôn muốn bảo vệ và yêu thương nhất.</p>
+            <p>Anh biết em cũng buồn, cũng suy nghĩ nhiều, có khi còn mệt mỏi vì những lần như vậy. Nghĩ đến điều đó, anh càng thấy mình cần phải thay đổi nhiều hơn, không chỉ bằng lời nói mà bằng hành động. Anh không phải là một cái máy hoàn hảo, nên đôi khi vẫn còn những thiếu sót, những điều nhỏ nhặt mà anh vô tình làm em tổn thương. Nhưng em à, điều anh có thể chắc chắn là: tình cảm anh dành cho em là thật, và anh luôn muốn trở thành một người tốt hơn — vì em, và vì chính tình yêu của chúng ta.</p>
+            <p>Cảm ơn em vì đã luôn dịu dàng, luôn bao dung, và đã cho anh cơ hội để sửa sai. Không phải ai cũng đủ kiên nhẫn để ở lại và yêu thương một người còn nhiều thiếu sót như anh. Những gì em làm, anh đều ghi nhận và trân trọng từng chút một.</p>
+            <p>Nếu có thể, anh mong em hãy cho anh thêm thời gian — không phải để biện minh cho lỗi lầm, mà để chứng minh rằng anh thực sự đang cố gắng thay đổi. Anh muốn em thấy một phiên bản tốt hơn của anh, một người biết quan tâm em nhiều hơn, hiểu em nhiều hơn, và không để em phải buồn thêm vì những điều đáng lẽ anh có thể làm tốt hơn.</p>
+            <p>Anh nhớ em. Nhớ cách em cười, nhớ những lúc em dỗi, thậm chí cả những lúc em im lặng — vì anh biết, đằng sau đó là rất nhiều cảm xúc mà em đã cố giữ lại. Anh không muốn em phải giữ những điều đó một mình nữa.</p>
+            <p>Mong rằng khi em đọc những dòng này, em sẽ hiểu rằng anh thật sự hối lỗi và thật sự yêu em rất nhiều. Không phải chỉ là hôm nay, mà là mỗi ngày sau này, anh vẫn muốn được ở bên em, cùng em đi qua những vui buồn, và cùng nhau trở nên tốt hơn.</p>
+            <p>Anh thương em nhiều lắm.</p>
+            <p class="sign">Trọng Nghĩa của em!</p>
+          </div>
+        </section>
+      </div>
     </main>
 
-    <audio
-      id="loveSong"
-      src="/audio/HO%C3%80NG%20T%C3%94N%20-%20Y%C3%8AU%20EM%20R%E1%BA%A4T%20NHI%E1%BB%80U%20(Lyrics%20Video)%20-%20YouTube.mp3"
-      preload="none"
-    ></audio>
+    <audio id="bgMusic" src="/audio/HO%C3%80NG%20T%C3%94N%20-%20Y%C3%8AU%20EM%20R%E1%BA%A4T%20NHI%E1%BB%80U%20(Lyrics%20Video)%20-%20YouTube.mp3" preload="none" loop></audio>
 
     <script>
-      const audio = document.getElementById("loveSong");
-      const playBtn = document.getElementById("playBtn");
-      let isPlaying = false;
+      const envelope = document.getElementById("envelope");
+      const letter = document.getElementById("letter");
+      const music = document.getElementById("bgMusic");
+      const musicToggle = document.getElementById("musicToggle");
+      const hearts = document.getElementById("hearts");
+      const sparkles = document.getElementById("sparkles");
+      let opened = false;
+      let soundEnabled = false;
 
-      const syncButton = () => {
-        playBtn.textContent = isPlaying ? "Pause" : "Play";
-      };
+      function spawnHearts(count = 18) {
+        for (let i = 0; i < count; i += 1) {
+          const heart = document.createElement("span");
+          heart.className = "heart";
+          const size = 10 + Math.random() * 16;
+          const left = Math.random() * 100;
+          const duration = 6 + Math.random() * 6;
+          const delay = Math.random() * 4;
+          heart.style.left = `${left}%`;
+          heart.style.width = `${size}px`;
+          heart.style.height = `${size}px`;
+          heart.style.animationDuration = `${duration}s`;
+          heart.style.animationDelay = `${delay}s`;
+          hearts.appendChild(heart);
+        }
+      }
 
-      const safePlay = async () => {
+      function updateToggle() {
+        musicToggle.classList.toggle("enabled", soundEnabled);
+        musicToggle.classList.toggle("muted", !soundEnabled);
+        musicToggle.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
+        musicToggle.textContent = soundEnabled ? "♫" : "♪";
+      }
+
+      function spawnSparkles(count = 16) {
+        if (!sparkles) return;
+        sparkles.innerHTML = "";
+        for (let i = 0; i < count; i += 1) {
+          const dot = document.createElement("span");
+          dot.className = "sparkle";
+          const left = 10 + Math.random() * 80;
+          const top = 10 + Math.random() * 70;
+          const delay = Math.random() * 0.6;
+          const size = 6 + Math.random() * 8;
+          dot.style.left = `${left}%`;
+          dot.style.top = `${top}%`;
+          dot.style.width = `${size}px`;
+          dot.style.height = `${size}px`;
+          dot.style.animationDelay = `${delay}s`;
+          sparkles.appendChild(dot);
+        }
+      }
+
+      async function tryPlay() {
+        if (!music || !music.getAttribute("src")) return false;
         try {
-          await audio.play();
+          await music.play();
           return true;
         } catch {
           return false;
         }
-      };
+      }
 
-      playBtn.addEventListener("click", async () => {
-        if (!audio) return;
-        if (isPlaying) {
-          audio.pause();
-          isPlaying = false;
-          syncButton();
-          return;
-        }
+      async function openLetter() {
+        if (opened) return;
+        opened = true;
+        document.body.classList.add("opened");
+        letter.setAttribute("aria-hidden", "false");
+        soundEnabled = true;
+        updateToggle();
+        spawnSparkles();
+        sparkles?.classList.add("show");
+        window.setTimeout(() => sparkles?.classList.remove("show"), 1800);
+        await tryPlay();
+      }
 
-        const ok = await safePlay();
-        if (!ok) {
-          playBtn.textContent = "Tap to Play";
-          return;
+      envelope.addEventListener("click", openLetter);
+      envelope.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openLetter();
         }
-        isPlaying = true;
-        syncButton();
       });
 
-      audio.addEventListener("ended", () => {
-        isPlaying = false;
-        syncButton();
-      });
-
-      syncButton();
-
-      window.addEventListener("DOMContentLoaded", async () => {
-        const ok = await safePlay();
-        if (!ok) {
-          playBtn.textContent = "Tap to Play";
-          return;
+      musicToggle.addEventListener("click", async () => {
+        if (!opened) return;
+        soundEnabled = !soundEnabled;
+        music.muted = !soundEnabled;
+        if (soundEnabled) {
+          await tryPlay();
         }
-        isPlaying = true;
-        syncButton();
+        updateToggle();
       });
+
+      spawnHearts();
+      updateToggle();
     </script>
   </body>
 </html>
