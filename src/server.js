@@ -71,6 +71,7 @@ app.use("/api/ai-chat", require("./routes/aiChat"));
 app.use("/api/journey", require("./routes/journey"));
 app.use("/api/mood-map", require("./routes/moodMap"));
 app.use("/api/water-reminder", require("./routes/waterReminder"));
+app.use("/api/notify", require("./routes/notify"));
 
 app.get(/^\/(?!api|uploads).*/, (_req, res) => {
   res.sendFile(path.join(__dirname, "../public/index.html"));
