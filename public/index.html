@@ -28,6 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <link rel="stylesheet" href="/ai-widget.css">
   <style>
     :root {
@@ -707,6 +708,7 @@
         <a class="cta" href="journal.html">📚 Xem kho kỷ niệm</a>
         <a class="cta secondary" href="create.html">✍️ Tạo khoảng khắc</a>
         <a class="cta secondary" href="counter.html">🌸 Đếm ngày yêu</a>
+        <button class="cta secondary" id="notifyBtn" type="button">🔔 Bật thông báo</button>
       </div>
     </section>
 <section class="card mood-quick" id="moodQuickCard">
@@ -940,7 +942,41 @@
     });
 
   </script>
-<script>
+  <script>
+    const notifyBtn = document.getElementById("notifyBtn");
+
+    if (notifyBtn && (!("Notification" in window) || !("serviceWorker" in navigator))) {
+      notifyBtn.disabled = true;
+      notifyBtn.textContent = "Thiết bị chưa hỗ trợ";
+    }
+
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(function(OneSignal) {
+      OneSignal.init({
+        appId: "YOUR_ONESIGNAL_APP_ID",
+        safari_web_id: "YOUR_SAFARI_WEB_ID",
+        serviceWorkerPath: "/sw.js",
+        serviceWorkerParam: { scope: "/" },
+        promptOptions: {
+          slidedown: { enabled: false }
+        }
+      });
+
+      if (!notifyBtn) return;
+
+      notifyBtn.addEventListener("click", async () => {
+        try {
+          const granted = await OneSignal.Notifications.permission;
+          if (granted) {
+            notifyBtn.textContent = "Đã bật thông báo";
+            notifyBtn.disabled = true;
+            return;
+          }
+          await OneSignal.Notifications.requestPermission();
+        } catch (_) {}
+      });
+    });
+
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
