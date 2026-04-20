@@ -9,23 +9,6 @@
     return;
   }
 
-  const isHome = path === '/' || path.endsWith('/index.html');
-  const hasIntroParam = window.location.search.includes('intro=1');
-  if (isHome && !hasIntroParam) {
-    const nextPath = path + window.location.search + window.location.hash;
-    const joiner = nextPath.includes('?') ? '&' : '?';
-    const next = encodeURIComponent(`${nextPath}${joiner}intro=1`);
-    window.location.replace(`/intro.html?next=${next}`);
-    return;
-  }
-
-  const introSeen = localStorage.getItem('intro_seen') === 'true';
-  if (!introSeen) {
-    const next = encodeURIComponent(path + window.location.search + window.location.hash);
-    window.location.replace(`/intro.html?next=${next}`);
-    return;
-  }
-
   if (window.HDHA_DISABLE_HA_SPLASH === true) return;
 
   const style = document.createElement('style');
