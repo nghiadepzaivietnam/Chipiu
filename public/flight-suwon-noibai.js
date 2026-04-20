@@ -1,5 +1,5 @@
 ﻿(function initFlightSuwonNoiBaiPage() {
-  const TARGET_DATE = new Date("2026-07-30T00:00:00+07:00");
+  const TARGET_DATE = new Date("2026-07-04T00:00:00+07:00");
   const GEOJSON_URL = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
   const SVG_WIDTH = 1200;
   const SVG_HEIGHT = 620;
@@ -179,9 +179,9 @@
     secondsEl.textContent = pad2(parts.seconds);
 
     if (isFuture) {
-      statusEl.textContent = `Con ${parts.days} ngay ${parts.hours} gio ${parts.minutes} phut ${parts.seconds} giay toi 30/07/2026.`;
+      statusEl.textContent = `Con ${parts.days} ngay ${parts.hours} gio ${parts.minutes} phut ${parts.seconds} giay toi 04/07/2026.`;
       if (headerFlightStatusEl) {
-        headerFlightStatusEl.textContent = `ETA 30/07/2026 | T-${parts.days}d ${pad2(parts.hours)}h ${pad2(parts.minutes)}m`;
+        headerFlightStatusEl.textContent = `ETA 04/07/2026 | T-${parts.days}d ${pad2(parts.hours)}h ${pad2(parts.minutes)}m`;
       }
     } else {
       statusEl.textContent = "Finally Together <3";
