@@ -316,6 +316,32 @@
         opacity: 0.65;
       }
 
+      .back-button {
+        position: fixed;
+        top: max(16px, env(safe-area-inset-top));
+        left: max(16px, env(safe-area-inset-left));
+        z-index: 5;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 16px;
+        border: 1px solid rgba(255, 120, 160, 0.25);
+        border-radius: 999px;
+        background: rgba(255, 249, 251, 0.88);
+        box-shadow: 0 10px 24px rgba(255, 120, 160, 0.16);
+        color: var(--ink);
+        font: 600 14px "Playfair Display", serif;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .back-button:hover {
+        transform: translateY(-2px);
+        background: #fff;
+      }
+
       .music-toggle.enabled {
         opacity: 1;
       }
@@ -378,6 +404,10 @@
   <body>
     <div class="hearts" id="hearts" aria-hidden="true"></div>
 
+    <button class="back-button" id="backButton" type="button" aria-label="Quay lại trang trước">
+      <span aria-hidden="true">←</span> Quay lại
+    </button>
+
     <button class="music-toggle muted" id="musicToggle" type="button" aria-pressed="false" title="Mute/unmute">
       ♪
     </button>
@@ -413,11 +443,22 @@
       const envelope = document.getElementById("envelope");
       const letter = document.getElementById("letter");
       const music = document.getElementById("bgMusic");
+      const backButton = document.getElementById("backButton");
       const musicToggle = document.getElementById("musicToggle");
       const hearts = document.getElementById("hearts");
       const sparkles = document.getElementById("sparkles");
       let opened = false;
       let soundEnabled = false;
+
+      backButton.addEventListener("click", () => {
+        const previousPage = document.referrer;
+        const cameFromThisSite = previousPage && new URL(previousPage).origin === window.location.origin;
+        if (cameFromThisSite && window.history.length > 1) {
+          window.history.back();
+          return;
+        }
+        window.location.href = "/";
+      });
 
       function spawnHearts(count = 18) {
         for (let i = 0; i < count; i += 1) {
