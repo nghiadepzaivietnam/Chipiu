@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Th&#432; 20/10/2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --pink: #ff8bb3;
+        --pink-2: #ffc2d6;
+        --red: #ff5d7c;
+        --paper: #fff9fb;
+        --paper-edge: #f4dbe7;
+        --ink: #4a2a35;
+        --shadow: 0 24px 60px rgba(255, 120, 160, 0.25);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Playfair Display", serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 18% 18%, rgba(255, 208, 226, 0.55), transparent 45%),
+          radial-gradient(circle at 82% 12%, rgba(255, 180, 210, 0.5), transparent 45%),
+          radial-gradient(circle at 50% 90%, rgba(255, 210, 225, 0.5), transparent 55%),
+          #fff3f7;
+        overflow: hidden;
+      }
+
+      body.opened {
+        overflow-y: auto;
+      }
+
+      .hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .heart {
+        position: absolute;
+        bottom: -10%;
+        width: 14px;
+        height: 14px;
+        background: linear-gradient(140deg, var(--pink), var(--pink-2));
+        transform: rotate(45deg);
+        border-radius: 4px 4px 0 0;
+        opacity: 0;
+        animation: floatHeart 8s linear infinite;
+        filter: drop-shadow(0 8px 16px rgba(255, 120, 170, 0.25));
+      }
+
+      .heart::before,
+      .heart::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: inherit;
+      }
+
+      .heart::before {
+        left: -7px;
+        top: 0;
+      }
+
+      .heart::after {
+        top: -7px;
+        left: 0;
+      }
+
+      @keyframes floatHeart {
+        0% {
+          transform: translateY(0) rotate(45deg) scale(0.9);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.9;
+        }
+        100% {
+          transform: translateY(-120vh) rotate(45deg) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      .stage {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 16px 140px;
+      }
+
+      body.opened .stage {
+        align-items: flex-start;
+      }
+
+      .envelope-wrap {
+        position: relative;
+        width: min(620px, 92vw);
+        height: 360px;
+      }
+
+      .envelope {
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 100%;
+        height: 240px;
+        transform: translateX(-50%);
+        cursor: pointer;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease, opacity 0.6s ease;
+      }
+
+      body.opened .envelope {
+        transform: translateX(-50%) translateY(20px);
+        opacity: 0.75;
+        pointer-events: none;
+      }
+
+      .envelope-body {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(160deg, #ffe7f2, #ffd1e6);
+        border-radius: 18px;
+        border: 1px solid rgba(255, 160, 190, 0.6);
+        box-shadow: 0 18px 40px rgba(255, 120, 170, 0.25);
+      }
+
+      .envelope-body::before,
+      .envelope-body::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 18px;
+        background: linear-gradient(135deg, transparent 48%, rgba(255, 190, 210, 0.8) 50%);
+        clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+        opacity: 0.8;
+      }
+
+      .envelope-flap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        height: 130px;
+        background: linear-gradient(160deg, #ffd8ed, #ffc2db);
+        clip-path: polygon(0 0, 50% 90%, 100% 0);
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        transform-origin: top;
+        transition: transform 0.8s ease;
+        border: 1px solid rgba(255, 160, 190, 0.6);
+      }
+
+      body.opened .envelope-flap {
+        transform: rotateX(180deg);
+      }
+
+      .seal {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 52px;
+        height: 52px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #ff8fb5, #ff5a8a);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 18px;
+        box-shadow: 0 12px 20px rgba(255, 90, 130, 0.35);
+        transition: transform 0.6s ease, opacity 0.6s ease;
+      }
+
+      body.opened .seal {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.4;
+      }
+
+      .letter {
+        position: absolute;
+        left: 50%;
+        bottom: 40px;
+        width: min(620px, 92vw);
+        transform: translate(-50%, 40px) scale(0.98);
+        opacity: 0;
+        transition: transform 0.9s ease, opacity 0.9s ease;
+        pointer-events: none;
+      }
+
+      body.opened .letter {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        transform: translateY(-120px);
+        opacity: 1;
+        pointer-events: auto;
+        margin: 0 auto 60px;
+      }
+
+      .letter-paper {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 245, 250, 0.95)),
+          repeating-linear-gradient(0deg, transparent 0 28px, rgba(255, 205, 220, 0.16) 28px 29px);
+        border-radius: 20px;
+        padding: 32px 30px 38px;
+        border: 1px solid var(--paper-edge);
+        box-shadow: var(--shadow);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 20px;
+        line-height: 1.85;
+      }
+
+      .letter-paper p {
+        margin: 0 0 16px;
+      }
+
+      .letter-paper .date {
+        font-weight: 700;
+        font-size: 22px;
+      }
+
+      .letter-paper .sign {
+        margin-top: 24px;
+        font-weight: 700;
+        font-size: 22px;
+      }
+
+      .hint {
+        position: absolute;
+        bottom: -34px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        color: rgba(77, 43, 54, 0.7);
+      }
+
+      .sparkles {
+        position: absolute;
+        inset: -20px;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 210, 230, 0.1));
+        border-radius: 50%;
+        opacity: 0;
+        transform: scale(0.4) rotate(0deg);
+        filter: drop-shadow(0 4px 10px rgba(255, 140, 180, 0.35));
+        animation: sparklePop 1.6s ease both;
+      }
+
+      .sparkles.show .sparkle {
+        opacity: 1;
+      }
+
+      @keyframes sparklePop {
+        0% {
+          opacity: 0;
+          transform: scale(0.4) rotate(0deg);
+        }
+        40% {
+          opacity: 1;
+          transform: scale(1) rotate(20deg);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.2) translateY(-10px) rotate(60deg);
+        }
+      }
+
+      body.opened .hint {
+        opacity: 0;
+        transform: translateX(-50%) translateY(6px);
+      }
+
+      .music-toggle {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 5;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 12px 24px rgba(255, 120, 160, 0.25);
+        cursor: pointer;
+        font-size: 18px;
+        color: #ff6f96;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        opacity: 0.65;
+      }
+
+      .music-toggle.enabled {
+        opacity: 1;
+      }
+
+      .music-toggle.muted {
+        color: #b98a9a;
+      }
+
+      .music-toggle:hover {
+        transform: translateY(-2px);
+      }
+
+      @media (min-width: 900px) {
+        .stage {
+          padding: 120px 24px 180px;
+        }
+
+        .envelope-wrap {
+          width: min(760px, 70vw);
+          height: 400px;
+        }
+
+        .letter {
+          width: min(800px, 70vw);
+        }
+
+        .letter-paper {
+          font-size: 22px;
+          line-height: 1.95;
+          padding: 40px 44px 46px;
+        }
+
+        .letter-paper .date,
+        .letter-paper .sign {
+          font-size: 24px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .envelope-wrap {
+          height: 320px;
+        }
+
+        body.opened .letter {
+          transform: translateY(-100px);
+        }
+
+        .letter-paper {
+          font-size: 18px;
+          padding: 24px 22px 30px;
+        }
+
+        .letter-paper .date,
+        .letter-paper .sign {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts" id="hearts" aria-hidden="true"></div>
+
+    <button class="music-toggle muted" id="musicToggle" type="button" aria-pressed="false" title="Mute/unmute">
+      ♪
+    </button>
+
+    <main class="stage">
+      <div class="envelope-wrap">
+        <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Mở thư tình">
+          <div class="envelope-flap"></div>
+          <div class="envelope-body"></div>
+          <div class="seal">❤</div>
+        </div>
+        <p class="hint">Chạm để mở thư</p>
+        <section class="letter" id="letter" aria-hidden="true">
+          <div class="letter-paper">
+            <p class="date">Ngày 20/10/2026</p>
+            <p>Nhân ngày 20/10, anh chúc em yêu của anh có một ngày thật hạnh phúc, ý nghĩa hơn trong cuộc đời mình. Anh không mong rằng mọi thứ trọn vẹn nhất, anh chỉ cần hai đứa luôn ở bên nhau với những điều thật lòng nhất. Bước thứ 2 ở bên nhau, khép lại năm đầu tiên với vui có, buồn cũng có và điều hạnh phúc nhất đối với anh là chúng mình vẫn có nhau, vẫn cùng nhau bước tiếp. Anh thật mong rằng, sau tất cả mọi chuyện, hai đứa vẫn có thể cùng nhau trưởng thành và nhìn thấy nhau thật nhiều thật nhiều hơn nữa.</p>
+            <p>Có lẽ điều mà anh hạnh phúc nhất trong khoảng thời gian vừa qua là cuối cùng, sau những ngày tháng chỉ có thể nhìn nhau qua màn hình điện thoại, chúng mình cũng đã được gặp nhau. Tháng 7 năm 2026, lần đầu tiên anh được ở cạnh em, được nhìn thấy em bằng ánh mắt của mình, được nắm tay em, ôm em vào lòng và cùng em trải qua những điều mà trước đây chúng mình chỉ biết tưởng tượng qua những cuộc gọi. Từ tháng 7 đến hết tháng 8, khoảng thời gian tuy không quá dài nhưng lại chứa đựng thật nhiều kỷ niệm, thật nhiều trải nghiệm và những khoảnh khắc mà anh nghĩ rằng mình sẽ còn nhớ mãi.</p>
+            <p>Có những điều rất đỗi bình thường thôi, nhưng khi được làm cùng em, anh lại cảm thấy chúng trở nên đặc biệt hơn rất nhiều. Anh vui vì chúng mình đã có những ngày được ở cạnh nhau, được cùng nhau đi, cùng ăn những món ngon, cùng cười vì những chuyện chẳng đâu vào đâu và được cảm nhận rõ ràng hơn rằng người mình thương thật sự đang ở ngay bên cạnh mình.</p>
+            <p>Rồi đến lúc phải xa nhau một lần nữa, anh mới hiểu rằng hóa ra cảm giác hạnh phúc khi được ở cạnh em và cảm giác trống trải khi phải rời xa em lại khác nhau nhiều đến thế. Từ những ngày có thể gặp nhau, nhìn nhau mỗi ngày, chúng mình lại trở về với chiếc điện thoại, trở về với những cuộc gọi, những dòng tin nhắn và những lần nhớ nhau mà chẳng thể lập tức chạy đến bên Chip yêu của anh. Anh biết yêu xa chưa bao giờ là điều dễ dàng, sẽ có những lúc cả hai mệt mỏi, có những lúc nhớ nhau thật nhiều nhưng chẳng biết phải làm gì ngoài việc chờ đợi, cũng có những lúc vì khoảng cách mà chúng mình không thể ở bên nhau vào những thời điểm đối phương cần nhất.</p>
+            <p>Nhưng anh mong rằng, dù sau này có những ngày như thế, hai đứa mình vẫn sẽ chọn ngồi lại, lắng nghe nhau, nói với nhau những điều thật lòng và cùng nhau tìm cách vượt qua, thay vì để khoảng cách khiến chúng mình dần xa nhau hơn.</p>
+            <p>Cảm ơn em vì đã xuất hiện trong cuộc đời anh, vì đã cùng anh đi qua năm đầu tiên với đủ những cảm xúc vui buồn, vì đã cho anh cơ hội được yêu em và được cùng em tạo nên những kỷ niệm thật đẹp. Anh biết chúng mình vẫn còn rất nhiều điều phải học, còn nhiều thử thách phải đối mặt và còn cả một chặng đường dài phía trước. Nhưng anh mong rằng tất cả mọi thứ chúng mình sẽ cùng nhau vượt qua. Anh không biết tương lai sẽ đưa chúng mình đến đâu, nhưng anh biết ở hiện tại, anh thật lòng muốn có em trong tương lai của mình.</p>
+            <p>Gặp em là điều may mắn nhất cuộc đời anh!</p>
+            <p class="sign">Trọng Nghĩa</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <audio id="bgMusic" src="/audio/HO%C3%80NG%20T%C3%94N%20-%20Y%C3%8AU%20EM%20R%E1%BA%A4T%20NHI%E1%BB%80U%20(Lyrics%20Video)%20-%20YouTube.mp3" preload="none" loop></audio>
+
+    <script>
+      const envelope = document.getElementById("envelope");
+      const letter = document.getElementById("letter");
+      const music = document.getElementById("bgMusic");
+      const musicToggle = document.getElementById("musicToggle");
+      const hearts = document.getElementById("hearts");
+      const sparkles = document.getElementById("sparkles");
+      let opened = false;
+      let soundEnabled = false;
+
+      function spawnHearts(count = 18) {
+        for (let i = 0; i < count; i += 1) {
+          const heart = document.createElement("span");
+          heart.className = "heart";
+          const size = 10 + Math.random() * 16;
+          const left = Math.random() * 100;
+          const duration = 6 + Math.random() * 6;
+          const delay = Math.random() * 4;
+          heart.style.left = `${left}%`;
+          heart.style.width = `${size}px`;
+          heart.style.height = `${size}px`;
+          heart.style.animationDuration = `${duration}s`;
+          heart.style.animationDelay = `${delay}s`;
+          hearts.appendChild(heart);
+        }
+      }
+
+      function updateToggle() {
+        musicToggle.classList.toggle("enabled", soundEnabled);
+        musicToggle.classList.toggle("muted", !soundEnabled);
+        musicToggle.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
+        musicToggle.textContent = soundEnabled ? "♫" : "♪";
+      }
+
+      function spawnSparkles(count = 16) {
+        if (!sparkles) return;
+        sparkles.innerHTML = "";
+        for (let i = 0; i < count; i += 1) {
+          const dot = document.createElement("span");
+          dot.className = "sparkle";
+          const left = 10 + Math.random() * 80;
+          const top = 10 + Math.random() * 70;
+          const delay = Math.random() * 0.6;
+          const size = 6 + Math.random() * 8;
+          dot.style.left = `${left}%`;
+          dot.style.top = `${top}%`;
+          dot.style.width = `${size}px`;
+          dot.style.height = `${size}px`;
+          dot.style.animationDelay = `${delay}s`;
+          sparkles.appendChild(dot);
+        }
+      }
+
+      async function tryPlay() {
+        if (!music || !music.getAttribute("src")) return false;
+        try {
+          await music.play();
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
+      async function openLetter() {
+        if (opened) return;
+        opened = true;
+        document.body.classList.add("opened");
+        letter.setAttribute("aria-hidden", "false");
+        soundEnabled = true;
+        updateToggle();
+        spawnSparkles();
+        sparkles?.classList.add("show");
+        window.setTimeout(() => sparkles?.classList.remove("show"), 1800);
+        await tryPlay();
+      }
+
+      envelope.addEventListener("click", openLetter);
+      envelope.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openLetter();
+        }
+      });
+
+      musicToggle.addEventListener("click", async () => {
+        if (!opened) return;
+        soundEnabled = !soundEnabled;
+        music.muted = !soundEnabled;
+        if (soundEnabled) {
+          await tryPlay();
+        }
+        updateToggle();
+      });
+
+      spawnHearts();
+      updateToggle();
+    </script>
+  </body>
+</html>

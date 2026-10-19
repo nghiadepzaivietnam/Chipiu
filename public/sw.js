@@ -1,5 +1,4 @@
-﻿const CACHE_NAME = "hai-anh-pwa-v1";
-const CACHE_NAME = "hai-anh-pwa-v4";
+const CACHE_NAME = "hai-anh-pwa-v6";
 const CORE_ASSETS = [
   "/",
   "/index.html",
@@ -16,6 +15,7 @@ const CORE_ASSETS = [
   "/romantic-letter.html",
   "/romantic-letter.css",
   "/romantic-letter.js",
+  "/letter-2026-10-20.html",
   "/create.html",
   "/journal.html",
   "/counter.html",
@@ -24,7 +24,8 @@ const CORE_ASSETS = [
   "/weather-dual.html",
   "/flight-suwon-noibai.html",
   "/hanh-trinh-toi-2-dua.html",
-  "/owner-data.html"
+  "/owner-data.html",
+  "/mail.html"
 ];
 
 self.addEventListener("install", (event) => {
@@ -46,11 +47,13 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;
+
   const url = new URL(request.url);
   const isMedia =
     url.pathname.startsWith("/uploads/") ||
     request.destination === "video" ||
     request.headers.has("range");
+
   if (isMedia) {
     event.respondWith(fetch(request));
     return;
@@ -81,4 +84,3 @@ self.addEventListener("fetch", (event) => {
     )
   );
 });
-importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");

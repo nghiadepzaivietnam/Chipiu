@@ -28,7 +28,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <link rel="stylesheet" href="/ai-widget.css">
   <style>
     :root {
@@ -671,12 +670,13 @@
       <a class="nav-link" href="/mood-map.html">💗 Bản đồ cảm xúc</a>
       <a class="nav-link" href="/valentine-letter.html">💌 14/03/2026</a>
       <a class="nav-link" href="/letter-2026-03-24.html">💌 24/03/2026</a>
+      <a class="nav-link" href="/letter-2026-10-20.html">💌 20/10/2026</a>
       <a class="nav-link" href="/water-reminder.html">💧 Nhắc uống nước</a><a class="nav-link" href="/love-calendar.html">Nhật ký đôi</a>
       <a class="nav-link" href="/flight-suwon-noibai.html">✈ Chuyến bay SUW -> HAN</a>
       <a class="nav-link" href="/weather-dual.html">🌦️ Thời tiết đôi</a>
       <a class="nav-link" href="/hanh-trinh-toi-2-dua.html">&#x1F9ED; H&#224;nh tr&#236;nh</a>
       <a class="nav-link" href="/owner-data.html">📝 Bối cảnh, ý tưởng</a>
-      <a class="nav-link" href="/notify.html">🛎️ Gửi thông báo</a>
+      <a class="nav-link" href="/mail.html">✉️ Gửi email</a>
     </nav>
   </header>
   <div class="audio-box" aria-label="Trình phát Dành cho em">
@@ -709,7 +709,7 @@
         <a class="cta" href="journal.html">📚 Xem kho kỷ niệm</a>
         <a class="cta secondary" href="create.html">✍️ Tạo khoảng khắc</a>
         <a class="cta secondary" href="counter.html">🌸 Đếm ngày yêu</a>
-        <button class="cta secondary" id="notifyBtn" type="button">🔔 Bật thông báo</button>
+        <a class="cta secondary" href="mail.html">✉️ Gửi email</a>
       </div>
     </section>
 <section class="card mood-quick" id="moodQuickCard">
@@ -944,45 +944,11 @@
 
   </script>
   <script>
-    const notifyBtn = document.getElementById("notifyBtn");
-
-    if (notifyBtn && (!("Notification" in window) || !("serviceWorker" in navigator))) {
-      notifyBtn.disabled = true;
-      notifyBtn.textContent = "Thiết bị chưa hỗ trợ";
-    }
-
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(function(OneSignal) {
-      OneSignal.init({
-        appId: "d6b3d5e1-ccf9-48d5-bb97-cd2fd0f33fab",
-        serviceWorkerPath: "/sw.js",
-        serviceWorkerParam: { scope: "/" },
-        promptOptions: {
-          slidedown: { enabled: false }
-        }
-      });
-
-      if (!notifyBtn) return;
-
-      notifyBtn.addEventListener("click", async () => {
-        try {
-          const granted = await OneSignal.Notifications.permission;
-          if (granted) {
-            notifyBtn.textContent = "Đã bật thông báo";
-            notifyBtn.disabled = true;
-            return;
-          }
-          await OneSignal.Notifications.requestPermission();
-        } catch (_) {}
-      });
-    });
-
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
       });
     }
-
   </script>
   <script src="/mood-map-summary.js"></script>
   <script src="/user-context.js"></script>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gui email</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff7f1;
+      --card: rgba(255, 255, 255, 0.92);
+      --text: #2b1b1b;
+      --accent: #ff5f8d;
+      --accent-2: #f47c3c;
+      --line: rgba(43, 27, 27, 0.1);
+      --shadow: 0 20px 50px rgba(255, 95, 141, 0.18);
+      --radius: 24px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 95, 141, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(244, 124, 60, 0.16), transparent 32%),
+        var(--bg);
+      padding: 28px 16px;
+    }
+    .shell {
+      width: min(860px, 100%);
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    h1 {
+      margin: 14px 0 10px;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(30px, 5vw, 48px);
+      line-height: 1.08;
+    }
+    .lead {
+      margin: 0 0 20px;
+      max-width: 660px;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .field-full {
+      grid-column: 1 / -1;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font: inherit;
+      color: inherit;
+      background: rgba(255, 255, 255, 0.95);
+    }
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      line-height: 1.55;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    button:hover {
+      transform: translateY(-1px);
+    }
+    .primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(255, 95, 141, 0.28);
+    }
+    .secondary {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid rgba(255, 95, 141, 0.2);
+    }
+    .status {
+      margin-top: 16px;
+      min-height: 24px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .tips {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px dashed rgba(255, 95, 141, 0.28);
+      line-height: 1.6;
+      font-size: 14px;
+      opacity: 0.85;
+    }
+    @media (max-width: 720px) {
+      .shell {
+        padding: 18px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="eyebrow">Mail Console</div>
+    <h1>Gui email tu Gmail SMTP</h1>
+    <p class="lead">Trang nay gui email thong qua server cua ban. Ban nhap dia chi nhan, tieu de, noi dung, sau do server dung Gmail App Password de gui di.</p>
+
+    <form id="mailForm" class="grid">
+      <div>
+        <label for="to">Email nhan</label>
+        <input id="to" name="to" type="email" autocomplete="email" placeholder="nguoinhan@gmail.com" required>
+      </div>
+      <div>
+        <label for="token">Admin token</label>
+        <input id="token" name="token" type="password" placeholder="Nhap ADMIN_TOKEN" required>
+      </div>
+      <div class="field-full">
+        <label for="subject">Tieu de</label>
+        <input id="subject" name="subject" type="text" placeholder="Vi du: Anh gui em mot loi nhan" required>
+      </div>
+      <div class="field-full">
+        <label for="message">Noi dung</label>
+        <textarea id="message" name="message" placeholder="Nhap noi dung email..." required></textarea>
+      </div>
+      <div class="field-full actions">
+        <button class="primary" id="sendBtn" type="submit">Gui email</button>
+        <button class="secondary" id="clearBtn" type="button">Xoa</button>
+      </div>
+    </form>
+
+    <div class="status" id="status"></div>
+    <div class="tips">
+      Gmail can bat `2-Step Verification` va tao `App Password`. Tren Render can co `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `ADMIN_TOKEN`.
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById("mailForm");
+    const sendBtn = document.getElementById("sendBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const statusEl = document.getElementById("status");
+    const toEl = document.getElementById("to");
+    const tokenEl = document.getElementById("token");
+    const subjectEl = document.getElementById("subject");
+    const messageEl = document.getElementById("message");
+
+    toEl.value = localStorage.getItem("mail_to") || "";
+    tokenEl.value = localStorage.getItem("mail_admin_token") || "";
+
+    const setStatus = (text, ok) => {
+      statusEl.textContent = text;
+      statusEl.style.color = ok ? "#2b1b1b" : "#b42318";
+    };
+
+    clearBtn.addEventListener("click", () => {
+      subjectEl.value = "";
+      messageEl.value = "";
+      setStatus("", true);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = {
+        to: toEl.value.trim(),
+        subject: subjectEl.value.trim(),
+        message: messageEl.value.trim(),
+      };
+      const token = tokenEl.value.trim();
+
+      if (!payload.to || !payload.subject || !payload.message || !token) {
+        setStatus("Thieu email nhan, tieu de, noi dung hoac admin token.", false);
+        return;
+      }
+
+      localStorage.setItem("mail_to", payload.to);
+      localStorage.setItem("mail_admin_token", token);
+      sendBtn.disabled = true;
+      setStatus("Dang gui email...", true);
+
+      try {
+        const response = await fetch("/api/mail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-token": token
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          setStatus(`Gui that bai: ${data.error || "Khong xac dinh"}`, false);
+          return;
+        }
+        setStatus(`Gui thanh cong. Message ID: ${data.messageId || "N/A"}`, true);
+      } catch (error) {
+        setStatus(`Loi mang: ${error.message || error}`, false);
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
+  </script>
+  <script src="/auth-guard.js"></script>
+</body>
+</html>
